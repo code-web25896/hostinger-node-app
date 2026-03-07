@@ -1,0 +1,7 @@
+<svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="220" height="220" rx="48" fill="#0F1730"/>
+  <circle cx="110" cy="88" r="40" fill="#D9B14A" fill-opacity="0.18"/>
+  <path d="M76 144C76 122.909 93.9086 106 115 106H144V114H115C98.326 114 84 128.326 84 145V146H76V144Z" fill="#D9B14A"/>
+  <path d="M110.4 56L120.8 82.8H150L126.4 99.2L135.6 126L110.4 109.8L85.2 126L94.4 99.2L70.8 82.8H100L110.4 56Z" fill="#D9B14A"/>
+  <text x="110" y="184" text-anchor="middle" fill="#F7EEDF" font-family="Georgia, serif" font-size="26" font-weight="700">L'ACADEMIE</text>
+</svg>
