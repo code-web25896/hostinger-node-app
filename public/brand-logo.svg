@@ -1,0 +1,20 @@
+<svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="110" cy="110" r="104" fill="url(#bg)"/>
+  <circle cx="110" cy="110" r="101" stroke="#DEC183" stroke-width="2"/>
+  <circle cx="110" cy="110" r="88" fill="#FFFDF9" stroke="#D4B06A" stroke-width="3"/>
+  <circle cx="110" cy="110" r="78" stroke="#F0DEC0" stroke-width="2"/>
+  <path d="M61 83L110 59L159 83L110 106L61 83Z" fill="#111827"/>
+  <path d="M77 89V103C77 118 92 129 110 129C128 129 143 118 143 103V89L110 105L77 89Z" fill="#1F2937"/>
+  <path d="M159 83V118" stroke="#C79C38" stroke-width="4" stroke-linecap="round"/>
+  <path d="M159 118L166 128H152L159 118Z" fill="#C79C38"/>
+  <path d="M84 147C97 141 123 141 136 147" stroke="#C79C38" stroke-width="4" stroke-linecap="round"/>
+  <text x="110" y="165" text-anchor="middle" fill="#404040" font-family="Georgia, serif" font-size="22" font-weight="700">L'ACADEMIE</text>
+  <text x="110" y="184" text-anchor="middle" fill="#7A5F2F" font-family="Georgia, serif" font-size="16" font-style="italic">Internationale</text>
+  <text x="110" y="199" text-anchor="middle" fill="#A28A58" font-family="Arial, sans-serif" font-size="10" letter-spacing="3">DE BEAUTE</text>
+  <defs>
+    <radialGradient id="bg" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(70 55) rotate(55) scale(170)">
+      <stop stop-color="#FFF7E8"/>
+      <stop offset="1" stop-color="#F2D79E"/>
+    </radialGradient>
+  </defs>
+</svg>
