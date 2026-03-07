@@ -10,7 +10,8 @@ const mapTraining = (row) => ({
   image: row.image,
   description: row.description,
   duration: row.duration,
-  priceTND: Number(row.price_tnd)
+  priceTND: Number(row.price_tnd),
+  priceEUR: Number(row.price_eur)
 });
 
 const mapNews = (row) => ({
@@ -53,7 +54,7 @@ router.get("/enrollments/status", async (req, res) => {
   }
 
   const enrollments = await query(
-    `SELECT er.*, t.title AS training_title, t.price_tnd AS training_price_tnd
+    `SELECT er.*, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
      FROM enrollment_requests er
      INNER JOIN trainings t ON t.id = er.training_id
      WHERE er.email = ? AND er.phone = ?
@@ -70,11 +71,13 @@ router.get("/enrollments/status", async (req, res) => {
       email: item.email,
       mode: item.mode_label,
       notes: item.notes,
+      country: item.country_label,
       status: item.status,
       training: {
         _id: String(item.training_id),
         title: item.training_title,
-        priceTND: Number(item.training_price_tnd)
+        priceTND: Number(item.training_price_tnd),
+        priceEUR: Number(item.training_price_eur)
       }
     }))
   );
@@ -102,16 +105,16 @@ router.post("/contact", async (req, res) => {
 });
 
 router.post("/enrollments", async (req, res) => {
-  const { fullName, phone, email, mode, trainingId, notes } = req.body;
-  const [training] = await query("SELECT id, title, price_tnd FROM trainings WHERE id = ?", [trainingId]);
+  const { fullName, phone, email, mode, trainingId, notes, country } = req.body;
+  const [training] = await query("SELECT id, title, price_tnd, price_eur FROM trainings WHERE id = ?", [trainingId]);
   if (!training) {
     return res.status(404).json({ message: "Formation introuvable" });
   }
 
   const result = await insert(
-    `INSERT INTO enrollment_requests (full_name, phone, email, mode_label, training_id, notes, status)
-     VALUES (?, ?, ?, ?, ?, ?, 'En attente')`,
-    [fullName, phone, email.toLowerCase(), mode || "Presentiel", trainingId, notes || ""]
+    `INSERT INTO enrollment_requests (full_name, phone, email, mode_label, training_id, notes, country_label, status)
+     VALUES (?, ?, ?, ?, ?, ?, ?, 'En attente')`,
+    [fullName, phone, email.toLowerCase(), mode || "Presentiel", trainingId, notes || "", country || "Tunisie"]
   );
 
   res.status(201).json({
@@ -123,8 +126,14 @@ router.post("/enrollments", async (req, res) => {
       email: email.toLowerCase(),
       mode: mode || "Presentiel",
       notes: notes || "",
+      country: country || "Tunisie",
       status: "En attente",
-      training: { _id: String(training.id), title: training.title, priceTND: Number(training.price_tnd) }
+      training: {
+        _id: String(training.id),
+        title: training.title,
+        priceTND: Number(training.price_tnd),
+        priceEUR: Number(training.price_eur)
+      }
     }
   });
 });

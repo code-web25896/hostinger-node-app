@@ -60,25 +60,25 @@ router.get("/contacts", async (_req, res) => {
 
 router.get("/enrollments", async (_req, res) => {
   const enrollments = await query(
-    `SELECT er.*, t.title AS training_title, t.price_tnd AS training_price_tnd
+    `SELECT er.*, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
      FROM enrollment_requests er
      INNER JOIN trainings t ON t.id = er.training_id
      ORDER BY er.created_at DESC`
   );
-  res.json(enrollments.map((item) => ({ _id: String(item.id), fullName: item.full_name, phone: item.phone, email: item.email, mode: item.mode_label, notes: item.notes, status: item.status, training: { _id: String(item.training_id), title: item.training_title, priceTND: Number(item.training_price_tnd) } })));
+  res.json(enrollments.map((item) => ({ _id: String(item.id), fullName: item.full_name, phone: item.phone, email: item.email, mode: item.mode_label, notes: item.notes, status: item.status, training: { _id: String(item.training_id), title: item.training_title, priceTND: Number(item.training_price_tnd), priceEUR: Number(item.training_price_eur) }, country: item.country_label })));
 });
 
 router.patch("/enrollments/:id", async (req, res) => {
   const result = await insert("UPDATE enrollment_requests SET status = ? WHERE id = ?", [req.body.status, req.params.id]);
   if (!result.affectedRows) return res.status(404).json({ message: "Demande introuvable" });
   const [updated] = await query(
-    `SELECT er.*, t.title AS training_title, t.price_tnd AS training_price_tnd
+    `SELECT er.*, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
      FROM enrollment_requests er
      INNER JOIN trainings t ON t.id = er.training_id
      WHERE er.id = ?`,
     [req.params.id]
   );
-  res.json({ _id: String(updated.id), fullName: updated.full_name, phone: updated.phone, email: updated.email, mode: updated.mode_label, notes: updated.notes, status: updated.status, training: { _id: String(updated.training_id), title: updated.training_title, priceTND: Number(updated.training_price_tnd) } });
+  res.json({ _id: String(updated.id), fullName: updated.full_name, phone: updated.phone, email: updated.email, mode: updated.mode_label, notes: updated.notes, country: updated.country_label, status: updated.status, training: { _id: String(updated.training_id), title: updated.training_title, priceTND: Number(updated.training_price_tnd), priceEUR: Number(updated.training_price_eur) } });
 });
 
 router.delete("/enrollments/:id", async (req, res) => {
@@ -173,3 +173,6 @@ router.get("/stats", async (_req, res) => {
 });
 
 export default router;
+
+
+

@@ -31,6 +31,7 @@ const defaults = {
       description: "Formation complete en microneedling avec protocole, hygiene et pratique sur modele.",
       duration: "3 jours",
       priceTND: 900,
+      priceEUR: 290,
       availability: ["Presentiel", "En ligne"]
     },
     {
@@ -39,6 +40,7 @@ const defaults = {
       description: "Hydrafacial professionnel avec diagnostic peau, extraction et protocoles premium.",
       duration: "2 jours",
       priceTND: 750,
+      priceEUR: 240,
       availability: ["Presentiel", "En ligne"]
     },
     {
@@ -47,6 +49,7 @@ const defaults = {
       description: "Parcours complet en soins avances, technologies esthetiques et relation cliente.",
       duration: "6 semaines",
       priceTND: 1200,
+      priceEUR: 390,
       availability: ["Presentiel", "En ligne"]
     }
   ],
@@ -80,6 +83,7 @@ const schemaStatements = [
     description TEXT,
     duration VARCHAR(100),
     price_tnd DECIMAL(10,2) NOT NULL DEFAULT 0,
+    price_eur DECIMAL(10,2) NOT NULL DEFAULT 0,
     availability_json TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -112,6 +116,7 @@ const schemaStatements = [
     mode_label VARCHAR(50) DEFAULT 'Presentiel',
     training_id INT NOT NULL,
     notes TEXT,
+    country_label VARCHAR(100) DEFAULT 'Tunisie',
     status VARCHAR(50) DEFAULT 'En attente',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -213,6 +218,13 @@ export const insert = async (sql, params = []) => {
   return result;
 };
 
+const ensureColumn = async (tableName, columnName, definition) => {
+  const rows = await query("SELECT COUNT(*) AS count FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?", [tableName, columnName]);
+  if (!rows[0]?.count) {
+    await query(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${definition}`);
+  }
+};
+
 const userFromRow = (row) => ({
   id: row.id,
   _id: String(row.id),
@@ -242,7 +254,7 @@ export const getUserWithPasswordByEmail = async (email) => {
 export const getStudentRecordBundle = async (studentId) => {
   const records = await query(
     `SELECT sr.*, u.full_name, u.email, u.phone, u.level_label, u.formation_mode,
-            t.id AS training_id, t.title AS training_title, t.duration AS training_duration, t.price_tnd AS training_price_tnd, t.image AS training_image
+            t.id AS training_id, t.title AS training_title, t.duration AS training_duration, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur, t.image AS training_image
      FROM student_records sr
      INNER JOIN users u ON u.id = sr.student_id
      LEFT JOIN trainings t ON t.id = sr.formation_id
@@ -280,6 +292,7 @@ export const getStudentRecordBundle = async (studentId) => {
           title: record.training_title,
           duration: record.training_duration,
           priceTND: Number(record.training_price_tnd),
+          priceEUR: Number(record.training_price_eur),
           image: record.training_image
         }
       : null,
@@ -328,9 +341,9 @@ const ensureSeedData = async () => {
   const trainingIds = [];
   for (const training of defaults.trainings) {
     const result = await insert(
-      `INSERT INTO trainings (title, image, description, duration, price_tnd, availability_json)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [training.title, training.image, training.description, training.duration, training.priceTND, JSON.stringify(training.availability)]
+      `INSERT INTO trainings (title, image, description, duration, price_tnd, price_eur, availability_json)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [training.title, training.image, training.description, training.duration, training.priceTND, training.priceEUR, JSON.stringify(training.availability)]
     );
     trainingIds.push(result.insertId);
   }
@@ -384,6 +397,9 @@ export const connectDB = async () => {
   for (const statement of schemaStatements) {
     await connection.query(statement);
   }
+  await ensureColumn("trainings", "price_eur", "DECIMAL(10,2) NOT NULL DEFAULT 0 AFTER price_tnd");
+  await ensureColumn("enrollment_requests", "country_label", "VARCHAR(100) DEFAULT 'Tunisie' AFTER notes");
+  await query("UPDATE trainings SET price_eur = CASE WHEN title = 'Microneedling' THEN 290 WHEN title = 'Hydrafacial' THEN 240 WHEN title = 'Esthetique avancee' THEN 390 ELSE ROUND(price_tnd / 3.2, 0) END WHERE price_eur = 0");
   await ensureSeedData();
   console.log(`MySQL connecte: ${process.env.MYSQL_HOST}/${process.env.MYSQL_DATABASE}`);
 };
