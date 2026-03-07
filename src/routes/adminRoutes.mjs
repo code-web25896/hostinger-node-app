@@ -1,189 +1,175 @@
 import express from "express";
 import path from "path";
-import User from "../models/User\.mjs";
-import News from "../models/News\.mjs";
-import Training from "../models/Training\.mjs";
-import StudentRecord from "../models/StudentRecord\.mjs";
-import ContactRequest from "../models/ContactRequest\.mjs";
-import EnrollmentRequest from "../models/EnrollmentRequest\.mjs";
-import { auth } from "../middleware/auth\.mjs";
-import { requireRole } from "../middleware/role\.mjs";
-import { upload } from "../middleware/upload\.mjs";
+import { auth } from "../middleware/auth.mjs";
+import { requireRole } from "../middleware/role.mjs";
+import { upload } from "../middleware/upload.mjs";
+import { getStudentRecordBundle, insert, query } from "../config/db.mjs";
 
 const router = express.Router();
-
 router.use(auth, requireRole("admin"));
 
 const absoluteUrl = (req, filename, folder) => `${req.protocol}://${req.get("host")}/uploads/${folder}/${filename}`;
 
-router.get("/student-records", async (_req, res) => {
-  const records = await StudentRecord.find()
-    .populate("student", "fullName email level formationMode")
-    .populate("formation", "title")
-    .sort({ updatedAt: -1 });
+const mapStudent = (row) => ({
+  id: row.id,
+  _id: String(row.id),
+  fullName: row.full_name,
+  email: row.email,
+  phone: row.phone,
+  level: row.level_label,
+  formationMode: row.formation_mode,
+  role: row.role,
+  avatar: row.avatar_url
+});
 
-  res.json(records);
+router.get("/student-records", async (_req, res) => {
+  const students = await query("SELECT id FROM users WHERE role = 'student' ORDER BY updated_at DESC, id DESC");
+  const bundles = await Promise.all(students.map((item) => getStudentRecordBundle(item.id)));
+  res.json(bundles.filter(Boolean));
 });
 
 router.post("/uploads/training-image", upload.single("file"), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "Fichier manquant" });
-  }
-
-  res.status(201).json({
-    message: "Image televersee.",
-    url: absoluteUrl(req, req.file.filename, "images")
-  });
+  if (!req.file) return res.status(400).json({ message: "Fichier manquant" });
+  res.status(201).json({ message: "Image televersee.", url: absoluteUrl(req, req.file.filename, "images") });
 });
 
 router.post("/students/:id/documents", upload.single("file"), async (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: "Fichier manquant" });
-  }
+  if (!req.file) return res.status(400).json({ message: "Fichier manquant" });
+  const [record] = await query("SELECT id FROM student_records WHERE student_id = ? LIMIT 1", [req.params.id]);
+  if (!record) return res.status(404).json({ message: "Dossier etudiant non configure" });
 
   const extension = path.extname(req.file.originalname).replace(".", "").toUpperCase() || "FILE";
-  const record = await StudentRecord.findOneAndUpdate(
-    { student: req.params.id },
-    {
-      $push: {
-        documents: {
-          name: req.file.originalname,
-          size: `${(req.file.size / (1024 * 1024)).toFixed(1)} MB`,
-          fileType: extension,
-          url: absoluteUrl(req, req.file.filename, "documents")
-        }
-      }
-    },
-    { new: true, upsert: true }
+  await insert(
+    `INSERT INTO student_documents (student_record_id, name, size_label, file_type, url)
+     VALUES (?, ?, ?, ?, ?)`,
+    [record.id, req.file.originalname, `${(req.file.size / (1024 * 1024)).toFixed(1)} MB`, extension, absoluteUrl(req, req.file.filename, "documents")]
   );
 
-  res.status(201).json({ message: "Document ajoute.", record });
+  res.status(201).json({ message: "Document ajoute.", record: await getStudentRecordBundle(Number(req.params.id)) });
 });
 
 router.get("/students", async (_req, res) => {
-  const students = await User.find({ role: "student" }).select("-password").sort({ createdAt: -1 });
-  res.json(students);
+  const students = await query("SELECT * FROM users WHERE role = 'student' ORDER BY created_at DESC");
+  res.json(students.map(mapStudent));
 });
 
 router.get("/contacts", async (_req, res) => {
-  const contacts = await ContactRequest.find().sort({ createdAt: -1 });
-  res.json(contacts);
+  const contacts = await query("SELECT * FROM contact_requests ORDER BY created_at DESC");
+  res.json(contacts.map((item) => ({ _id: String(item.id), fullName: item.full_name, phone: item.phone, email: item.email, message: item.message, status: item.status, createdAt: item.created_at })));
 });
 
 router.get("/enrollments", async (_req, res) => {
-  const enrollments = await EnrollmentRequest.find().populate("training", "title priceTND").sort({ createdAt: -1 });
-  res.json(enrollments);
+  const enrollments = await query(
+    `SELECT er.*, t.title AS training_title, t.price_tnd AS training_price_tnd
+     FROM enrollment_requests er
+     INNER JOIN trainings t ON t.id = er.training_id
+     ORDER BY er.created_at DESC`
+  );
+  res.json(enrollments.map((item) => ({ _id: String(item.id), fullName: item.full_name, phone: item.phone, email: item.email, mode: item.mode_label, notes: item.notes, status: item.status, training: { _id: String(item.training_id), title: item.training_title, priceTND: Number(item.training_price_tnd) } })));
 });
 
 router.patch("/enrollments/:id", async (req, res) => {
-  const updated = await EnrollmentRequest.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true }).populate("training", "title priceTND");
-  if (!updated) return res.status(404).json({ message: "Demande introuvable" });
-  res.json(updated);
+  const result = await insert("UPDATE enrollment_requests SET status = ? WHERE id = ?", [req.body.status, req.params.id]);
+  if (!result.affectedRows) return res.status(404).json({ message: "Demande introuvable" });
+  const [updated] = await query(
+    `SELECT er.*, t.title AS training_title, t.price_tnd AS training_price_tnd
+     FROM enrollment_requests er
+     INNER JOIN trainings t ON t.id = er.training_id
+     WHERE er.id = ?`,
+    [req.params.id]
+  );
+  res.json({ _id: String(updated.id), fullName: updated.full_name, phone: updated.phone, email: updated.email, mode: updated.mode_label, notes: updated.notes, status: updated.status, training: { _id: String(updated.training_id), title: updated.training_title, priceTND: Number(updated.training_price_tnd) } });
 });
 
 router.delete("/enrollments/:id", async (req, res) => {
-  const deleted = await EnrollmentRequest.findByIdAndDelete(req.params.id);
-  if (!deleted) return res.status(404).json({ message: "Demande introuvable" });
+  const result = await insert("DELETE FROM enrollment_requests WHERE id = ?", [req.params.id]);
+  if (!result.affectedRows) return res.status(404).json({ message: "Demande introuvable" });
   res.json({ message: "Demande supprimee" });
 });
 
 router.patch("/contacts/:id", async (req, res) => {
-  const updated = await ContactRequest.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true });
-  if (!updated) return res.status(404).json({ message: "Message introuvable" });
-  res.json(updated);
+  const result = await insert("UPDATE contact_requests SET status = ? WHERE id = ?", [req.body.status, req.params.id]);
+  if (!result.affectedRows) return res.status(404).json({ message: "Message introuvable" });
+  const [updated] = await query("SELECT * FROM contact_requests WHERE id = ?", [req.params.id]);
+  res.json({ _id: String(updated.id), fullName: updated.full_name, phone: updated.phone, email: updated.email, message: updated.message, status: updated.status });
 });
 
 router.put("/students/:id", async (req, res) => {
-  const updated = await User.findByIdAndUpdate(req.params.id, req.body, { new: true }).select("-password");
-  if (!updated) return res.status(404).json({ message: "Eleve introuvable" });
-  res.json(updated);
+  const { fullName, email, phone, level, formationMode, avatar } = req.body;
+  const result = await insert(
+    `UPDATE users SET full_name = ?, email = ?, phone = ?, level_label = ?, formation_mode = ?, avatar_url = ? WHERE id = ? AND role = 'student'`,
+    [fullName, email.toLowerCase(), phone || null, level || "Debutant", formationMode || "Presentiel", avatar || "/logo-academie.svg", req.params.id]
+  );
+  if (!result.affectedRows) return res.status(404).json({ message: "Eleve introuvable" });
+  const [student] = await query("SELECT * FROM users WHERE id = ?", [req.params.id]);
+  res.json(mapStudent(student));
 });
 
 router.delete("/students/:id", async (req, res) => {
-  await StudentRecord.findOneAndDelete({ student: req.params.id });
-  const deleted = await User.findByIdAndDelete(req.params.id);
-  if (!deleted) return res.status(404).json({ message: "Eleve introuvable" });
+  const result = await insert("DELETE FROM users WHERE id = ? AND role = 'student'", [req.params.id]);
+  if (!result.affectedRows) return res.status(404).json({ message: "Eleve introuvable" });
   res.json({ message: "Eleve supprime" });
 });
 
 router.post("/students/:id/notes", async (req, res) => {
   const { module, score } = req.body;
-
-  if (!module?.trim()) {
-    return res.status(400).json({ message: "Le module est obligatoire" });
-  }
-
-  const record = await StudentRecord.findOneAndUpdate(
-    { student: req.params.id },
-    { $push: { notes: { module, score } }, $inc: { progressPercent: 5, hoursCompleted: 1 } },
-    { new: true, upsert: true }
-  );
-  res.json(record);
+  if (!module?.trim()) return res.status(400).json({ message: "Le module est obligatoire" });
+  const [record] = await query("SELECT id FROM student_records WHERE student_id = ? LIMIT 1", [req.params.id]);
+  if (!record) return res.status(404).json({ message: "Dossier etudiant non configure" });
+  await insert("INSERT INTO student_notes (student_record_id, module_name, score) VALUES (?, ?, ?)", [record.id, module, Number(score || 0)]);
+  await insert("UPDATE student_records SET progress_percent = LEAST(progress_percent + 5, 100), hours_completed = hours_completed + 1 WHERE id = ?", [record.id]);
+  res.json(await getStudentRecordBundle(Number(req.params.id)));
 });
 
 router.post("/students/:id/schedule", async (req, res) => {
   const { day, dateLabel, slot, subject, room, mode } = req.body;
-
-  if (!subject?.trim()) {
-    return res.status(400).json({ message: "La matiere est obligatoire" });
-  }
-
-  const record = await StudentRecord.findOneAndUpdate(
-    { student: req.params.id },
-    { $push: { schedule: { day, dateLabel, slot, subject, room, mode } } },
-    { new: true, upsert: true }
+  if (!subject?.trim()) return res.status(400).json({ message: "La matiere est obligatoire" });
+  const [record] = await query("SELECT id FROM student_records WHERE student_id = ? LIMIT 1", [req.params.id]);
+  if (!record) return res.status(404).json({ message: "Dossier etudiant non configure" });
+  await insert(
+    `INSERT INTO student_schedule (student_record_id, day_label, date_label, slot_label, subject, room_label, mode_label)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`,
+    [record.id, day || null, dateLabel || null, slot || null, subject, room || null, mode || "Presentiel"]
   );
-  res.json(record);
+  res.json(await getStudentRecordBundle(Number(req.params.id)));
 });
 
 router.post("/students/:id/message", async (req, res) => {
   const { title, message } = req.body;
-
-  if (!message?.trim()) {
-    return res.status(400).json({ message: "Le message Administration est obligatoire" });
-  }
-
-  const record = await StudentRecord.findOneAndUpdate(
-    { student: req.params.id },
-    { $push: { hrMessages: { title: title || "Message Administration", message } } },
-    { new: true, upsert: true }
-  );
-  res.json(record);
+  if (!message?.trim()) return res.status(400).json({ message: "Le message Administration est obligatoire" });
+  const [record] = await query("SELECT id FROM student_records WHERE student_id = ? LIMIT 1", [req.params.id]);
+  if (!record) return res.status(404).json({ message: "Dossier etudiant non configure" });
+  await insert("INSERT INTO student_hr_messages (student_record_id, title, message) VALUES (?, ?, ?)", [record.id, title || "Message Administration", message]);
+  res.json(await getStudentRecordBundle(Number(req.params.id)));
 });
 
 router.post("/students/:id/assign-training", async (req, res) => {
   const { trainingId } = req.body;
-  const record = await StudentRecord.findOneAndUpdate(
-    { student: req.params.id },
-    { formation: trainingId, progressPercent: 20 },
-    { new: true, upsert: true }
-  ).populate("formation", "title");
-
-  res.json(record);
+  const [record] = await query("SELECT id FROM student_records WHERE student_id = ? LIMIT 1", [req.params.id]);
+  if (!record) return res.status(404).json({ message: "Dossier etudiant non configure" });
+  await insert("UPDATE student_records SET formation_id = ?, progress_percent = GREATEST(progress_percent, 20) WHERE id = ?", [trainingId, record.id]);
+  res.json(await getStudentRecordBundle(Number(req.params.id)));
 });
 
 router.get("/stats", async (_req, res) => {
-  const [students, trainings, posts, online, certificates, contacts, enrollments] = await Promise.all([
-    User.countDocuments({ role: "student" }),
-    Training.countDocuments(),
-    News.countDocuments(),
-    User.countDocuments({ role: "student", formationMode: "En ligne" }),
-    StudentRecord.countDocuments({ certificateStatus: "Certificat delivre" }),
-    ContactRequest.countDocuments({ status: "Nouveau" }),
-    EnrollmentRequest.countDocuments({ status: "En attente" })
-  ]);
+  const [studentsCount] = await query("SELECT COUNT(*) AS count FROM users WHERE role = 'student'");
+  const [trainingsCount] = await query("SELECT COUNT(*) AS count FROM trainings");
+  const [postsCount] = await query("SELECT COUNT(*) AS count FROM news");
+  const [onlineCount] = await query("SELECT COUNT(*) AS count FROM users WHERE role = 'student' AND formation_mode = 'En ligne'");
+  const [certificatesCount] = await query("SELECT COUNT(*) AS count FROM student_records WHERE certificate_status = 'Certificat delivre'");
+  const [contactsCount] = await query("SELECT COUNT(*) AS count FROM contact_requests WHERE status = 'Nouveau'");
+  const [enrollmentsCount] = await query("SELECT COUNT(*) AS count FROM enrollment_requests WHERE status = 'En attente'");
 
   res.json({
-    students,
-    trainings,
-    posts,
-    online,
-    onsite: students - online,
-    certificates,
-    newContacts: contacts,
-    pendingEnrollments: enrollments
+    students: studentsCount.count,
+    trainings: trainingsCount.count,
+    posts: postsCount.count,
+    online: onlineCount.count,
+    onsite: studentsCount.count - onlineCount.count,
+    certificates: certificatesCount.count,
+    newContacts: contactsCount.count,
+    pendingEnrollments: enrollmentsCount.count
   });
 });
 
 export default router;
-

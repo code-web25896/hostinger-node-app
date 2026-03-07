@@ -1,33 +1,33 @@
-# Hostinger Ready Package
+# Hostinger Ready Package (MySQL)
 
-Ce dossier est la version la plus simple pour Hostinger Node.js.
-
-## Structure
-- `server.js` : serveur Node principal
-- `src/` : logique backend
-- `public/` : frontend deja buildé
-- `uploads/` : images et documents
-- `package.json` : dependances et commande de demarrage
+Ce package est concu pour Hostinger Node.js + base MySQL Hostinger.
 
 ## Commandes Hostinger
-```txt
 Install command: npm install
 Build command: laisser vide
 Start command: npm start
-```
 
 ## Variables d'environnement
-Vous pouvez copier le contenu de `.env.production.example` dans Hostinger.
+Copiez `.env.hostinger` dans les variables Hostinger puis remplacez les placeholders.
 
 ```txt
 NODE_ENV=production
 PORT=3000
-MONGODB_URI=mongodb+srv://USER:PASSWORD@cluster.mongodb.net/beauty_center?retryWrites=true&w=majority
-JWT_SECRET=mettez_une_cle_tres_longue_et_secrete
+JWT_SECRET=CHANGE_ME_TO_A_LONG_RANDOM_SECRET_KEY
 CLIENT_URL=https://votre-domaine.tn
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_DATABASE=uXXXXXXXXX_beauty_center
+MYSQL_USER=uXXXXXXXXX_beauty_user
+MYSQL_PASSWORD=CHANGE_ME
 ```
 
-## Seed de demo
+## Base de donnees
+- Le schema MySQL se cree automatiquement au demarrage.
+- Si la base est vide, des donnees de demo sont creees automatiquement.
+- Comptes demo: `admin@academie.tn / Admin@123` et `yasmine@academie.tn / Yasmine@123`.
+
+## Seed manuel
 ```bash
 npm run seed
 ```

@@ -1,69 +1,53 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../models/User\.mjs";
-import StudentRecord from "../models/StudentRecord\.mjs";
-import { auth } from "../middleware/auth\.mjs";
-import { requireRole } from "../middleware/role\.mjs";
+import { auth } from "../middleware/auth.mjs";
+import { requireRole } from "../middleware/role.mjs";
+import { getUserWithPasswordByEmail, insert, query } from "../config/db.mjs";
 
 const router = express.Router();
 
-const tokenFor = (user) => jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });
+const tokenFor = (user) => jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email: email?.toLowerCase() });
+  const user = email ? await getUserWithPasswordByEmail(email) : null;
 
   if (!user) {
     return res.status(401).json({ message: "Identifiants invalides" });
   }
 
-  const ok = await bcrypt.compare(password, user.password);
+  const ok = await bcrypt.compare(password, user.passwordHash);
   if (!ok) {
     return res.status(401).json({ message: "Identifiants invalides" });
   }
 
   const token = tokenFor(user);
-  res.json({ token, user: { id: user._id, fullName: user.fullName, role: user.role, email: user.email } });
+  res.json({ token, user: { id: user.id, fullName: user.fullName, role: user.role, email: user.email } });
 });
 
 router.post("/register-student", auth, requireRole("admin"), async (req, res) => {
   const { fullName, email, password, phone, level, formationMode, avatar } = req.body;
 
-  const exists = await User.findOne({ email: email.toLowerCase() });
+  const [exists] = await query("SELECT id FROM users WHERE email = ? LIMIT 1", [email.toLowerCase()]);
   if (exists) {
     return res.status(400).json({ message: "Email deja utilise" });
   }
 
   const hash = await bcrypt.hash(password || "123456", 10);
-  const student = await User.create({
-    fullName,
-    email: email.toLowerCase(),
-    password: hash,
-    phone,
-    level: level || "Debutant",
-    formationMode: formationMode || "Presentiel",
-    role: "student"
-  });
+  const result = await insert(
+    `INSERT INTO users (full_name, email, password_hash, phone, level_label, formation_mode, role, avatar_url)
+     VALUES (?, ?, ?, ?, ?, ?, 'student', ?)`,
+    [fullName, email.toLowerCase(), hash, phone || null, level || "Debutant", formationMode || "Presentiel", avatar || "/logo-academie.svg"]
+  );
 
-  await StudentRecord.create({
-    student: student._id,
-    avatar: avatar || "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80",
-    progressPercent: 15,
-    hoursCompleted: 3,
-    totalHours: 24,
-    internship: "En attente",
-    documents: [
-      {
-        name: "Guide_Accueil.pdf",
-        size: "1.8 MB",
-        fileType: "PDF",
-        url: "#"
-      }
-    ]
-  });
+  await insert(
+    `INSERT INTO student_records (student_id, avatar_url, progress_percent, hours_completed, total_hours, internship_label, certificate_status)
+     VALUES (?, ?, 15, 3, 24, 'En attente', 'En cours d''acquisition')`,
+    [result.insertId, avatar || "/logo-academie.svg"]
+  );
 
-  res.status(201).json({ id: student._id, fullName: student.fullName, email: student.email, role: student.role });
+  res.status(201).json({ id: result.insertId, _id: String(result.insertId), fullName, email: email.toLowerCase(), role: "student" });
 });
 
 router.get("/me", auth, async (req, res) => {
@@ -71,4 +55,3 @@ router.get("/me", auth, async (req, res) => {
 });
 
 export default router;
-

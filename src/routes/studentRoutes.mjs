@@ -1,14 +1,12 @@
 import express from "express";
-import StudentRecord from "../models/StudentRecord\.mjs";
-import { auth } from "../middleware/auth\.mjs";
-import { requireRole } from "../middleware/role\.mjs";
+import { auth } from "../middleware/auth.mjs";
+import { requireRole } from "../middleware/role.mjs";
+import { getStudentRecordBundle, insert, query } from "../config/db.mjs";
 
 const router = express.Router();
 
 router.get("/dashboard", auth, requireRole("student"), async (req, res) => {
-  const record = await StudentRecord.findOne({ student: req.user._id })
-    .populate("student", "fullName email phone level formationMode")
-    .populate("formation", "title duration priceTND image");
+  const record = await getStudentRecordBundle(req.user.id);
 
   if (!record) {
     return res.status(404).json({ message: "Dossier etudiant non configure" });
@@ -19,7 +17,7 @@ router.get("/dashboard", auth, requireRole("student"), async (req, res) => {
     : 0;
 
   res.json({
-    ...record.toObject(),
+    ...record,
     averageScore,
     latestNotes: [...record.notes].slice(-3).reverse(),
     latestMessages: [...record.hrMessages].slice(-3).reverse(),
@@ -34,14 +32,19 @@ router.post("/messages", auth, requireRole("student"), async (req, res) => {
     return res.status(400).json({ message: "Le message est obligatoire" });
   }
 
-  const record = await StudentRecord.findOneAndUpdate(
-    { student: req.user._id },
-    { $push: { studentMessages: { subject: subject || "Message eleve", message } } },
-    { new: true, upsert: true }
+  const [record] = await query("SELECT id FROM student_records WHERE student_id = ? LIMIT 1", [req.user.id]);
+  if (!record) {
+    return res.status(404).json({ message: "Dossier etudiant non configure" });
+  }
+
+  await insert(
+    `INSERT INTO student_messages (student_record_id, subject, message)
+     VALUES (?, ?, ?)`,
+    [record.id, subject || "Message eleve", message]
   );
 
-  res.status(201).json({ message: "Message envoye au service RH.", record });
+  const updatedRecord = await getStudentRecordBundle(req.user.id);
+  res.status(201).json({ message: "Message envoye a l'administration.", record: updatedRecord });
 });
 
 export default router;
-

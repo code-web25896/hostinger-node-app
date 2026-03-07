@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import User from "../models/User\.mjs";
+import { getUserById } from "../config/db.mjs";
 
 export const auth = async (req, res, next) => {
   const header = req.headers.authorization;
@@ -10,7 +10,7 @@ export const auth = async (req, res, next) => {
   try {
     const token = header.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select("-password");
+    const user = await getUserById(decoded.id);
 
     if (!user) {
       return res.status(401).json({ message: "Utilisateur introuvable" });
@@ -18,8 +18,7 @@ export const auth = async (req, res, next) => {
 
     req.user = user;
     next();
-  } catch (error) {
+  } catch (_error) {
     return res.status(401).json({ message: "Token invalide" });
   }
 };
-
