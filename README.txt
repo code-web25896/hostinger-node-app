@@ -17,6 +17,8 @@ Start command: npm start
 ```
 
 ## Variables d'environnement
+Vous pouvez copier le contenu de `.env.production.example` dans Hostinger.
+
 ```txt
 NODE_ENV=production
 PORT=3000
