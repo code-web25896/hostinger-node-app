@@ -1,10 +1,10 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
-import StudentRecord from "../models/StudentRecord.js";
-import { auth } from "../middleware/auth.js";
-import { requireRole } from "../middleware/role.js";
+import User from "../models/User\.mjs";
+import StudentRecord from "../models/StudentRecord\.mjs";
+import { auth } from "../middleware/auth\.mjs";
+import { requireRole } from "../middleware/role\.mjs";
 
 const router = express.Router();
 
@@ -71,3 +71,4 @@ router.get("/me", auth, async (req, res) => {
 });
 
 export default router;
+

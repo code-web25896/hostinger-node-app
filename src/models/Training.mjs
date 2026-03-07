@@ -13,3 +13,4 @@ const trainingSchema = new mongoose.Schema(
 );
 
 export default mongoose.model("Training", trainingSchema);
+

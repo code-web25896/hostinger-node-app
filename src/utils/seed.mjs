@@ -1,12 +1,12 @@
 import dotenv from "dotenv";
 import bcrypt from "bcryptjs";
-import { connectDB } from "../config/db.js";
-import User from "../models/User.js";
-import Training from "../models/Training.js";
-import News from "../models/News.js";
-import StudentRecord from "../models/StudentRecord.js";
-import ContactRequest from "../models/ContactRequest.js";
-import EnrollmentRequest from "../models/EnrollmentRequest.js";
+import { connectDB } from "../config/db\.mjs";
+import User from "../models/User\.mjs";
+import Training from "../models/Training\.mjs";
+import News from "../models/News\.mjs";
+import StudentRecord from "../models/StudentRecord\.mjs";
+import ContactRequest from "../models/ContactRequest\.mjs";
+import EnrollmentRequest from "../models/EnrollmentRequest\.mjs";
 
 dotenv.config();
 await connectDB();
@@ -204,3 +204,4 @@ await EnrollmentRequest.insertMany([
 
 console.log("Seed termine");
 process.exit(0);
+

@@ -2,13 +2,12 @@
   "name": "beauty-center-hostinger-app",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
   "engines": {
     "node": ">=18"
   },
   "scripts": {
     "start": "node server.js",
-    "seed": "node src/utils/seed.js"
+    "seed": "node src/utils/seed.mjs"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -1,7 +1,7 @@
 import express from "express";
-import Training from "../models/Training.js";
-import { auth } from "../middleware/auth.js";
-import { requireRole } from "../middleware/role.js";
+import Training from "../models/Training\.mjs";
+import { auth } from "../middleware/auth\.mjs";
+import { requireRole } from "../middleware/role\.mjs";
 
 const router = express.Router();
 
@@ -28,3 +28,4 @@ router.delete("/:id", auth, requireRole("admin"), async (req, res) => {
 });
 
 export default router;
+

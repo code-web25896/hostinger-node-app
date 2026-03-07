@@ -53,3 +53,4 @@ const studentRecordSchema = new mongoose.Schema(
 );
 
 export default mongoose.model("StudentRecord", studentRecordSchema);
+

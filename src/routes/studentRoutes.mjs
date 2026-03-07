@@ -1,7 +1,7 @@
 import express from "express";
-import StudentRecord from "../models/StudentRecord.js";
-import { auth } from "../middleware/auth.js";
-import { requireRole } from "../middleware/role.js";
+import StudentRecord from "../models/StudentRecord\.mjs";
+import { auth } from "../middleware/auth\.mjs";
+import { requireRole } from "../middleware/role\.mjs";
 
 const router = express.Router();
 
@@ -44,3 +44,4 @@ router.post("/messages", auth, requireRole("student"), async (req, res) => {
 });
 
 export default router;
+

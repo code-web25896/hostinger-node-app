@@ -1,14 +1,14 @@
 import express from "express";
 import path from "path";
-import User from "../models/User.js";
-import News from "../models/News.js";
-import Training from "../models/Training.js";
-import StudentRecord from "../models/StudentRecord.js";
-import ContactRequest from "../models/ContactRequest.js";
-import EnrollmentRequest from "../models/EnrollmentRequest.js";
-import { auth } from "../middleware/auth.js";
-import { requireRole } from "../middleware/role.js";
-import { upload } from "../middleware/upload.js";
+import User from "../models/User\.mjs";
+import News from "../models/News\.mjs";
+import Training from "../models/Training\.mjs";
+import StudentRecord from "../models/StudentRecord\.mjs";
+import ContactRequest from "../models/ContactRequest\.mjs";
+import EnrollmentRequest from "../models/EnrollmentRequest\.mjs";
+import { auth } from "../middleware/auth\.mjs";
+import { requireRole } from "../middleware/role\.mjs";
+import { upload } from "../middleware/upload\.mjs";
 
 const router = express.Router();
 
@@ -186,3 +186,4 @@ router.get("/stats", async (_req, res) => {
 });
 
 export default router;
+

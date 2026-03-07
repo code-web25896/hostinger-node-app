@@ -1,8 +1,8 @@
 import express from "express";
-import ContactRequest from "../models/ContactRequest.js";
-import EnrollmentRequest from "../models/EnrollmentRequest.js";
-import Training from "../models/Training.js";
-import News from "../models/News.js";
+import ContactRequest from "../models/ContactRequest\.mjs";
+import EnrollmentRequest from "../models/EnrollmentRequest\.mjs";
+import Training from "../models/Training\.mjs";
+import News from "../models/News\.mjs";
 
 const router = express.Router();
 
@@ -65,3 +65,4 @@ router.post("/enrollments", async (req, res) => {
 });
 
 export default router;
+

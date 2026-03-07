@@ -14,3 +14,4 @@ const enrollmentRequestSchema = new mongoose.Schema(
 );
 
 export default mongoose.model("EnrollmentRequest", enrollmentRequestSchema);
+
