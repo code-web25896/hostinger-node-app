@@ -5,11 +5,25 @@ import { insert, query } from "../config/db.mjs";
 
 const router = express.Router();
 
+const normalizeImage = (value) => {
+  const image = (value || "").trim();
+  if (!image) return "";
+  if (image.startsWith("/uploads/")) return image;
+  if (image.startsWith("uploads/")) return `/${image}`;
+  const uploadsIndex = image.indexOf("/uploads/");
+  if (uploadsIndex >= 0) return image.slice(uploadsIndex);
+  if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i.test(image)) {
+    const match = image.match(/\/uploads\/.+$/i);
+    if (match) return match[0];
+  }
+  return image;
+};
+
 const mapTraining = (row) => ({
   id: row.id,
   _id: String(row.id),
   title: row.title,
-  image: row.image,
+  image: normalizeImage(row.image),
   description: row.description,
   duration: row.duration,
   priceTND: Number(row.price_tnd),
@@ -27,7 +41,7 @@ router.post("/", auth, requireRole("admin"), async (req, res) => {
   const result = await insert(
     `INSERT INTO trainings (title, image, description, duration, price_tnd, price_eur, availability_json)
      VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [title, image, description, duration, Number(priceTND || 0), Number(priceEUR || 0), JSON.stringify(availability)]
+    [title, normalizeImage(image), description, duration, Number(priceTND || 0), Number(priceEUR || 0), JSON.stringify(availability)]
   );
   const [training] = await query("SELECT * FROM trainings WHERE id = ?", [result.insertId]);
   res.status(201).json(mapTraining(training));
@@ -39,7 +53,7 @@ router.put("/:id", auth, requireRole("admin"), async (req, res) => {
     `UPDATE trainings
      SET title = ?, image = ?, description = ?, duration = ?, price_tnd = ?, price_eur = ?, availability_json = ?
      WHERE id = ?`,
-    [title, image, description, duration, Number(priceTND || 0), Number(priceEUR || 0), JSON.stringify(availability), req.params.id]
+    [title, normalizeImage(image), description, duration, Number(priceTND || 0), Number(priceEUR || 0), JSON.stringify(availability), req.params.id]
   );
   const [training] = await query("SELECT * FROM trainings WHERE id = ?", [req.params.id]);
   if (!training) return res.status(404).json({ message: "Formation introuvable" });

@@ -8,7 +8,7 @@ import { getStudentRecordBundle, insert, query } from "../config/db.mjs";
 const router = express.Router();
 router.use(auth, requireRole("admin"));
 
-const absoluteUrl = (req, filename, folder) => `${req.protocol}://${req.get("host")}/uploads/${folder}/${filename}`;
+const uploadUrl = (filename, folder) => `/uploads/${folder}/${filename}`;
 
 const mapStudent = (row) => ({
   id: row.id,
@@ -30,7 +30,7 @@ router.get("/student-records", async (_req, res) => {
 
 router.post("/uploads/training-image", upload.single("file"), async (req, res) => {
   if (!req.file) return res.status(400).json({ message: "Fichier manquant" });
-  res.status(201).json({ message: "Image televersee.", url: absoluteUrl(req, req.file.filename, "images") });
+  res.status(201).json({ message: "Image televersee.", url: uploadUrl(req.file.filename, "images") });
 });
 
 router.post("/students/:id/documents", upload.single("file"), async (req, res) => {
@@ -42,7 +42,7 @@ router.post("/students/:id/documents", upload.single("file"), async (req, res) =
   await insert(
     `INSERT INTO student_documents (student_record_id, name, size_label, file_type, url)
      VALUES (?, ?, ?, ?, ?)`,
-    [record.id, req.file.originalname, `${(req.file.size / (1024 * 1024)).toFixed(1)} MB`, extension, absoluteUrl(req, req.file.filename, "documents")]
+    [record.id, req.file.originalname, `${(req.file.size / (1024 * 1024)).toFixed(1)} MB`, extension, uploadUrl(req.file.filename, "documents")]
   );
 
   res.status(201).json({ message: "Document ajoute.", record: await getStudentRecordBundle(Number(req.params.id)) });
@@ -173,6 +173,3 @@ router.get("/stats", async (_req, res) => {
 });
 
 export default router;
-
-
-
