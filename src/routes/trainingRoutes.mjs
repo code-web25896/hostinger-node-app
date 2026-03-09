@@ -8,6 +8,7 @@ const router = express.Router();
 const normalizeImage = (value) => {
   const image = (value || "").trim();
   if (!image) return "";
+  if (["/logo.jpeg", "logo.jpeg", "/picpro.jpeg", "picpro.jpeg", "/foundatrice.jpeg", "foundatrice.jpeg", "/brand-logo.svg", "brand-logo.svg", "/logo-academie.svg", "logo-academie.svg"].includes(image)) return "";
   if (image.startsWith("/uploads/")) return image;
   if (image.startsWith("uploads/")) return `/${image}`;
   const uploadsIndex = image.indexOf("/uploads/");
