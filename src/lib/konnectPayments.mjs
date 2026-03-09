@@ -127,7 +127,8 @@ export const createKonnectPayment = async ({ enrollmentId, training, fullName, p
 
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(data?.message || data?.error || "Erreur Konnect lors de la creation du paiement");
+    const details = typeof data === "object" ? JSON.stringify(data) : String(data || "");
+    throw new Error(data?.message || data?.error || `Erreur Konnect lors de la creation du paiement (HTTP ${response.status})${details ? ` - ${details}` : ""}`);
   }
 
   return {
@@ -148,7 +149,8 @@ export const getKonnectPaymentDetails = async (paymentRef) => {
 
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(data?.message || data?.error || "Erreur Konnect lors de la verification du paiement");
+    const details = typeof data === "object" ? JSON.stringify(data) : String(data || "");
+    throw new Error(data?.message || data?.error || `Erreur Konnect lors de la verification du paiement (HTTP ${response.status})${details ? ` - ${details}` : ""}`);
   }
 
   return data.payment || data;

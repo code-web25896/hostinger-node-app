@@ -90,67 +90,72 @@ router.post("/contact", async (req, res) => {
 });
 
 router.post("/enrollments/checkout", async (req, res) => {
-  const { fullName, phone, email, password, confirmPassword, mode, trainingId, notes, country } = req.body;
-  const normalizedEmail = (email || "").trim().toLowerCase();
+  try {
+    const { fullName, phone, email, password, confirmPassword, mode, trainingId, notes, country } = req.body;
+    const normalizedEmail = (email || "").trim().toLowerCase();
 
-  if (!normalizedEmail || !password) {
-    return res.status(400).json({ message: "Email et mot de passe obligatoires" });
+    if (!normalizedEmail || !password) {
+      return res.status(400).json({ message: "Email et mot de passe obligatoires" });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ message: "Le mot de passe doit contenir au moins 6 caracteres" });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "La confirmation du mot de passe ne correspond pas" });
+    }
+
+    const [training] = await query("SELECT id, title, price_tnd, price_eur FROM trainings WHERE id = ?", [trainingId]);
+    if (!training) {
+      return res.status(404).json({ message: "Formation introuvable" });
+    }
+
+    const [existingUser] = await query("SELECT id, role FROM users WHERE email = ? LIMIT 1", [normalizedEmail]);
+    if (existingUser?.role === "admin") {
+      return res.status(400).json({ message: "Cet email est deja utilise par un compte administration" });
+    }
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    const payment = paymentAmountForTraining(training, country || "Tunisie");
+
+    const result = await insert(
+      `INSERT INTO enrollment_requests (
+        full_name, phone, email, password_hash, mode_label, training_id, notes, country_label,
+        status, payment_status, payment_provider, amount_value, currency_code
+       )
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'En attente', 'En attente', 'Konnect', ?, ?)`,
+      [fullName, phone, normalizedEmail, passwordHash, mode || "Presentiel", trainingId, notes || "", country || "Tunisie", payment.amountValue, payment.token]
+    );
+
+    const konnect = await createKonnectPayment({
+      enrollmentId: result.insertId,
+      training,
+      fullName,
+      phone,
+      email: normalizedEmail,
+      country: country || "Tunisie",
+      mode: mode || "Presentiel"
+    });
+
+    await insert(
+      `UPDATE enrollment_requests
+       SET payment_ref = ?, payment_status = 'Session creee'
+       WHERE id = ?`,
+      [konnect.paymentRef, result.insertId]
+    );
+
+    res.status(201).json({
+      message: "Redirection vers le paiement Konnect.",
+      checkoutUrl: konnect.payUrl,
+      paymentRef: konnect.paymentRef,
+      paymentAmount: konnect.amountValue,
+      paymentCurrency: payment.token
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: error.message || "Erreur Konnect lors de la creation du paiement" });
   }
-
-  if (password.length < 6) {
-    return res.status(400).json({ message: "Le mot de passe doit contenir au moins 6 caracteres" });
-  }
-
-  if (password !== confirmPassword) {
-    return res.status(400).json({ message: "La confirmation du mot de passe ne correspond pas" });
-  }
-
-  const [training] = await query("SELECT id, title, price_tnd, price_eur FROM trainings WHERE id = ?", [trainingId]);
-  if (!training) {
-    return res.status(404).json({ message: "Formation introuvable" });
-  }
-
-  const [existingUser] = await query("SELECT id, role FROM users WHERE email = ? LIMIT 1", [normalizedEmail]);
-  if (existingUser?.role === "admin") {
-    return res.status(400).json({ message: "Cet email est deja utilise par un compte administration" });
-  }
-
-  const passwordHash = await bcrypt.hash(password, 10);
-  const payment = paymentAmountForTraining(training, country || "Tunisie");
-
-  const result = await insert(
-    `INSERT INTO enrollment_requests (
-      full_name, phone, email, password_hash, mode_label, training_id, notes, country_label,
-      status, payment_status, payment_provider, amount_value, currency_code
-     )
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'En attente', 'En attente', 'Konnect', ?, ?)`,
-    [fullName, phone, normalizedEmail, passwordHash, mode || "Presentiel", trainingId, notes || "", country || "Tunisie", payment.amountValue, payment.token]
-  );
-
-  const konnect = await createKonnectPayment({
-    enrollmentId: result.insertId,
-    training,
-    fullName,
-    phone,
-    email: normalizedEmail,
-    country: country || "Tunisie",
-    mode: mode || "Presentiel"
-  });
-
-  await insert(
-    `UPDATE enrollment_requests
-     SET payment_ref = ?, payment_status = 'Session creee'
-     WHERE id = ?`,
-    [konnect.paymentRef, result.insertId]
-  );
-
-  res.status(201).json({
-    message: "Redirection vers le paiement Konnect.",
-    checkoutUrl: konnect.payUrl,
-    paymentRef: konnect.paymentRef,
-    paymentAmount: konnect.amountValue,
-    paymentCurrency: payment.token
-  });
 });
 
 export default router;
