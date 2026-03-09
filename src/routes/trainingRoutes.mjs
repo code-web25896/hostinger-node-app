@@ -33,38 +33,59 @@ const mapTraining = (row) => ({
 });
 
 router.get("/", async (_req, res) => {
-  const trainings = await query("SELECT * FROM trainings ORDER BY price_tnd ASC, id DESC");
-  res.json(trainings.map(mapTraining));
+  try {
+    const trainings = await query("SELECT * FROM trainings ORDER BY price_tnd ASC, id DESC");
+    res.json(trainings.map(mapTraining));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message || "Erreur lors du chargement des formations" });
+  }
 });
 
 router.post("/", auth, requireRole("admin"), async (req, res) => {
-  const { title, image, description, category, duration, priceTND, priceEUR, availability = [] } = req.body;
-  const result = await insert(
-    `INSERT INTO trainings (title, image, description, category_label, duration, price_tnd, price_eur, availability_json)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [title, normalizeImage(image), description, category || "Esthetique avancee", duration, Number(priceTND || 0), Number(priceEUR || 0), JSON.stringify(availability)]
-  );
-  const [training] = await query("SELECT * FROM trainings WHERE id = ?", [result.insertId]);
-  res.status(201).json(mapTraining(training));
+  try {
+    const { title, image, description, category, duration, priceTND, priceEUR, availability = [] } = req.body;
+    const result = await insert(
+      `INSERT INTO trainings (title, image, description, category_label, duration, price_tnd, price_eur, availability_json)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [title, normalizeImage(image), description, category || "Esthetique avancee", duration, Number(priceTND || 0), Number(priceEUR || 0), JSON.stringify(availability)]
+    );
+    const [training] = await query("SELECT * FROM trainings WHERE id = ?", [result.insertId]);
+    res.status(201).json(mapTraining(training));
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: error.message || "Erreur lors de la creation de la formation" });
+  }
 });
 
 router.put("/:id", auth, requireRole("admin"), async (req, res) => {
-  const { title, image, description, duration, priceTND, priceEUR, availability = [] } = req.body;
-  await insert(
-    `UPDATE trainings
-     SET title = ?, image = ?, description = ?, category_label = ?, duration = ?, price_tnd = ?, price_eur = ?, availability_json = ?
-     WHERE id = ?`,
-    [title, normalizeImage(image), description, category || "Esthetique avancee", duration, Number(priceTND || 0), Number(priceEUR || 0), JSON.stringify(availability), req.params.id]
-  );
-  const [training] = await query("SELECT * FROM trainings WHERE id = ?", [req.params.id]);
-  if (!training) return res.status(404).json({ message: "Formation introuvable" });
-  res.json(mapTraining(training));
+  try {
+    const { title, image, description, category, duration, priceTND, priceEUR, availability = [] } = req.body;
+    const result = await insert(
+      `UPDATE trainings
+       SET title = ?, image = ?, description = ?, category_label = ?, duration = ?, price_tnd = ?, price_eur = ?, availability_json = ?
+       WHERE id = ?`,
+      [title, normalizeImage(image), description, category || "Esthetique avancee", duration, Number(priceTND || 0), Number(priceEUR || 0), JSON.stringify(availability), req.params.id]
+    );
+    if (!result.affectedRows) return res.status(404).json({ message: "Formation introuvable" });
+    const [training] = await query("SELECT * FROM trainings WHERE id = ?", [req.params.id]);
+    if (!training) return res.status(404).json({ message: "Formation introuvable" });
+    res.json(mapTraining(training));
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: error.message || "Erreur lors de la modification de la formation" });
+  }
 });
 
 router.delete("/:id", auth, requireRole("admin"), async (req, res) => {
-  const result = await insert("DELETE FROM trainings WHERE id = ?", [req.params.id]);
-  if (!result.affectedRows) return res.status(404).json({ message: "Formation introuvable" });
-  res.json({ message: "Formation supprimee" });
+  try {
+    const result = await insert("DELETE FROM trainings WHERE id = ?", [req.params.id]);
+    if (!result.affectedRows) return res.status(404).json({ message: "Formation introuvable" });
+    res.json({ message: "Formation supprimee" });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: error.message || "Erreur lors de la suppression de la formation" });
+  }
 });
 
 export default router;
