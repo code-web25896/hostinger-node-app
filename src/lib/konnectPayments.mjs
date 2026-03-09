@@ -24,6 +24,19 @@ const paymentAmountMajor = (payment = {}, fallback = 0) => {
   return Math.round((rawAmount / divisor) * 100) / 100;
 };
 
+const mapKonnectError = (response, data, fallbackMessage) => {
+  const firstError = Array.isArray(data?.errors) ? data.errors[0] : null;
+  const rawMessage = firstError?.message || data?.message || data?.error || "";
+  const rawCode = firstError?.code || "";
+
+  if (rawCode === "AUTHENTICATE_TOKEN_INVALID" && /status de cette organisation/i.test(rawMessage)) {
+    return "Paiement Konnect indisponible pour le moment : votre organisation Konnect est encore en cours de validation.";
+  }
+
+  const details = typeof data === "object" ? JSON.stringify(data) : String(data || "");
+  return rawMessage || `${fallbackMessage} (HTTP ${response.status})${details ? ` - ${details}` : ""}`;
+};
+
 const ensureStudentForEnrollment = async (enrollment) => {
   const existingUsers = await query("SELECT id, role FROM users WHERE email = ? LIMIT 1", [enrollment.email]);
   const existingUser = existingUsers[0];
@@ -127,8 +140,7 @@ export const createKonnectPayment = async ({ enrollmentId, training, fullName, p
 
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const details = typeof data === "object" ? JSON.stringify(data) : String(data || "");
-    throw new Error(data?.message || data?.error || `Erreur Konnect lors de la creation du paiement (HTTP ${response.status})${details ? ` - ${details}` : ""}`);
+    throw new Error(mapKonnectError(response, data, "Erreur Konnect lors de la creation du paiement"));
   }
 
   return {
@@ -149,8 +161,7 @@ export const getKonnectPaymentDetails = async (paymentRef) => {
 
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
-    const details = typeof data === "object" ? JSON.stringify(data) : String(data || "");
-    throw new Error(data?.message || data?.error || `Erreur Konnect lors de la verification du paiement (HTTP ${response.status})${details ? ` - ${details}` : ""}`);
+    throw new Error(mapKonnectError(response, data, "Erreur Konnect lors de la verification du paiement"));
   }
 
   return data.payment || data;
