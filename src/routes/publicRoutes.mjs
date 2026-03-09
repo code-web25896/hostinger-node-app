@@ -1,7 +1,11 @@
 import express from "express";
+import bcrypt from "bcryptjs";
 import { insert, query } from "../config/db.mjs";
+import { getStripeClient, paymentAmountForTraining, serializeEnrollment } from "../lib/stripePayments.mjs";
 
 const router = express.Router();
+
+const clientUrl = () => process.env.CLIENT_URL || "http://localhost:5173";
 
 const mapTraining = (row) => ({
   id: row.id,
@@ -21,6 +25,13 @@ const mapNews = (row) => ({
   content: row.content,
   type: row.type,
   createdAt: row.created_at
+});
+
+const trainingFromRow = (row) => ({
+  id: row.training_id,
+  title: row.training_title,
+  price_tnd: row.training_price_tnd,
+  price_eur: row.training_price_eur
 });
 
 router.get("/search", async (req, res) => {
@@ -54,7 +65,7 @@ router.get("/enrollments/status", async (req, res) => {
   }
 
   const enrollments = await query(
-    `SELECT er.*, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
+    `SELECT er.*, t.id AS training_id, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
      FROM enrollment_requests er
      INNER JOIN trainings t ON t.id = er.training_id
      WHERE er.email = ? AND er.phone = ?
@@ -62,25 +73,7 @@ router.get("/enrollments/status", async (req, res) => {
     [email, phone]
   );
 
-  res.json(
-    enrollments.map((item) => ({
-      id: item.id,
-      _id: String(item.id),
-      fullName: item.full_name,
-      phone: item.phone,
-      email: item.email,
-      mode: item.mode_label,
-      notes: item.notes,
-      country: item.country_label,
-      status: item.status,
-      training: {
-        _id: String(item.training_id),
-        title: item.training_title,
-        priceTND: Number(item.training_price_tnd),
-        priceEUR: Number(item.training_price_eur)
-      }
-    }))
-  );
+  res.json(enrollments.map((item) => serializeEnrollment(item, trainingFromRow(item))));
 });
 
 router.post("/contact", async (req, res) => {
@@ -104,37 +97,86 @@ router.post("/contact", async (req, res) => {
   });
 });
 
-router.post("/enrollments", async (req, res) => {
-  const { fullName, phone, email, mode, trainingId, notes, country } = req.body;
+router.post("/enrollments/checkout", async (req, res) => {
+  const { fullName, phone, email, password, confirmPassword, mode, trainingId, notes, country } = req.body;
+  const normalizedEmail = (email || "").trim().toLowerCase();
+
+  if (!normalizedEmail || !password) {
+    return res.status(400).json({ message: "Email et mot de passe obligatoires" });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({ message: "Le mot de passe doit contenir au moins 6 caracteres" });
+  }
+
+  if (password !== confirmPassword) {
+    return res.status(400).json({ message: "La confirmation du mot de passe ne correspond pas" });
+  }
+
   const [training] = await query("SELECT id, title, price_tnd, price_eur FROM trainings WHERE id = ?", [trainingId]);
   if (!training) {
     return res.status(404).json({ message: "Formation introuvable" });
   }
 
+  const [existingUser] = await query("SELECT id, role FROM users WHERE email = ? LIMIT 1", [normalizedEmail]);
+  if (existingUser?.role === "admin") {
+    return res.status(400).json({ message: "Cet email est deja utilise par un compte administration" });
+  }
+
+  const passwordHash = await bcrypt.hash(password, 10);
+  const payment = paymentAmountForTraining(training);
+  const amountValue = payment.amountValue;
+  const currencyCode = payment.currency.toUpperCase();
+
   const result = await insert(
-    `INSERT INTO enrollment_requests (full_name, phone, email, mode_label, training_id, notes, country_label, status)
-     VALUES (?, ?, ?, ?, ?, ?, ?, 'En attente')`,
-    [fullName, phone, email.toLowerCase(), mode || "Presentiel", trainingId, notes || "", country || "Tunisie"]
+    `INSERT INTO enrollment_requests (
+      full_name, phone, email, password_hash, mode_label, training_id, notes, country_label,
+      status, payment_status, payment_provider, amount_value, currency_code
+     )
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'En attente', 'En attente', 'Stripe', ?, ?)`,
+    [fullName, phone, normalizedEmail, passwordHash, mode || "Presentiel", trainingId, notes || "", country || "Tunisie", amountValue, currencyCode]
+  );
+
+  const stripe = getStripeClient();
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    success_url: `${clientUrl()}/paiement/succes?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${clientUrl()}/paiement/annule?session_id={CHECKOUT_SESSION_ID}`,
+    customer_email: normalizedEmail,
+    metadata: {
+      enrollmentId: String(result.insertId),
+      trainingId: String(training.id),
+      country: country || "Tunisie",
+      mode: mode || "Presentiel"
+    },
+    line_items: [
+      {
+        quantity: 1,
+        price_data: {
+          currency: payment.currency,
+          unit_amount: payment.amountMinor,
+          product_data: {
+            name: `Inscription formation - ${training.title}`,
+            description: `Academie Internationale de Beaute | ${mode || "Presentiel"} | ${country || "Tunisie"}`
+          }
+        }
+      }
+    ]
+  });
+
+  await insert(
+    `UPDATE enrollment_requests
+     SET stripe_session_id = ?, payment_status = 'Session creee'
+     WHERE id = ?`,
+    [session.id, result.insertId]
   );
 
   res.status(201).json({
-    message: "Demande d'inscription envoyee.",
-    enrollment: {
-      _id: String(result.insertId),
-      fullName,
-      phone,
-      email: email.toLowerCase(),
-      mode: mode || "Presentiel",
-      notes: notes || "",
-      country: country || "Tunisie",
-      status: "En attente",
-      training: {
-        _id: String(training.id),
-        title: training.title,
-        priceTND: Number(training.price_tnd),
-        priceEUR: Number(training.price_eur)
-      }
-    }
+    message: "Redirection vers le paiement Stripe.",
+    checkoutUrl: session.url,
+    sessionId: session.id,
+    paymentAmount: amountValue,
+    paymentCurrency: currencyCode
   });
 });
 

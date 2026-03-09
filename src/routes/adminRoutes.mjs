@@ -4,6 +4,7 @@ import { auth } from "../middleware/auth.mjs";
 import { requireRole } from "../middleware/role.mjs";
 import { upload } from "../middleware/upload.mjs";
 import { getStudentRecordBundle, insert, query } from "../config/db.mjs";
+import { serializeEnrollment, syncEnrollmentBySession } from "../lib/stripePayments.mjs";
 
 const router = express.Router();
 router.use(auth, requireRole("admin"));
@@ -20,6 +21,13 @@ const mapStudent = (row) => ({
   formationMode: row.formation_mode,
   role: row.role,
   avatar: row.avatar_url
+});
+
+const trainingFromEnrollmentRow = (item) => ({
+  id: item.training_id_ref,
+  title: item.training_title,
+  price_tnd: item.training_price_tnd,
+  price_eur: item.training_price_eur
 });
 
 router.get("/student-records", async (_req, res) => {
@@ -60,25 +68,40 @@ router.get("/contacts", async (_req, res) => {
 
 router.get("/enrollments", async (_req, res) => {
   const enrollments = await query(
-    `SELECT er.*, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
+    `SELECT er.*, t.id AS training_id_ref, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
      FROM enrollment_requests er
      INNER JOIN trainings t ON t.id = er.training_id
      ORDER BY er.created_at DESC`
   );
-  res.json(enrollments.map((item) => ({ _id: String(item.id), fullName: item.full_name, phone: item.phone, email: item.email, mode: item.mode_label, notes: item.notes, status: item.status, training: { _id: String(item.training_id), title: item.training_title, priceTND: Number(item.training_price_tnd), priceEUR: Number(item.training_price_eur) }, country: item.country_label })));
+  res.json(enrollments.map((item) => serializeEnrollment(item, trainingFromEnrollmentRow(item))));
 });
 
 router.patch("/enrollments/:id", async (req, res) => {
   const result = await insert("UPDATE enrollment_requests SET status = ? WHERE id = ?", [req.body.status, req.params.id]);
   if (!result.affectedRows) return res.status(404).json({ message: "Demande introuvable" });
   const [updated] = await query(
-    `SELECT er.*, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
+    `SELECT er.*, t.id AS training_id_ref, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
      FROM enrollment_requests er
      INNER JOIN trainings t ON t.id = er.training_id
      WHERE er.id = ?`,
     [req.params.id]
   );
-  res.json({ _id: String(updated.id), fullName: updated.full_name, phone: updated.phone, email: updated.email, mode: updated.mode_label, notes: updated.notes, country: updated.country_label, status: updated.status, training: { _id: String(updated.training_id), title: updated.training_title, priceTND: Number(updated.training_price_tnd), priceEUR: Number(updated.training_price_eur) } });
+  res.json(serializeEnrollment(updated, trainingFromEnrollmentRow(updated)));
+});
+
+router.post("/enrollments/:id/verify-payment", async (req, res) => {
+  const [enrollment] = await query("SELECT stripe_session_id FROM enrollment_requests WHERE id = ? LIMIT 1", [req.params.id]);
+  if (!enrollment?.stripe_session_id) return res.status(404).json({ message: "Session Stripe introuvable" });
+  const { enrollment: updated } = await syncEnrollmentBySession(enrollment.stripe_session_id);
+  if (!updated) return res.status(404).json({ message: "Paiement introuvable" });
+  const [row] = await query(
+    `SELECT er.*, t.id AS training_id_ref, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
+     FROM enrollment_requests er
+     INNER JOIN trainings t ON t.id = er.training_id
+     WHERE er.id = ?`,
+    [updated.id]
+  );
+  res.json(serializeEnrollment(row, trainingFromEnrollmentRow(row)));
 });
 
 router.delete("/enrollments/:id", async (req, res) => {
@@ -159,6 +182,7 @@ router.get("/stats", async (_req, res) => {
   const [certificatesCount] = await query("SELECT COUNT(*) AS count FROM student_records WHERE certificate_status = 'Certificat delivre'");
   const [contactsCount] = await query("SELECT COUNT(*) AS count FROM contact_requests WHERE status = 'Nouveau'");
   const [enrollmentsCount] = await query("SELECT COUNT(*) AS count FROM enrollment_requests WHERE status = 'En attente'");
+  const [paidPaymentsCount] = await query("SELECT COUNT(*) AS count FROM enrollment_requests WHERE payment_status = 'Paye'");
 
   res.json({
     students: studentsCount.count,
@@ -168,7 +192,8 @@ router.get("/stats", async (_req, res) => {
     onsite: studentsCount.count - onlineCount.count,
     certificates: certificatesCount.count,
     newContacts: contactsCount.count,
-    pendingEnrollments: enrollmentsCount.count
+    pendingEnrollments: enrollmentsCount.count,
+    paidPayments: paidPaymentsCount.count
   });
 });
 

@@ -113,11 +113,19 @@ const schemaStatements = [
     full_name VARCHAR(191) NOT NULL,
     phone VARCHAR(50) NOT NULL,
     email VARCHAR(191) NOT NULL,
+    password_hash VARCHAR(255) NULL,
     mode_label VARCHAR(50) DEFAULT 'Presentiel',
     training_id INT NOT NULL,
     notes TEXT,
     country_label VARCHAR(100) DEFAULT 'Tunisie',
     status VARCHAR(50) DEFAULT 'En attente',
+    payment_status VARCHAR(50) DEFAULT 'En attente',
+    payment_provider VARCHAR(50) DEFAULT 'Stripe',
+    stripe_session_id VARCHAR(255) NULL,
+    amount_value DECIMAL(10,2) DEFAULT 0,
+    currency_code VARCHAR(10) DEFAULT 'EUR',
+    paid_at TIMESTAMP NULL,
+    student_user_id INT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_enrollment_training FOREIGN KEY (training_id) REFERENCES trainings(id) ON DELETE CASCADE
@@ -326,16 +334,7 @@ const ensureSeedData = async () => {
   const studentResult = await insert(
     `INSERT INTO users (full_name, email, password_hash, phone, level_label, formation_mode, role, avatar_url)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [
-      defaults.student.fullName,
-      defaults.student.email,
-      studentHash,
-      defaults.student.phone,
-      defaults.student.level,
-      defaults.student.formationMode,
-      defaults.student.role,
-      "/logo-academie.svg"
-    ]
+    [defaults.student.fullName, defaults.student.email, studentHash, defaults.student.phone, defaults.student.level, defaults.student.formationMode, defaults.student.role, "/logo.jpeg"]
   );
 
   const trainingIds = [];
@@ -349,16 +348,13 @@ const ensureSeedData = async () => {
   }
 
   for (const item of defaults.news) {
-    await insert(
-      `INSERT INTO news (title, content, type, published_by) VALUES (?, ?, ?, ?)`,
-      [item.title, item.content, item.type, adminResult.insertId]
-    );
+    await insert(`INSERT INTO news (title, content, type, published_by) VALUES (?, ?, ?, ?)`, [item.title, item.content, item.type, adminResult.insertId]);
   }
 
   const recordResult = await insert(
     `INSERT INTO student_records (student_id, formation_id, avatar_url, progress_percent, hours_completed, total_hours, internship_label, certificate_status)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [studentResult.insertId, trainingIds[2] || trainingIds[0] || null, "/logo-academie.svg", 75, 12, 24, "En cours", "En cours d'acquisition"]
+    [studentResult.insertId, trainingIds[2] || trainingIds[0] || null, "/logo.jpeg", 75, 12, 24, "En cours", "En cours d'acquisition"]
   );
 
   await insert(
@@ -398,7 +394,15 @@ export const connectDB = async () => {
     await connection.query(statement);
   }
   await ensureColumn("trainings", "price_eur", "DECIMAL(10,2) NOT NULL DEFAULT 0 AFTER price_tnd");
+  await ensureColumn("enrollment_requests", "password_hash", "VARCHAR(255) NULL AFTER email");
   await ensureColumn("enrollment_requests", "country_label", "VARCHAR(100) DEFAULT 'Tunisie' AFTER notes");
+  await ensureColumn("enrollment_requests", "payment_status", "VARCHAR(50) DEFAULT 'En attente' AFTER status");
+  await ensureColumn("enrollment_requests", "payment_provider", "VARCHAR(50) DEFAULT 'Stripe' AFTER payment_status");
+  await ensureColumn("enrollment_requests", "stripe_session_id", "VARCHAR(255) NULL AFTER payment_provider");
+  await ensureColumn("enrollment_requests", "amount_value", "DECIMAL(10,2) DEFAULT 0 AFTER stripe_session_id");
+  await ensureColumn("enrollment_requests", "currency_code", "VARCHAR(10) DEFAULT 'EUR' AFTER amount_value");
+  await ensureColumn("enrollment_requests", "paid_at", "TIMESTAMP NULL AFTER currency_code");
+  await ensureColumn("enrollment_requests", "student_user_id", "INT NULL AFTER paid_at");
   await query("UPDATE trainings SET price_eur = CASE WHEN title = 'Microneedling' THEN 290 WHEN title = 'Hydrafacial' THEN 240 WHEN title = 'Esthetique avancee' THEN 390 ELSE ROUND(price_tnd / 3.2, 0) END WHERE price_eur = 0");
   await ensureSeedData();
   console.log(`MySQL connecte: ${process.env.MYSQL_HOST}/${process.env.MYSQL_DATABASE}`);
