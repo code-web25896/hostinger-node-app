@@ -9,9 +9,9 @@ const defaults = {
   admin: { fullName: "Direction Academie", email: "admin@academie.tn", password: "Admin@123", role: "admin", level: "Direction", formationMode: "Presentiel", phone: "95466836" },
   student: { fullName: "Yasmine Ben Salem", email: "yasmine@academie.tn", password: "Yasmine@123", role: "student", level: "Avance", formationMode: "Presentiel", phone: "95466836" },
   trainings: [
-    { title: "Microneedling", image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1200&q=80", description: "Formation complete en microneedling avec protocole, hygiene et pratique sur modele.", duration: "3 jours", priceTND: 900, priceEUR: 290, availability: ["Presentiel", "En ligne"] },
-    { title: "Hydrafacial", image: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=1200&q=80", description: "Hydrafacial professionnel avec diagnostic peau, extraction et protocoles premium.", duration: "2 jours", priceTND: 750, priceEUR: 240, availability: ["Presentiel", "En ligne"] },
-    { title: "Esthetique avancee", image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80", description: "Parcours complet en soins avances, technologies esthetiques et relation cliente.", duration: "6 semaines", priceTND: 1200, priceEUR: 390, availability: ["Presentiel", "En ligne"] }
+    { title: "Microneedling", category: "Dermo-esthetique", image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1200&q=80", description: "Formation complete en microneedling avec protocole, hygiene et pratique sur modele.", duration: "3 jours", priceTND: 900, priceEUR: 290, availability: ["Presentiel", "En ligne"] },
+    { title: "Hydrafacial", category: "Soins visage", image: "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=1200&q=80", description: "Hydrafacial professionnel avec diagnostic peau, extraction et protocoles premium.", duration: "2 jours", priceTND: 750, priceEUR: 240, availability: ["Presentiel", "En ligne"] },
+    { title: "Esthetique avancee", category: "Esthetique avancee", image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80", description: "Parcours complet en soins avances, technologies esthetiques et relation cliente.", duration: "6 semaines", priceTND: 1200, priceEUR: 390, availability: ["Presentiel", "En ligne"] }
   ],
   news: [{ title: "Nouvelle session de printemps", content: "Les inscriptions sont ouvertes pour la nouvelle session de formation professionnelle a Tunis Belvedere.", type: "Annonce" }]
 };
@@ -35,6 +35,7 @@ const schemaStatements = [
     title VARCHAR(191) NOT NULL,
     image TEXT,
     description TEXT,
+    category_label VARCHAR(120) DEFAULT 'Esthetique avancee',
     duration VARCHAR(100),
     price_tnd DECIMAL(10,2) NOT NULL DEFAULT 0,
     price_eur DECIMAL(10,2) NOT NULL DEFAULT 0,
@@ -220,7 +221,7 @@ const ensureSeedData = async () => {
   const studentResult = await insert(`INSERT INTO users (full_name, email, password_hash, phone, level_label, formation_mode, role, avatar_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [defaults.student.fullName, defaults.student.email, studentHash, defaults.student.phone, defaults.student.level, defaults.student.formationMode, defaults.student.role, "/logo.jpeg"]);
   const trainingIds = [];
   for (const training of defaults.trainings) {
-    const result = await insert(`INSERT INTO trainings (title, image, description, duration, price_tnd, price_eur, availability_json) VALUES (?, ?, ?, ?, ?, ?, ?)`, [training.title, training.image, training.description, training.duration, training.priceTND, training.priceEUR, JSON.stringify(training.availability)]);
+    const result = await insert(`INSERT INTO trainings (title, image, description, category_label, duration, price_tnd, price_eur, availability_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`, [training.title, training.image, training.description, training.category || "Esthetique avancee", training.duration, training.priceTND, training.priceEUR, JSON.stringify(training.availability)]);
     trainingIds.push(result.insertId);
   }
   for (const item of defaults.news) await insert(`INSERT INTO news (title, content, type, published_by) VALUES (?, ?, ?, ?)`, [item.title, item.content, item.type, adminResult.insertId]);
@@ -235,6 +236,7 @@ export const connectDB = async () => {
   const connection = getPool();
   await connection.query("SELECT 1");
   for (const statement of schemaStatements) await connection.query(statement);
+  await ensureColumn("trainings", "category_label", "VARCHAR(120) DEFAULT 'Esthetique avancee' AFTER description");
   await ensureColumn("trainings", "price_eur", "DECIMAL(10,2) NOT NULL DEFAULT 0 AFTER price_tnd");
   await ensureColumn("enrollment_requests", "password_hash", "VARCHAR(255) NULL AFTER email");
   await ensureColumn("enrollment_requests", "country_label", "VARCHAR(100) DEFAULT 'Tunisie' AFTER notes");
