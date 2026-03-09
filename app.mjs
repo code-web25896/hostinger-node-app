@@ -12,7 +12,7 @@ import newsRoutes from "./src/routes/newsRoutes.mjs";
 import studentRoutes from "./src/routes/studentRoutes.mjs";
 import adminRoutes from "./src/routes/adminRoutes.mjs";
 import publicRoutes from "./src/routes/publicRoutes.mjs";
-import paymentRoutes, { stripeWebhookHandler } from "./src/routes/paymentRoutes.mjs";
+import paymentRoutes, { konnectWebhookHandler } from "./src/routes/paymentRoutes.mjs";
 
 dotenv.config();
 await connectDB();
@@ -27,7 +27,7 @@ fs.mkdirSync(path.join(uploadsDir, "images"), { recursive: true });
 fs.mkdirSync(path.join(uploadsDir, "documents"), { recursive: true });
 
 app.use(cors({ origin: process.env.CLIENT_URL || true, credentials: true }));
-app.post("/api/payments/stripe/webhook", express.raw({ type: "application/json" }), stripeWebhookHandler);
+app.get("/api/payments/konnect/webhook", konnectWebhookHandler);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));

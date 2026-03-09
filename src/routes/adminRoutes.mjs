@@ -4,7 +4,7 @@ import { auth } from "../middleware/auth.mjs";
 import { requireRole } from "../middleware/role.mjs";
 import { upload } from "../middleware/upload.mjs";
 import { getStudentRecordBundle, insert, query } from "../config/db.mjs";
-import { serializeEnrollment, syncEnrollmentBySession } from "../lib/stripePayments.mjs";
+import { serializeEnrollment, syncEnrollmentByPaymentRef } from "../lib/konnectPayments.mjs";
 
 const router = express.Router();
 router.use(auth, requireRole("admin"));
@@ -90,9 +90,9 @@ router.patch("/enrollments/:id", async (req, res) => {
 });
 
 router.post("/enrollments/:id/verify-payment", async (req, res) => {
-  const [enrollment] = await query("SELECT stripe_session_id FROM enrollment_requests WHERE id = ? LIMIT 1", [req.params.id]);
-  if (!enrollment?.stripe_session_id) return res.status(404).json({ message: "Session Stripe introuvable" });
-  const { enrollment: updated } = await syncEnrollmentBySession(enrollment.stripe_session_id);
+  const [enrollment] = await query("SELECT payment_ref FROM enrollment_requests WHERE id = ? LIMIT 1", [req.params.id]);
+  if (!enrollment?.payment_ref) return res.status(404).json({ message: "Reference Konnect introuvable" });
+  const { enrollment: updated } = await syncEnrollmentByPaymentRef(enrollment.payment_ref);
   if (!updated) return res.status(404).json({ message: "Paiement introuvable" });
   const [row] = await query(
     `SELECT er.*, t.id AS training_id_ref, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
@@ -198,3 +198,6 @@ router.get("/stats", async (_req, res) => {
 });
 
 export default router;
+
+
+

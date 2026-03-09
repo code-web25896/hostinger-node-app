@@ -1,11 +1,9 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import { insert, query } from "../config/db.mjs";
-import { getStripeClient, paymentAmountForTraining, serializeEnrollment } from "../lib/stripePayments.mjs";
+import { createKonnectPayment, paymentAmountForTraining, serializeEnrollment } from "../lib/konnectPayments.mjs";
 
 const router = express.Router();
-
-const clientUrl = () => process.env.CLIENT_URL || "http://localhost:5173";
 
 const mapTraining = (row) => ({
   id: row.id,
@@ -43,14 +41,8 @@ router.get("/search", async (req, res) => {
 
   const like = `%${keyword}%`;
   const [trainings, news] = await Promise.all([
-    query(
-      `SELECT * FROM trainings WHERE title LIKE ? OR description LIKE ? ORDER BY created_at DESC`,
-      [like, like]
-    ),
-    query(
-      `SELECT * FROM news WHERE title LIKE ? OR content LIKE ? OR type LIKE ? ORDER BY created_at DESC`,
-      [like, like, like]
-    )
+    query(`SELECT * FROM trainings WHERE title LIKE ? OR description LIKE ? ORDER BY created_at DESC`, [like, like]),
+    query(`SELECT * FROM news WHERE title LIKE ? OR content LIKE ? OR type LIKE ? ORDER BY created_at DESC`, [like, like, like])
   ]);
 
   res.json({ trainings: trainings.map(mapTraining), news: news.map(mapNews) });
@@ -124,59 +116,40 @@ router.post("/enrollments/checkout", async (req, res) => {
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
-  const payment = paymentAmountForTraining(training);
-  const amountValue = payment.amountValue;
-  const currencyCode = payment.currency.toUpperCase();
+  const payment = paymentAmountForTraining(training, country || "Tunisie");
 
   const result = await insert(
     `INSERT INTO enrollment_requests (
       full_name, phone, email, password_hash, mode_label, training_id, notes, country_label,
       status, payment_status, payment_provider, amount_value, currency_code
      )
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'En attente', 'En attente', 'Stripe', ?, ?)`,
-    [fullName, phone, normalizedEmail, passwordHash, mode || "Presentiel", trainingId, notes || "", country || "Tunisie", amountValue, currencyCode]
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'En attente', 'En attente', 'Konnect', ?, ?)`,
+    [fullName, phone, normalizedEmail, passwordHash, mode || "Presentiel", trainingId, notes || "", country || "Tunisie", payment.amountValue, payment.token]
   );
 
-  const stripe = getStripeClient();
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    success_url: `${clientUrl()}/paiement/succes?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${clientUrl()}/paiement/annule?session_id={CHECKOUT_SESSION_ID}`,
-    customer_email: normalizedEmail,
-    metadata: {
-      enrollmentId: String(result.insertId),
-      trainingId: String(training.id),
-      country: country || "Tunisie",
-      mode: mode || "Presentiel"
-    },
-    line_items: [
-      {
-        quantity: 1,
-        price_data: {
-          currency: payment.currency,
-          unit_amount: payment.amountMinor,
-          product_data: {
-            name: `Inscription formation - ${training.title}`,
-            description: `Academie Internationale de Beaute | ${mode || "Presentiel"} | ${country || "Tunisie"}`
-          }
-        }
-      }
-    ]
+  const konnect = await createKonnectPayment({
+    enrollmentId: result.insertId,
+    training,
+    fullName,
+    phone,
+    email: normalizedEmail,
+    country: country || "Tunisie",
+    mode: mode || "Presentiel"
   });
 
   await insert(
     `UPDATE enrollment_requests
-     SET stripe_session_id = ?, payment_status = 'Session creee'
+     SET payment_ref = ?, payment_status = 'Session creee'
      WHERE id = ?`,
-    [session.id, result.insertId]
+    [konnect.paymentRef, result.insertId]
   );
 
   res.status(201).json({
-    message: "Redirection vers le paiement Stripe.",
-    checkoutUrl: session.url,
-    sessionId: session.id,
-    paymentAmount: amountValue,
-    paymentCurrency: currencyCode
+    message: "Redirection vers le paiement Konnect.",
+    checkoutUrl: konnect.payUrl,
+    paymentRef: konnect.paymentRef,
+    paymentAmount: konnect.amountValue,
+    paymentCurrency: payment.token
   });
 });
 

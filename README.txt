@@ -1,6 +1,6 @@
-# Hostinger Ready Package (MySQL + Stripe)
+# Hostinger Ready Package (MySQL + Konnect)
 
-Ce package est concu pour Hostinger Node.js + base MySQL Hostinger + Stripe Checkout.
+Ce package est concu pour Hostinger Node.js + base MySQL Hostinger + paiement Konnect.
 
 ## Commandes Hostinger
 Install command: npm install
@@ -8,8 +8,6 @@ Build command: laisser vide
 Start command: npm start
 
 ## Variables d'environnement
-Copiez `.env.hostinger` dans les variables Hostinger puis remplacez les placeholders.
-
 ```txt
 NODE_ENV=production
 PORT=3000
@@ -20,24 +18,20 @@ MYSQL_PORT=3306
 MYSQL_DATABASE=uXXXXXXXXX_beauty_center
 MYSQL_USER=uXXXXXXXXX_beauty_user
 MYSQL_PASSWORD=CHANGE_ME
-STRIPE_SECRET_KEY=sk_live_xxx
-STRIPE_WEBHOOK_SECRET=whsec_xxx
+KONNECT_API_KEY=CHANGE_ME
+KONNECT_WALLET_ID=CHANGE_ME
+KONNECT_API_BASE_URL=https://api.konnect.network/api/v2
 ```
 
-## Stripe
-- Le paiement formation passe par Stripe Checkout.
-- URL webhook Stripe a configurer:
-  `https://votre-domaine.tn/api/payments/stripe/webhook`
-- Evenement Stripe minimal a ecouter:
-  `checkout.session.completed`
-- Optionnel:
-  `checkout.session.async_payment_succeeded`
-  `checkout.session.expired`
+## Konnect
+- URL webhook Konnect a configurer:
+  `https://votre-domaine.tn/api/payments/konnect/webhook`
+- Le paiement initie une redirection Konnect.
+- Le compte eleve est cree automatiquement apres paiement valide.
 
 ## Base de donnees
 - Le schema MySQL se cree automatiquement au demarrage.
-- Si la base est vide, des donnees de demo sont creees automatiquement.
-- Les paiements valides confirment l'inscription et creent automatiquement le compte eleve.
+- Les colonnes de paiement sont ajoutees automatiquement si elles n'existent pas.
 
 ## Seed manuel
 ```bash

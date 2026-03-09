@@ -1,6 +1,6 @@
 import express from "express";
 import { query } from "../config/db.mjs";
-import { finalizeEnrollmentPayment, getStripeClient, serializeEnrollment, syncEnrollmentBySession } from "../lib/stripePayments.mjs";
+import { finalizeEnrollmentPayment, serializeEnrollment, syncEnrollmentByPaymentRef } from "../lib/konnectPayments.mjs";
 
 const router = express.Router();
 
@@ -23,43 +23,32 @@ const trainingFromRow = (row) => ({
   price_eur: row.training_price_eur
 });
 
-export const stripeWebhookHandler = async (req, res) => {
+export const konnectWebhookHandler = async (req, res) => {
   try {
-    if (!process.env.STRIPE_WEBHOOK_SECRET) {
-      return res.status(500).send("STRIPE_WEBHOOK_SECRET manquante");
+    const paymentRef = (req.query.payment_ref || req.query.paymentRef || req.query.paymentId || "").trim();
+    if (!paymentRef) {
+      return res.status(400).send("payment_ref manquant");
     }
 
-    const stripe = getStripeClient();
-    const signature = req.headers["stripe-signature"];
-    const event = stripe.webhooks.constructEvent(req.body, signature, process.env.STRIPE_WEBHOOK_SECRET);
-
-    if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
-      const session = event.data.object;
-      const enrollmentId = Number(session.metadata?.enrollmentId || 0);
-      if (enrollmentId) {
-        await finalizeEnrollmentPayment(enrollmentId, session);
-      }
-    }
-
-    if (event.type === "checkout.session.expired") {
-      const session = event.data.object;
-      await syncEnrollmentBySession(session.id);
+    const { payment, enrollment } = await syncEnrollmentByPaymentRef(paymentRef);
+    if (payment?.status === "completed" && enrollment?.id) {
+      await finalizeEnrollmentPayment(enrollment.id, payment);
     }
 
     res.json({ received: true });
   } catch (error) {
     console.error(error);
-    res.status(400).send(`Webhook Error: ${error.message}`);
+    res.status(400).send(`Konnect webhook error: ${error.message}`);
   }
 };
 
 router.get("/session-status", async (req, res) => {
-  const sessionId = (req.query.session_id || "").trim();
-  if (!sessionId) {
-    return res.status(400).json({ message: "session_id obligatoire" });
+  const paymentRef = (req.query.payment_ref || req.query.paymentRef || "").trim();
+  if (!paymentRef) {
+    return res.status(400).json({ message: "payment_ref obligatoire" });
   }
 
-  const { session, enrollment } = await syncEnrollmentBySession(sessionId);
+  const { payment, enrollment } = await syncEnrollmentByPaymentRef(paymentRef);
   if (!enrollment) {
     return res.status(404).json({ message: "Paiement introuvable" });
   }
@@ -70,8 +59,8 @@ router.get("/session-status", async (req, res) => {
   }
 
   res.json({
-    checkoutStatus: session.status,
-    stripePaymentStatus: session.payment_status,
+    checkoutStatus: payment.status,
+    paymentStatus: payment.status,
     enrollment: serializeEnrollment(row, trainingFromRow(row)),
     loginReady: row.payment_status === "Paye" && !!row.student_user_id,
     loginEmail: row.email
