@@ -18,7 +18,7 @@
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(180deg,rgba(255,255,255,.82) 0%,rgba(255,255,255,.92) 100%);
+  background:linear-gradient(180deg,rgba(255,255,255,.62) 0%,rgba(255,255,255,.75) 100%);
   border-radius:inherit;
 }
 
@@ -28,10 +28,10 @@
   max-width:540px;
   padding:22px 20px;
   border-radius:24px;
-  background:rgba(255,255,255,.78);
+  background:rgba(255,255,255,.68);
   box-shadow:0 22px 60px rgba(20,24,40,.12);
-  -webkit-backdrop-filter:blur(10px);
-  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(6px);
+  backdrop-filter:blur(6px);
 }
 
 .hero .subtitle{
@@ -100,4 +100,40 @@
   .hero .description{
     font-size:1.05rem;
   }
+}
+
+.hero-grid{
+  align-items:center;
+}
+
+.glass-card{
+  background:rgba(255,252,248,.82);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+}
+
+.payment-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 12px;
+  border-radius:999px;
+  border:1px solid rgba(184,154,103,.35);
+  background:rgba(255,255,255,.9);
+  color:#0f1730;
+  font-weight:600;
+}
+
+.payment-icon{
+  display:inline-flex;
+  width:26px;
+  height:26px;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background:#fbf2e2;
+  color:#b08a55;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.04em;
 }

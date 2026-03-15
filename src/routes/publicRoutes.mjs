@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import { insert, query } from "../config/db.mjs";
-import { createKonnectPayment, paymentAmountForTraining, serializeEnrollment } from "../lib/konnectPayments.mjs";
+import { paymentAmountForTraining, serializeEnrollment } from "../lib/konnectPayments.mjs";
 
 const router = express.Router();
 
@@ -124,37 +124,16 @@ router.post("/enrollments/checkout", async (req, res) => {
         full_name, phone, email, password_hash, mode_label, training_id, notes, country_label,
         status, payment_status, payment_provider, amount_value, currency_code
        )
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'En attente', 'En attente', 'Konnect', ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'En attente', 'En attente', 'Virement/Visa', ?, ?)`,
       [fullName, phone, normalizedEmail, passwordHash, mode || "Presentiel", trainingId, notes || "", country || "Tunisie", payment.amountValue, payment.token]
     );
 
-    const konnect = await createKonnectPayment({
-      enrollmentId: result.insertId,
-      training,
-      fullName,
-      phone,
-      email: normalizedEmail,
-      country: country || "Tunisie",
-      mode: mode || "Presentiel"
-    });
-
-    await insert(
-      `UPDATE enrollment_requests
-       SET payment_ref = ?, payment_status = 'Session creee'
-       WHERE id = ?`,
-      [konnect.paymentRef, result.insertId]
-    );
-
     res.status(201).json({
-      message: "Redirection vers le paiement Konnect.",
-      checkoutUrl: konnect.payUrl,
-      paymentRef: konnect.paymentRef,
-      paymentAmount: konnect.amountValue,
-      paymentCurrency: payment.token
+      message: "Inscription reussie. Le paiement se fait apres inscription par virement bancaire ou carte Visa (Binance, Redotpay)."
     });
   } catch (error) {
     console.error(error);
-    res.status(400).json({ message: error.message || "Erreur Konnect lors de la creation du paiement" });
+    res.status(400).json({ message: error.message || "Erreur lors de l inscription" });
   }
 });
 
