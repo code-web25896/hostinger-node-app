@@ -12,7 +12,6 @@ import newsRoutes from "./src/routes/newsRoutes.mjs";
 import studentRoutes from "./src/routes/studentRoutes.mjs";
 import adminRoutes from "./src/routes/adminRoutes.mjs";
 import publicRoutes from "./src/routes/publicRoutes.mjs";
-import paymentRoutes, { konnectWebhookHandler } from "./src/routes/paymentRoutes.mjs";
 
 dotenv.config();
 await connectDB();
@@ -27,7 +26,6 @@ fs.mkdirSync(path.join(uploadsDir, "images"), { recursive: true });
 fs.mkdirSync(path.join(uploadsDir, "documents"), { recursive: true });
 
 app.use(cors({ origin: process.env.CLIENT_URL || true, credentials: true }));
-app.get("/api/payments/konnect/webhook", konnectWebhookHandler);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
@@ -40,7 +38,6 @@ app.use("/api/trainings", trainingRoutes);
 app.use("/api/news", newsRoutes);
 app.use("/api/student", studentRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("/api/payments", paymentRoutes);
 
 app.use(express.static(publicDir));
 app.get(/^\/(?!api|uploads).*/, (_req, res) => {
@@ -56,3 +53,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Application demarree sur http://localhost:${PORT}`);
 });
+

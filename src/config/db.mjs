@@ -75,7 +75,7 @@ const schemaStatements = [
     country_label VARCHAR(100) DEFAULT 'Tunisie',
     status VARCHAR(50) DEFAULT 'En attente',
     payment_status VARCHAR(50) DEFAULT 'En attente',
-    payment_provider VARCHAR(50) DEFAULT 'Konnect',
+    payment_provider VARCHAR(50) DEFAULT 'Virement/Visa',
     payment_ref VARCHAR(255) NULL,
     amount_value DECIMAL(10,2) DEFAULT 0,
     currency_code VARCHAR(10) DEFAULT 'TND',
@@ -241,14 +241,15 @@ export const connectDB = async () => {
   await ensureColumn("enrollment_requests", "password_hash", "VARCHAR(255) NULL AFTER email");
   await ensureColumn("enrollment_requests", "country_label", "VARCHAR(100) DEFAULT 'Tunisie' AFTER notes");
   await ensureColumn("enrollment_requests", "payment_status", "VARCHAR(50) DEFAULT 'En attente' AFTER status");
-  await ensureColumn("enrollment_requests", "payment_provider", "VARCHAR(50) DEFAULT 'Konnect' AFTER payment_status");
+  await ensureColumn("enrollment_requests", "payment_provider", "VARCHAR(50) DEFAULT 'Virement/Visa' AFTER payment_status");
   await ensureColumn("enrollment_requests", "payment_ref", "VARCHAR(255) NULL AFTER payment_provider");
   await ensureColumn("enrollment_requests", "amount_value", "DECIMAL(10,2) DEFAULT 0 AFTER payment_ref");
   await ensureColumn("enrollment_requests", "currency_code", "VARCHAR(10) DEFAULT 'TND' AFTER amount_value");
   await ensureColumn("enrollment_requests", "paid_at", "TIMESTAMP NULL AFTER currency_code");
   await ensureColumn("enrollment_requests", "student_user_id", "INT NULL AFTER paid_at");
-  await query("UPDATE enrollment_requests SET payment_provider = 'Konnect' WHERE payment_provider IS NULL OR payment_provider = '' OR payment_provider = 'Stripe'");
+  await query("UPDATE enrollment_requests SET payment_provider = 'Virement/Visa' WHERE payment_provider IS NULL OR payment_provider = '' OR payment_provider = 'Stripe'");
   await query("UPDATE trainings SET price_eur = CASE WHEN title = 'Microneedling' THEN 290 WHEN title = 'Hydrafacial' THEN 240 WHEN title = 'Esthetique avancee' THEN 390 ELSE ROUND(price_tnd / 3.2, 0) END WHERE price_eur = 0");
   await ensureSeedData();
   console.log(`MySQL connecte: ${process.env.MYSQL_HOST}/${process.env.MYSQL_DATABASE}`);
 };
+

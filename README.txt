@@ -1,6 +1,4 @@
-# Hostinger Ready Package (MySQL + Konnect)
 
-Ce package est concu pour Hostinger Node.js + base MySQL Hostinger + paiement Konnect.
 
 ## Commandes Hostinger
 Install command: npm install
@@ -18,15 +16,8 @@ MYSQL_PORT=3306
 MYSQL_DATABASE=uXXXXXXXXX_beauty_center
 MYSQL_USER=uXXXXXXXXX_beauty_user
 MYSQL_PASSWORD=CHANGE_ME
-KONNECT_API_KEY=CHANGE_ME
-KONNECT_WALLET_ID=CHANGE_ME
-KONNECT_API_BASE_URL=https://api.konnect.network/api/v2
 ```
 
-## Konnect
-- URL webhook Konnect a configurer:
-  `https://votre-domaine.tn/api/payments/konnect/webhook`
-- Le paiement initie une redirection Konnect.
 - Le compte eleve est cree automatiquement apres paiement valide.
 
 ## Base de donnees
@@ -37,3 +28,4 @@ KONNECT_API_BASE_URL=https://api.konnect.network/api/v2
 ```bash
 npm run seed
 ```
+

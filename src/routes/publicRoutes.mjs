@@ -1,7 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
 import { insert, query } from "../config/db.mjs";
-import { paymentAmountForTraining, serializeEnrollment } from "../lib/konnectPayments.mjs";
+import { paymentAmountForTraining, serializeEnrollment } from "../lib/enrollmentUtils.mjs";
 
 const router = express.Router();
 
@@ -138,3 +138,4 @@ router.post("/enrollments/checkout", async (req, res) => {
 });
 
 export default router;
+

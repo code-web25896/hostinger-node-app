@@ -137,3 +137,13 @@
   font-weight:700;
   letter-spacing:.04em;
 }
+
+
+.payment-success-box{
+  max-width:420px;
+  margin:0 auto;
+  text-align:center;
+  border:1px solid rgba(176,138,85,.18);
+  box-shadow:0 14px 30px rgba(15,23,42,.08);
+}
+
