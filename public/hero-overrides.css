@@ -147,3 +147,14 @@
   box-shadow:0 14px 30px rgba(15,23,42,.08);
 }
 
+
+#contact img[src*='logo'],
+#contact img[alt*='Logo']{
+  max-width:240px;
+  width:100%;
+  height:auto;
+  object-fit:contain;
+  margin:0 auto;
+  display:block;
+}
+
