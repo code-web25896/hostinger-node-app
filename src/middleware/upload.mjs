@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import multer from "multer";
 
-const uploadsRoot = path.resolve(process.cwd(), "uploads");
+const uploadsRoot = path.resolve(process.cwd(), "public", "uploads");
 const imageDir = path.join(uploadsRoot, "images");
 const documentDir = path.join(uploadsRoot, "documents");
 

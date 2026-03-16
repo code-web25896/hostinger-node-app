@@ -19,11 +19,31 @@ await connectDB();
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const uploadsDir = path.resolve(__dirname, "uploads");
 const publicDir = path.resolve(__dirname, "public");
+const uploadsDir = path.join(publicDir, "uploads");
+const legacyUploadsDir = path.resolve(__dirname, "uploads");
 
-fs.mkdirSync(path.join(uploadsDir, "images"), { recursive: true });
-fs.mkdirSync(path.join(uploadsDir, "documents"), { recursive: true });
+const ensureDir = (dir) => fs.mkdirSync(dir, { recursive: true });
+const copyIfMissing = (sourceDir, targetDir) => {
+  if (!fs.existsSync(sourceDir)) return;
+  ensureDir(targetDir);
+  for (const entry of fs.readdirSync(sourceDir, { withFileTypes: true })) {
+    const sourcePath = path.join(sourceDir, entry.name);
+    const targetPath = path.join(targetDir, entry.name);
+    if (entry.isDirectory()) {
+      copyIfMissing(sourcePath, targetPath);
+      continue;
+    }
+    if (!fs.existsSync(targetPath)) {
+      fs.copyFileSync(sourcePath, targetPath);
+    }
+  }
+};
+
+ensureDir(path.join(uploadsDir, "images"));
+ensureDir(path.join(uploadsDir, "documents"));
+copyIfMissing(path.join(legacyUploadsDir, "images"), path.join(uploadsDir, "images"));
+copyIfMissing(path.join(legacyUploadsDir, "documents"), path.join(uploadsDir, "documents"));
 
 app.use(cors({ origin: process.env.CLIENT_URL || true, credentials: true }));
 app.use(express.json());
