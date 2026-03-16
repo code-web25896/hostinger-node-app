@@ -64,6 +64,19 @@
   color:#4b5563;
 }
 
+.section-title{
+  text-align:center;
+  font-weight:700;
+}
+
+.section-title + p,
+.section-title + .mt-2,
+.section-title + .mt-3{
+  text-align:center;
+  margin-left:auto;
+  margin-right:auto;
+}
+
 .hero [class="mt-8 grid gap-3 sm:grid-cols-3"],
 .hero [class*=" mt-8 grid gap-3 sm:grid-cols-3"]{
   display:none;
