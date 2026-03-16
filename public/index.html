@@ -6,12 +6,45 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260316-16"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260316-16">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260316-16">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260316-17"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260316-17">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260316-17">
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      (function () {
+        const move = () => {
+          const headings = Array.from(document.querySelectorAll("h2"));
+          const partnersHeading = headings.find(
+            (h) => h.textContent.trim() === "Nos Partenaires"
+          );
+          const contactHeading = headings.find(
+            (h) => h.textContent.trim() === "Nous Trouver"
+          );
+          if (!partnersHeading || !contactHeading) return false;
+          const partnersSection = partnersHeading.closest("section");
+          const contactSection = contactHeading.closest("section");
+          if (!partnersSection || !contactSection) return false;
+          if (partnersSection === contactSection) return false;
+          if (partnersSection.nextElementSibling === contactSection) return true;
+          contactSection.parentNode.insertBefore(partnersSection, contactSection);
+          return true;
+        };
+
+        const tryMove = () => {
+          if (move()) {
+            observer.disconnect();
+            clearInterval(timer);
+          }
+        };
+
+        const observer = new MutationObserver(tryMove);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        const timer = setInterval(tryMove, 400);
+        window.addEventListener("load", tryMove);
+      })();
+    </script>
   </body>
 </html>
 
