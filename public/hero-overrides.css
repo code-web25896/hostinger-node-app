@@ -158,6 +158,37 @@
   display:block;
 }
 
+.atelier-gallery{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+}
+
+@media (min-width: 640px){
+  .atelier-gallery{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media (min-width: 1024px){
+  .atelier-gallery{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:20px;
+  }
+}
+
+.atelier-card img{
+  width:100%;
+  height:160px;
+  object-fit:cover;
+}
+
+@media (min-width: 1024px){
+  .atelier-card img{
+    height:190px;
+  }
+}
+
 
 
 @media (min-width: 1024px){
