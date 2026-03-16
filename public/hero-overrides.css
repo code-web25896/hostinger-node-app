@@ -64,6 +64,11 @@
   color:#4b5563;
 }
 
+.hero [class="mt-8 grid gap-3 sm:grid-cols-3"],
+.hero [class*=" mt-8 grid gap-3 sm:grid-cols-3"]{
+  display:none;
+}
+
 @media (max-width: 480px){
   .hero{
     min-height:480px;
