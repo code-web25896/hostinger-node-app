@@ -208,8 +208,14 @@
 }
 
 @media (min-width: 1024px){
+  .students-card{
+    background:#fff;
+  }
+
   .students-card img{
-    height:220px;
+    height:200px;
+    object-fit:contain;
+    padding:6px 10px;
   }
 }
 
