@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260316-22"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260316-22">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260316-22">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260316-25"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260316-25">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260316-25">
   </head>
   <body>
     <div id="root"></div>
@@ -43,6 +43,45 @@
         observer.observe(document.documentElement, { childList: true, subtree: true });
         const timer = setInterval(tryMove, 400);
         window.addEventListener("load", tryMove);
+      })();
+    </script>
+    <script>
+      (function () {
+        const labelToCode = {
+          Tunisie: "TN",
+          France: "FR",
+          Italie: "IT",
+          Suisse: "CH",
+          Canada: "CA",
+          "Afrique subsaharienne": "AF",
+          Libye: "LY",
+          Algerie: "DZ",
+          Maroc: "MA"
+        };
+
+        const isCountryModal = (node) => {
+          if (!node) return false;
+          const heading = node.querySelector ? node.querySelector("h2") : null;
+          return heading && heading.textContent.trim() === "Choisissez votre pays";
+        };
+
+        document.addEventListener(
+          "click",
+          (event) => {
+            const btn = event.target.closest("button");
+            if (!btn) return;
+            const modal = btn.closest("div");
+            if (!modal || !isCountryModal(modal)) return;
+            const label = (btn.querySelector("span") || btn).textContent.trim();
+            const code = labelToCode[label];
+            if (!code) return;
+            try {
+              sessionStorage.setItem("academy_country", code);
+            } catch (e) {}
+            window.location.reload();
+          },
+          true
+        );
       })();
     </script>
   </body>
