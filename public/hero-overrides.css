@@ -197,6 +197,7 @@
 
 @media (min-width: 1024px){
   .students-gallery{
+    grid-template-columns:repeat(2,minmax(0,1fr));
     gap:20px;
   }
 }
@@ -213,7 +214,7 @@
   }
 
   .students-card img{
-    height:200px;
+    height:320px;
     object-fit:contain;
     padding:6px 10px;
   }
