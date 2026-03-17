@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260317-02"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260317-02">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260317-02">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260317-03"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260317-03">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260317-03">
   </head>
   <body>
     <div id="root"></div>
@@ -43,6 +43,46 @@
         observer.observe(document.documentElement, { childList: true, subtree: true });
         const timer = setInterval(tryMove, 400);
         window.addEventListener("load", tryMove);
+      })();
+    </script>
+    <script>
+      (function () {
+        const upgrade = () => {
+          let changed = false;
+          const chips = Array.from(document.querySelectorAll("div,span,p,li"));
+          chips.forEach((el) => {
+            if (el.textContent && el.textContent.trim() === "Amincissement et remoulage") {
+              el.textContent = "Amincissement et remodelage";
+              changed = true;
+            }
+          });
+
+          const cvLink = document.querySelector('a[href="/formatrice-gharbi.pdf"]');
+          if (cvLink) {
+            cvLink.setAttribute("target", "_blank");
+            cvLink.setAttribute("rel", "noopener");
+            cvLink.className =
+              "mt-5 inline-flex w-full items-center justify-center gap-3 rounded-full border border-[#d7c3a1] bg-[linear-gradient(120deg,#fffaf1,#f7ead6)] px-5 py-3 text-sm font-semibold text-[#1f2a44] shadow-[0_16px_32px_rgba(18,26,46,0.12)] transition hover:-translate-y-0.5 hover:border-[#caa56a] hover:bg-[linear-gradient(120deg,#fff7e8,#f1e1c6)]";
+            if (!cvLink.querySelector(".cv-pill")) {
+              cvLink.innerHTML = '<span class="cv-pill flex h-8 w-8 items-center justify-center rounded-full bg-white text-[11px] font-bold text-gold shadow-[0_8px_16px_rgba(15,23,42,0.12)]">PDF</span>Voir le CV';
+            }
+            changed = true;
+          }
+
+          return changed;
+        };
+
+        const tryUpgrade = () => {
+          if (upgrade()) {
+            observer.disconnect();
+            clearInterval(timer);
+          }
+        };
+
+        const observer = new MutationObserver(tryUpgrade);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        const timer = setInterval(tryUpgrade, 400);
+        window.addEventListener("load", tryUpgrade);
       })();
     </script>
   </body>
