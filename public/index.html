@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260318-01"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260318-01">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260318-01">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260318-02"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260318-02">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260318-02">
   </head>
   <body>
     <div id="root"></div>
@@ -102,15 +102,15 @@
         `;
 
         const replaceSection = () => {
-          const candidate = Array.from(document.querySelectorAll("section")).find(
+          const sections = Array.from(document.querySelectorAll("section"));
+          const candidate = sections.find(
             (s) =>
               s.textContent.includes("Notre formatrice") ||
               (s.querySelector("h2") &&
                 s.querySelector("h2").textContent.trim() === "Madame Gharbi")
           );
-          if (!candidate) return false;
 
-          candidate.innerHTML = `
+          const newMarkup = `
             <div class="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-12">
               <div class="flex items-center gap-3">
                 <p class="text-sm font-bold uppercase tracking-[0.24em] text-gold">Nos formatrices</p>
@@ -125,6 +125,26 @@
               </div>
             </div>
           `;
+
+          if (candidate) {
+            candidate.innerHTML = newMarkup;
+            return true;
+          }
+
+          const offersHeading = Array.from(document.querySelectorAll("h2")).find(
+            (h) => h.textContent.trim() === "Nos Offres"
+          );
+          if (!offersHeading) return false;
+          const offersSection = offersHeading.closest("section");
+          if (!offersSection) return false;
+          if (document.getElementById("nos-formatrices")) return true;
+
+          const section = document.createElement("section");
+          section.id = "nos-formatrices";
+          section.className =
+            "mt-12 overflow-hidden rounded-[30px] border border-[#ead9c0] bg-[linear-gradient(135deg,#fffdfa_0%,#f7ecde_52%,#fff9f4_100%)] shadow-[0_20px_60px_rgba(36,28,21,0.08)] md:mt-16 md:rounded-[36px]";
+          section.innerHTML = newMarkup;
+          offersSection.parentNode.insertBefore(section, offersSection);
           return true;
         };
 
