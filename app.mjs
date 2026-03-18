@@ -20,8 +20,8 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const publicDir = path.resolve(__dirname, "public");
-const uploadsDir = path.join(publicDir, "uploads");
-const legacyUploadsDir = path.resolve(__dirname, "uploads");
+const uploadsDir = path.resolve(process.env.UPLOADS_DIR || path.join(__dirname, "uploads"));
+const legacyUploadsDir = path.join(publicDir, "uploads");
 
 const ensureDir = (dir) => fs.mkdirSync(dir, { recursive: true });
 const copyIfMissing = (sourceDir, targetDir) => {
