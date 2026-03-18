@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260317-03"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260317-03">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260317-03">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260318-01"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260318-01">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260318-01">
   </head>
   <body>
     <div id="root"></div>
@@ -83,6 +83,62 @@
         observer.observe(document.documentElement, { childList: true, subtree: true });
         const timer = setInterval(tryUpgrade, 400);
         window.addEventListener("load", tryUpgrade);
+      })();
+    </script>
+    <script>
+      (function () {
+        const buildCard = (name, img, pdf, role) => `
+          <article class="rounded-[28px] border border-white/70 bg-white/90 p-4 shadow-[0_16px_40px_rgba(15,23,42,0.12)] md:p-5">
+            <div class="overflow-hidden rounded-[22px] border border-[#efe5d8] bg-white">
+              <img src="${img}" alt="${name}" class="h-[260px] w-full object-contain p-3 md:h-[320px]" onerror="this.onerror=null;this.src='/logo.jpeg';" />
+            </div>
+            <h3 class="mt-4 text-2xl font-semibold text-[#0a0f1a]">${name}</h3>
+            <p class="mt-1 text-sm font-semibold uppercase tracking-[0.22em] text-gold">${role}</p>
+            <a href="${pdf}" target="_blank" rel="noopener" class="mt-4 inline-flex w-full items-center justify-center gap-3 rounded-full border border-[#d7c3a1] bg-[linear-gradient(120deg,#fffaf1,#f7ead6)] px-5 py-3 text-sm font-semibold text-[#1f2a44] shadow-[0_16px_32px_rgba(18,26,46,0.12)] transition hover:-translate-y-0.5 hover:border-[#caa56a] hover:bg-[linear-gradient(120deg,#fff7e8,#f1e1c6)]">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-[11px] font-bold text-gold shadow-[0_8px_16px_rgba(15,23,42,0.12)]">PDF</span>
+              Voir le CV
+            </a>
+          </article>
+        `;
+
+        const replaceSection = () => {
+          const candidate = Array.from(document.querySelectorAll("section")).find(
+            (s) =>
+              s.textContent.includes("Notre formatrice") ||
+              (s.querySelector("h2") &&
+                s.querySelector("h2").textContent.trim() === "Madame Gharbi")
+          );
+          if (!candidate) return false;
+
+          candidate.innerHTML = `
+            <div class="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-12">
+              <div class="flex items-center gap-3">
+                <p class="text-sm font-bold uppercase tracking-[0.24em] text-gold">Nos formatrices</p>
+              </div>
+              <h2 class="section-title mt-3 text-4xl font-bold leading-tight text-[#0a0f1a] md:text-5xl">Une equipe pedagogique experimentee</h2>
+              <p class="mt-4 max-w-2xl text-base leading-8 text-slate-900">
+                Des formatrices exigeantes, bienveillantes et orientees resultats pour un apprentissage premium.
+              </p>
+              <div class="mt-8 grid gap-6 md:grid-cols-2">
+                ${buildCard("Madame Gharbi", "/formatrice-gharbi.jpeg", "/formatrice-gharbi.pdf", "Esthetique avancee")}
+                ${buildCard("Madame Oumayma", "/formatriceoumayma.jpeg", "/CV_Oumayma.pdf", "Soins capillaires")}
+              </div>
+            </div>
+          `;
+          return true;
+        };
+
+        const tryReplace = () => {
+          if (replaceSection()) {
+            observer.disconnect();
+            clearInterval(timer);
+          }
+        };
+
+        const observer = new MutationObserver(tryReplace);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        const timer = setInterval(tryReplace, 400);
+        window.addEventListener("load", tryReplace);
       })();
     </script>
   </body>
