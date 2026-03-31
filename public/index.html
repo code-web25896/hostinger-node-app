@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260327-02"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260327-02">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260327-02">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260331-01"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260331-01">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260331-01">
   </head>
   <body>
     <div id="root"></div>
@@ -173,6 +173,109 @@
         observer.observe(document.documentElement, { childList: true, subtree: true });
         const timer = setInterval(tryReplace, 400);
         window.addEventListener("load", tryReplace);
+      })();
+    </script>
+    <script>
+      (function () {
+        const BANK_INFO = {
+          name: "ACADEMIE INTERNATIONALE BEAUTE",
+          bank: "Attijari Bank",
+          rib: "04 012 08600 94325762 87",
+          iban: "TN59 0070 0800 3423 6271 7571",
+          bic: "BSTUTNTT"
+        };
+
+        const findAmount = (root) => {
+          const texts = Array.from(root.querySelectorAll("*"))
+            .map((el) => el.textContent || "")
+            .filter(Boolean);
+          const match = texts
+            .map((t) => t.match(/\\b\\d[\\d\\s.]*\\s?(TND|DT|EUR|€)\\b/i))
+            .find((m) => m);
+          return match ? match[0].replace(/\\s+/g, " ").trim() : "";
+        };
+
+        const renderBox = (amount) => {
+          const amountLine = amount
+            ? `Montant a regler : <strong>${amount}</strong>`
+            : "Montant a regler : <strong>le prix de la formation selectionnee</strong>";
+
+          return `
+            <section class="mt-6 rounded-[26px] border border-[#ead9c0] bg-[linear-gradient(135deg,#fffdfa_0%,#f7ecde_55%,#fff9f4_100%)] p-5 shadow-[0_18px_50px_rgba(36,28,21,0.08)]">
+              <div class="flex items-center gap-3">
+                <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#fbf2e2] text-gold">€</span>
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.28em] text-gold">Paiement par virement</p>
+                  <h3 class="text-2xl font-semibold text-[#0a0f1a]">Reglez votre inscription apres confirmation</h3>
+                </div>
+              </div>
+              <p class="mt-3 text-sm text-slate-700">
+                ${amountLine}. Utilisez l’intitule et votre numero de telephone comme reference.
+              </p>
+              <div class="mt-4 grid gap-3 md:grid-cols-2">
+                <div class="rounded-[18px] bg-white/90 px-4 py-3 text-sm text-slate-700">
+                  <p class="font-semibold text-[#0a0f1a]">Beneficiaire</p>
+                  <p>${BANK_INFO.name}</p>
+                </div>
+                <div class="rounded-[18px] bg-white/90 px-4 py-3 text-sm text-slate-700">
+                  <p class="font-semibold text-[#0a0f1a]">Banque</p>
+                  <p>${BANK_INFO.bank}</p>
+                </div>
+                <div class="rounded-[18px] bg-white/90 px-4 py-3 text-sm text-slate-700">
+                  <p class="font-semibold text-[#0a0f1a]">RIB</p>
+                  <p>${BANK_INFO.rib}</p>
+                </div>
+                <div class="rounded-[18px] bg-white/90 px-4 py-3 text-sm text-slate-700">
+                  <p class="font-semibold text-[#0a0f1a]">IBAN / BIC</p>
+                  <p>${BANK_INFO.iban}</p>
+                  <p class="text-xs text-slate-500">BIC : ${BANK_INFO.bic}</p>
+                </div>
+              </div>
+              <p class="mt-3 text-xs text-slate-500">
+                Une fois le virement effectue, notre equipe valide votre inscription.
+              </p>
+            </section>
+          `;
+        };
+
+        const insertAfterSuccess = () => {
+          const successNodes = Array.from(document.querySelectorAll("*"))
+            .filter((el) =>
+              /demande envoyee|inscription confirmee|merci/i.test(
+                (el.textContent || "").replace(/\\s+/g, " ")
+              )
+            );
+          if (!successNodes.length) return false;
+          const target = successNodes[0];
+          const container = target.closest("section") || target.parentElement;
+          if (!container || container.querySelector("#bank-transfer-box")) return false;
+          const amount = findAmount(container) || findAmount(document.body);
+          const wrapper = document.createElement("div");
+          wrapper.id = "bank-transfer-box";
+          wrapper.innerHTML = renderBox(amount);
+          container.appendChild(wrapper);
+          return true;
+        };
+
+        const hookButtons = () => {
+          document.querySelectorAll("button").forEach((btn) => {
+            if (/s'inscrire/i.test(btn.textContent || "")) {
+              btn.addEventListener("click", () => {
+                setTimeout(insertAfterSuccess, 600);
+              });
+            }
+          });
+        };
+
+        const tryInsert = () => {
+          hookButtons();
+          insertAfterSuccess();
+        };
+
+        const observer = new MutationObserver(tryInsert);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        window.addEventListener("load", tryInsert);
+        setInterval(tryInsert, 1200);
       })();
     </script>
   </body>
