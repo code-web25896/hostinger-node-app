@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260331-01"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260331-01">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260331-01">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260331-02"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260331-02">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260331-02">
   </head>
   <body>
     <div id="root"></div>
@@ -190,7 +190,7 @@
             .map((el) => el.textContent || "")
             .filter(Boolean);
           const match = texts
-            .map((t) => t.match(/\\b\\d[\\d\\s.]*\\s?(TND|DT|EUR|€)\\b/i))
+            .map((t) => t.match(/\\b\\d[\\d\\s.]*\\s?(TND|DT|EUR)\\b/i))
             .find((m) => m);
           return match ? match[0].replace(/\\s+/g, " ").trim() : "";
         };
@@ -203,14 +203,14 @@
           return `
             <section class="mt-6 rounded-[26px] border border-[#ead9c0] bg-[linear-gradient(135deg,#fffdfa_0%,#f7ecde_55%,#fff9f4_100%)] p-5 shadow-[0_18px_50px_rgba(36,28,21,0.08)]">
               <div class="flex items-center gap-3">
-                <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#fbf2e2] text-gold">€</span>
+                <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#fbf2e2] text-gold">EUR</span>
                 <div>
                   <p class="text-xs font-bold uppercase tracking-[0.28em] text-gold">Paiement par virement</p>
                   <h3 class="text-2xl font-semibold text-[#0a0f1a]">Reglez votre inscription apres confirmation</h3>
                 </div>
               </div>
               <p class="mt-3 text-sm text-slate-700">
-                ${amountLine}. Utilisez l’intitule et votre numero de telephone comme reference.
+                ${amountLine}. Utilisez l'intitule et votre numero de telephone comme reference.
               </p>
               <div class="mt-4 grid gap-3 md:grid-cols-2">
                 <div class="rounded-[18px] bg-white/90 px-4 py-3 text-sm text-slate-700">
@@ -257,6 +257,73 @@
           return true;
         };
 
+        const enhancePaymentChooser = () => {
+          const cards = Array.from(document.querySelectorAll("div,section"))
+            .filter((el) =>
+              /Paiement apres inscription/i.test(el.textContent || "")
+            );
+          if (!cards.length) return false;
+          const card = cards[0];
+          if (card.querySelector("#payment-details-panel")) return true;
+
+          const panel = document.createElement("div");
+          panel.id = "payment-details-panel";
+          panel.className =
+            "mt-4 rounded-[24px] border border-[#ead9c0] bg-white/90 p-4 text-sm text-slate-700 shadow-[0_12px_30px_rgba(15,23,42,0.08)]";
+          panel.innerHTML = `
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p class="text-xs font-bold uppercase tracking-[0.24em] text-gold">Instructions</p>
+                <h4 class="mt-1 text-lg font-semibold text-[#0a0f1a]">Choisissez un moyen de paiement</h4>
+              </div>
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#fbf2e2] text-gold">EUR</span>
+            </div>
+            <div class="mt-3 space-y-3">
+              <div id="method-virement" class="rounded-[18px] border border-[#e9e0d2] bg-[#fffaf1] px-4 py-3">
+                <p class="font-semibold text-[#0a0f1a]">Virement bancaire</p>
+                <p class="mt-1">Beneficiaire: ${BANK_INFO.name}</p>
+                <p>Banque: ${BANK_INFO.bank}</p>
+                <p>RIB: ${BANK_INFO.rib}</p>
+                <p>IBAN: ${BANK_INFO.iban}</p>
+                <p class="text-xs text-slate-500">BIC/SWIFT: ${BANK_INFO.bic}</p>
+              </div>
+              <div id="method-visa" class="hidden rounded-[18px] border border-[#e9e0d2] bg-[#f7f4ff] px-4 py-3">
+                <p class="font-semibold text-[#0a0f1a]">Visa</p>
+                <p class="mt-1">Paiement par carte apres inscription. Notre equipe vous transmettra les etapes.</p>
+              </div>
+              <div id="method-binance" class="hidden rounded-[18px] border border-[#e9e0d2] bg-[#fff4ea] px-4 py-3">
+                <p class="font-semibold text-[#0a0f1a]">Binance</p>
+                <p class="mt-1">Paiement crypto apres inscription. Nous envoyons les details par message.</p>
+              </div>
+              <div id="method-redotpay" class="hidden rounded-[18px] border border-[#e9e0d2] bg-[#eef6ff] px-4 py-3">
+                <p class="font-semibold text-[#0a0f1a]">Redotpay</p>
+                <p class="mt-1">Paiement en ligne apres inscription. Contactez-nous pour les informations.</p>
+              </div>
+            </div>
+          `;
+
+          card.appendChild(panel);
+
+          const show = (id) => {
+            ["method-virement", "method-visa", "method-binance", "method-redotpay"].forEach((key) => {
+              const el = panel.querySelector(`#${key}`);
+              if (!el) return;
+              el.classList.toggle("hidden", key !== id);
+            });
+          };
+
+          const buttons = Array.from(card.querySelectorAll("button, a"));
+          buttons.forEach((btn) => {
+            const label = (btn.textContent || "").toLowerCase();
+            if (label.includes("virement")) btn.addEventListener("click", () => show("method-virement"));
+            if (label.includes("visa")) btn.addEventListener("click", () => show("method-visa"));
+            if (label.includes("binance")) btn.addEventListener("click", () => show("method-binance"));
+            if (label.includes("redotpay")) btn.addEventListener("click", () => show("method-redotpay"));
+          });
+
+          return true;
+        };
+
         const hookButtons = () => {
           document.querySelectorAll("button").forEach((btn) => {
             if (/s'inscrire/i.test(btn.textContent || "")) {
@@ -270,6 +337,7 @@
         const tryInsert = () => {
           hookButtons();
           insertAfterSuccess();
+          enhancePaymentChooser();
         };
 
         const observer = new MutationObserver(tryInsert);
