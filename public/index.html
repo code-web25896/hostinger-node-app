@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260331-02"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260331-02">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260331-02">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260331-03"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260331-03">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260331-03">
   </head>
   <body>
     <div id="root"></div>
@@ -266,6 +266,7 @@
           const card = cards[0];
           if (card.querySelector("#payment-details-panel")) return true;
 
+          card.style.overflow = "visible";
           const panel = document.createElement("div");
           panel.id = "payment-details-panel";
           panel.className =
@@ -281,11 +282,13 @@
             <div class="mt-3 space-y-3">
               <div id="method-virement" class="rounded-[18px] border border-[#e9e0d2] bg-[#fffaf1] px-4 py-3">
                 <p class="font-semibold text-[#0a0f1a]">Virement bancaire</p>
-                <p class="mt-1">Beneficiaire: ${BANK_INFO.name}</p>
-                <p>Banque: ${BANK_INFO.bank}</p>
-                <p>RIB: ${BANK_INFO.rib}</p>
-                <p>IBAN: ${BANK_INFO.iban}</p>
-                <p class="text-xs text-slate-500">BIC/SWIFT: ${BANK_INFO.bic}</p>
+                <div class="mt-2 grid gap-2 text-[13px]">
+                  <p><span class="font-semibold text-[#0a0f1a]">Beneficiaire :</span> ${BANK_INFO.name}</p>
+                  <p><span class="font-semibold text-[#0a0f1a]">Banque :</span> ${BANK_INFO.bank}</p>
+                  <p><span class="font-semibold text-[#0a0f1a]">RIB :</span> ${BANK_INFO.rib}</p>
+                  <p><span class="font-semibold text-[#0a0f1a]">IBAN :</span> ${BANK_INFO.iban}</p>
+                  <p class="text-xs text-slate-500">BIC/SWIFT : ${BANK_INFO.bic}</p>
+                </div>
               </div>
               <div id="method-visa" class="hidden rounded-[18px] border border-[#e9e0d2] bg-[#f7f4ff] px-4 py-3">
                 <p class="font-semibold text-[#0a0f1a]">Visa</p>
@@ -321,6 +324,7 @@
             if (label.includes("redotpay")) btn.addEventListener("click", () => show("method-redotpay"));
           });
 
+          show("method-virement");
           return true;
         };
 
