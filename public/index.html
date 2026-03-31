@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260331-03"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260331-03">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260331-03">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260331-04"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260331-04">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260331-04">
   </head>
   <body>
     <div id="root"></div>
@@ -267,15 +267,20 @@
           if (card.querySelector("#payment-details-panel")) return true;
 
           card.style.overflow = "visible";
+          card.style.background = "linear-gradient(135deg,#eef8ef 0%,#f6fff6 60%,#ffffff 100%)";
+          card.style.border = "1px solid #dfeee0";
+          card.style.boxShadow = "0 18px 40px rgba(20,30,50,0.08)";
+          card.style.padding = "18px";
+          card.style.borderRadius = "22px";
           const panel = document.createElement("div");
           panel.id = "payment-details-panel";
           panel.className =
-            "mt-4 rounded-[24px] border border-[#ead9c0] bg-white/90 p-4 text-sm text-slate-700 shadow-[0_12px_30px_rgba(15,23,42,0.08)]";
+            "mt-4 rounded-[20px] border border-[#ead9c0] bg-white/95 p-4 text-sm text-slate-700 shadow-[0_14px_28px_rgba(15,23,42,0.08)]";
           panel.innerHTML = `
             <div class="flex items-start justify-between gap-3">
               <div>
                 <p class="text-xs font-bold uppercase tracking-[0.24em] text-gold">Instructions</p>
-                <h4 class="mt-1 text-lg font-semibold text-[#0a0f1a]">Choisissez un moyen de paiement</h4>
+                <h4 class="mt-1 text-lg font-semibold text-[#0a0f1a]">Choisissez votre moyen de paiement</h4>
               </div>
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#fbf2e2] text-gold">EUR</span>
             </div>
@@ -318,6 +323,12 @@
           const buttons = Array.from(card.querySelectorAll("button, a"));
           buttons.forEach((btn) => {
             const label = (btn.textContent || "").toLowerCase();
+            btn.style.border = "1px solid #e8d7bc";
+            btn.style.background = "#fff";
+            btn.style.borderRadius = "999px";
+            btn.style.padding = "10px 14px";
+            btn.style.fontWeight = "600";
+            btn.style.boxShadow = "0 10px 24px rgba(15,23,42,0.08)";
             if (label.includes("virement")) btn.addEventListener("click", () => show("method-virement"));
             if (label.includes("visa")) btn.addEventListener("click", () => show("method-visa"));
             if (label.includes("binance")) btn.addEventListener("click", () => show("method-binance"));
