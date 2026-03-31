@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260331-04"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260331-04">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260331-04">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260331-05"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260331-05">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260331-05">
   </head>
   <body>
     <div id="root"></div>
@@ -258,12 +258,17 @@
         };
 
         const enhancePaymentChooser = () => {
-          const cards = Array.from(document.querySelectorAll("div,section"))
-            .filter((el) =>
-              /Paiement apres inscription/i.test(el.textContent || "")
+          const successCard = Array.from(document.querySelectorAll("div,section"))
+            .find((el) =>
+              /Inscription reussie/i.test(el.textContent || "")
             );
-          if (!cards.length) return false;
-          const card = cards[0];
+          if (!successCard) return false;
+
+          const card = successCard;
+          const existing = document.querySelector("#payment-details-panel");
+          if (existing && !card.contains(existing)) {
+            existing.remove();
+          }
           if (card.querySelector("#payment-details-panel")) return true;
 
           card.style.overflow = "visible";
