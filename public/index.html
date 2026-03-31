@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260331-06"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260331-06">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260331-06">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260331-07"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260331-07">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260331-07">
   </head>
   <body>
     <div id="root"></div>
@@ -313,15 +313,24 @@
           });
         };
 
+        const hookValidateButton = () => {
+          const buttons = Array.from(document.querySelectorAll("button"));
+          buttons.forEach((btn) => {
+            const label = (btn.textContent || "").toLowerCase();
+            if (!label.includes("valider l'inscription")) return;
+            if (btn.dataset.paymentModalBound) return;
+            btn.dataset.paymentModalBound = "true";
+            btn.addEventListener("click", () => {
+              setTimeout(() => {
+                showPaymentModal();
+              }, 700);
+            });
+          });
+        };
+
         const tryInsert = () => {
           hookButtons();
-          const success = Array.from(document.querySelectorAll("*"))
-            .some((el) =>
-              /Inscription reussie/i.test((el.textContent || ""))
-            );
-          if (success) {
-            showPaymentModal();
-          }
+          hookValidateButton();
         };
 
         const observer = new MutationObserver(tryInsert);
