@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260331-05"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260331-05">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260331-05">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260331-06"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260331-06">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260331-06">
   </head>
   <body>
     <div id="root"></div>
@@ -238,109 +238,68 @@
           `;
         };
 
-        const insertAfterSuccess = () => {
-          const successNodes = Array.from(document.querySelectorAll("*"))
-            .filter((el) =>
-              /demande envoyee|inscription confirmee|merci/i.test(
-                (el.textContent || "").replace(/\\s+/g, " ")
-              )
-            );
-          if (!successNodes.length) return false;
-          const target = successNodes[0];
-          const container = target.closest("section") || target.parentElement;
-          if (!container || container.querySelector("#bank-transfer-box")) return false;
-          const amount = findAmount(container) || findAmount(document.body);
-          const wrapper = document.createElement("div");
-          wrapper.id = "bank-transfer-box";
-          wrapper.innerHTML = renderBox(amount);
-          container.appendChild(wrapper);
-          return true;
-        };
+        const showPaymentModal = () => {
+          const existing = document.querySelector("#payment-modal");
+          if (existing) return true;
 
-        const enhancePaymentChooser = () => {
-          const successCard = Array.from(document.querySelectorAll("div,section"))
-            .find((el) =>
-              /Inscription reussie/i.test(el.textContent || "")
-            );
-          if (!successCard) return false;
+          const amount = findAmount(document.body);
+          const amountLine = amount
+            ? `Montant a regler : <strong>${amount}</strong>`
+            : "Montant a regler : <strong>le prix de la formation selectionnee</strong>";
 
-          const card = successCard;
-          const existing = document.querySelector("#payment-details-panel");
-          if (existing && !card.contains(existing)) {
-            existing.remove();
-          }
-          if (card.querySelector("#payment-details-panel")) return true;
-
-          card.style.overflow = "visible";
-          card.style.background = "linear-gradient(135deg,#eef8ef 0%,#f6fff6 60%,#ffffff 100%)";
-          card.style.border = "1px solid #dfeee0";
-          card.style.boxShadow = "0 18px 40px rgba(20,30,50,0.08)";
-          card.style.padding = "18px";
-          card.style.borderRadius = "22px";
-          const panel = document.createElement("div");
-          panel.id = "payment-details-panel";
-          panel.className =
-            "mt-4 rounded-[20px] border border-[#ead9c0] bg-white/95 p-4 text-sm text-slate-700 shadow-[0_14px_28px_rgba(15,23,42,0.08)]";
-          panel.innerHTML = `
-            <div class="flex items-start justify-between gap-3">
-              <div>
-                <p class="text-xs font-bold uppercase tracking-[0.24em] text-gold">Instructions</p>
-                <h4 class="mt-1 text-lg font-semibold text-[#0a0f1a]">Choisissez votre moyen de paiement</h4>
-              </div>
-              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#fbf2e2] text-gold">EUR</span>
-            </div>
-            <div class="mt-3 space-y-3">
-              <div id="method-virement" class="rounded-[18px] border border-[#e9e0d2] bg-[#fffaf1] px-4 py-3">
-                <p class="font-semibold text-[#0a0f1a]">Virement bancaire</p>
-                <div class="mt-2 grid gap-2 text-[13px]">
-                  <p><span class="font-semibold text-[#0a0f1a]">Beneficiaire :</span> ${BANK_INFO.name}</p>
-                  <p><span class="font-semibold text-[#0a0f1a]">Banque :</span> ${BANK_INFO.bank}</p>
-                  <p><span class="font-semibold text-[#0a0f1a]">RIB :</span> ${BANK_INFO.rib}</p>
-                  <p><span class="font-semibold text-[#0a0f1a]">IBAN :</span> ${BANK_INFO.iban}</p>
-                  <p class="text-xs text-slate-500">BIC/SWIFT : ${BANK_INFO.bic}</p>
+          const modal = document.createElement("div");
+          modal.id = "payment-modal";
+          modal.style.position = "fixed";
+          modal.style.inset = "0";
+          modal.style.zIndex = "9999";
+          modal.innerHTML = `
+            <div id="payment-modal-backdrop" style="position:absolute;inset:0;background:rgba(10,14,24,0.45);backdrop-filter:blur(6px);"></div>
+            <div style="position:relative;display:flex;align-items:center;justify-content:center;height:100%;padding:16px;">
+              <div style="width:min(720px,95vw);border-radius:26px;background:linear-gradient(135deg,#eef8ef 0%,#f6fff6 60%,#ffffff 100%);border:1px solid #dfeee0;box-shadow:0 30px 80px rgba(10,14,24,0.25);padding:22px;">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+                  <div>
+                    <p style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:#b28a4d;font-weight:700;">Paiement apres inscription</p>
+                    <h3 style="margin-top:6px;font-size:22px;color:#0a0f1a;font-weight:700;">Choisissez votre moyen de paiement</h3>
+                    <p style="margin-top:6px;color:#4a5568;font-size:14px;">${amountLine}. Utilisez l'intitule et votre numero de telephone comme reference.</p>
+                  </div>
+                  <button id="payment-modal-close" style="height:40px;width:40px;border-radius:999px;border:1px solid #e6d6bf;background:white;color:#0a0f1a;font-weight:700;">✕</button>
                 </div>
-              </div>
-              <div id="method-visa" class="hidden rounded-[18px] border border-[#e9e0d2] bg-[#f7f4ff] px-4 py-3">
-                <p class="font-semibold text-[#0a0f1a]">Visa</p>
-                <p class="mt-1">Paiement par carte apres inscription. Notre equipe vous transmettra les etapes.</p>
-              </div>
-              <div id="method-binance" class="hidden rounded-[18px] border border-[#e9e0d2] bg-[#fff4ea] px-4 py-3">
-                <p class="font-semibold text-[#0a0f1a]">Binance</p>
-                <p class="mt-1">Paiement crypto apres inscription. Nous envoyons les details par message.</p>
-              </div>
-              <div id="method-redotpay" class="hidden rounded-[18px] border border-[#e9e0d2] bg-[#eef6ff] px-4 py-3">
-                <p class="font-semibold text-[#0a0f1a]">Redotpay</p>
-                <p class="mt-1">Paiement en ligne apres inscription. Contactez-nous pour les informations.</p>
+
+                <div style="margin-top:14px;display:grid;gap:10px;">
+                  <div style="border-radius:18px;border:1px solid #e9e0d2;background:#fffaf1;padding:12px;">
+                    <div style="font-weight:700;color:#0a0f1a;">Virement bancaire</div>
+                    <div style="margin-top:6px;font-size:13px;color:#1f2a44;">
+                      <div><strong>Beneficiaire :</strong> ${BANK_INFO.name}</div>
+                      <div><strong>Banque :</strong> ${BANK_INFO.bank}</div>
+                      <div><strong>RIB :</strong> ${BANK_INFO.rib}</div>
+                      <div><strong>IBAN :</strong> ${BANK_INFO.iban}</div>
+                      <div style="font-size:12px;color:#718096;">BIC/SWIFT : ${BANK_INFO.bic}</div>
+                    </div>
+                  </div>
+
+                  <div style="display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
+                    <div style="border-radius:18px;border:1px solid #e9e0d2;background:#f7f4ff;padding:12px;">
+                      <div style="font-weight:700;color:#0a0f1a;">Visa</div>
+                      <div style="margin-top:6px;font-size:13px;color:#4a5568;">Paiement par carte apres inscription. Notre equipe vous transmettra les etapes.</div>
+                    </div>
+                    <div style="border-radius:18px;border:1px solid #e9e0d2;background:#fff4ea;padding:12px;">
+                      <div style="font-weight:700;color:#0a0f1a;">Binance</div>
+                      <div style="margin-top:6px;font-size:13px;color:#4a5568;">Paiement crypto apres inscription. Nous envoyons les details par message.</div>
+                    </div>
+                    <div style="border-radius:18px;border:1px solid #e9e0d2;background:#eef6ff;padding:12px;">
+                      <div style="font-weight:700;color:#0a0f1a;">Redotpay</div>
+                      <div style="margin-top:6px;font-size:13px;color:#4a5568;">Paiement en ligne apres inscription. Contactez-nous pour les informations.</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           `;
 
-          card.appendChild(panel);
-
-          const show = (id) => {
-            ["method-virement", "method-visa", "method-binance", "method-redotpay"].forEach((key) => {
-              const el = panel.querySelector(`#${key}`);
-              if (!el) return;
-              el.classList.toggle("hidden", key !== id);
-            });
-          };
-
-          const buttons = Array.from(card.querySelectorAll("button, a"));
-          buttons.forEach((btn) => {
-            const label = (btn.textContent || "").toLowerCase();
-            btn.style.border = "1px solid #e8d7bc";
-            btn.style.background = "#fff";
-            btn.style.borderRadius = "999px";
-            btn.style.padding = "10px 14px";
-            btn.style.fontWeight = "600";
-            btn.style.boxShadow = "0 10px 24px rgba(15,23,42,0.08)";
-            if (label.includes("virement")) btn.addEventListener("click", () => show("method-virement"));
-            if (label.includes("visa")) btn.addEventListener("click", () => show("method-visa"));
-            if (label.includes("binance")) btn.addEventListener("click", () => show("method-binance"));
-            if (label.includes("redotpay")) btn.addEventListener("click", () => show("method-redotpay"));
-          });
-
-          show("method-virement");
+          document.body.appendChild(modal);
+          const close = () => modal.remove();
+          modal.querySelector("#payment-modal-close").addEventListener("click", close);
+          modal.querySelector("#payment-modal-backdrop").addEventListener("click", close);
           return true;
         };
 
@@ -356,8 +315,13 @@
 
         const tryInsert = () => {
           hookButtons();
-          insertAfterSuccess();
-          enhancePaymentChooser();
+          const success = Array.from(document.querySelectorAll("*"))
+            .some((el) =>
+              /Inscription reussie/i.test((el.textContent || ""))
+            );
+          if (success) {
+            showPaymentModal();
+          }
         };
 
         const observer = new MutationObserver(tryInsert);
