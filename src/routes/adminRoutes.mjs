@@ -107,6 +107,75 @@ router.patch("/enrollments/:id/payment", async (req, res) => {
   res.json(serializeEnrollment(updated, trainingFromEnrollmentRow(updated)));
 });
 
+router.post("/enrollments/:id/accept", async (req, res) => {
+  const [row] = await query(
+    `SELECT er.*, t.id AS training_id_ref, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
+     FROM enrollment_requests er
+     INNER JOIN trainings t ON t.id = er.training_id
+     WHERE er.id = ?`,
+    [req.params.id]
+  );
+  if (!row) return res.status(404).json({ message: "Demande introuvable" });
+
+  let studentUserId = row.student_user_id;
+  if (!studentUserId) {
+    const [existingUser] = await query("SELECT id FROM users WHERE email = ? LIMIT 1", [row.email.toLowerCase()]);
+    if (existingUser?.id) {
+      studentUserId = existingUser.id;
+    } else {
+      const userResult = await insert(
+        `INSERT INTO users (full_name, email, password_hash, phone, level_label, formation_mode, role, avatar_url)
+         VALUES (?, ?, ?, ?, ?, ?, 'student', ?)`,
+        [row.full_name, row.email.toLowerCase(), row.password_hash, row.phone, "Debutant", row.mode_label || "Presentiel", "/logo.jpeg"]
+      );
+      studentUserId = userResult.insertId;
+    }
+
+    if (studentUserId) {
+      const [record] = await query("SELECT id FROM student_records WHERE student_id = ? LIMIT 1", [studentUserId]);
+      if (!record) {
+        await insert(
+          `INSERT INTO student_records (student_id, formation_id, avatar_url)
+           VALUES (?, ?, ?)`,
+          [studentUserId, row.training_id, "/logo.jpeg"]
+        );
+      }
+    }
+  }
+
+  await insert(
+    `UPDATE enrollment_requests
+     SET status = 'Confirmee', payment_status = 'Paye', paid_at = NOW(), student_user_id = ?
+     WHERE id = ?`,
+    [studentUserId || null, row.id]
+  );
+
+  const [updated] = await query(
+    `SELECT er.*, t.id AS training_id_ref, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
+     FROM enrollment_requests er
+     INNER JOIN trainings t ON t.id = er.training_id
+     WHERE er.id = ?`,
+    [row.id]
+  );
+  res.json(serializeEnrollment(updated, trainingFromEnrollmentRow(updated)));
+});
+
+router.post("/enrollments/:id/reject", async (req, res) => {
+  await insert(
+    "UPDATE enrollment_requests SET status = 'Refusee', payment_status = 'Refuse' WHERE id = ?",
+    [req.params.id]
+  );
+  const [updated] = await query(
+    `SELECT er.*, t.id AS training_id_ref, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
+     FROM enrollment_requests er
+     INNER JOIN trainings t ON t.id = er.training_id
+     WHERE er.id = ?`,
+    [req.params.id]
+  );
+  if (!updated) return res.status(404).json({ message: "Demande introuvable" });
+  res.json(serializeEnrollment(updated, trainingFromEnrollmentRow(updated)));
+});
+
 router.post("/enrollments/:id/verify-payment", async (req, res) => {
   const [row] = await query(
     `SELECT er.*, t.id AS training_id_ref, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur

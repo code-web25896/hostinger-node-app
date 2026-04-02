@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260402-02"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260402-02">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260402-02">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260402-03"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260402-03">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260402-03">
   </head>
   <body>
     <div id="root"></div>
@@ -556,6 +556,30 @@
           );
           if (!cards.length) return false;
 
+          const cardsParent = cards[0].parentElement;
+          if (!cardsParent) return false;
+          let pendingGrid = cardsParent;
+          if (!pendingGrid.id) pendingGrid.id = "payments-pending-grid";
+
+          let acceptedSection = document.getElementById("payments-accepted");
+          if (!acceptedSection) {
+            const heading = document.createElement("h3");
+            heading.className = "mt-6 text-xl font-semibold text-[#091632] md:text-2xl";
+            heading.textContent = "Paiements en attente";
+            cardsParent.parentElement?.insertBefore(heading, cardsParent);
+
+            acceptedSection = document.createElement("div");
+            acceptedSection.id = "payments-accepted";
+            acceptedSection.className = "mt-10";
+            acceptedSection.innerHTML = `
+              <h3 class="text-xl font-semibold text-[#091632] md:text-2xl">Paiements acceptes</h3>
+              <div id="payments-accepted-grid" class="mt-4 grid gap-4 lg:grid-cols-2"></div>
+            `;
+            cardsParent.parentElement?.appendChild(acceptedSection);
+          }
+
+          const acceptedGrid = document.getElementById("payments-accepted-grid") || pendingGrid;
+
           cards.forEach((card) => {
             if (card.dataset.receiptDecorated) return;
             const titleEl = card.querySelector("p.text-lg") || card.querySelector("p.font-semibold");
@@ -599,27 +623,52 @@
               acceptBtn.disabled = true;
             }
             acceptBtn.addEventListener("click", async () => {
-              await fetch(`/api/admin/enrollments/${enrollment.id}/payment`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ paymentStatus: "Paye", status: "Confirmee" })
-              });
-              acceptBtn.textContent = "Paiement accepte";
-              acceptBtn.disabled = true;
+              try {
+                const res = await fetch(`/api/admin/enrollments/${enrollment.id}/accept`, { method: "POST" });
+                if (!res.ok) throw new Error("Erreur validation paiement.");
+                const data = await res.json();
+                const chips = card.querySelectorAll(".metric-chip");
+                if (chips[0]) chips[0].textContent = "Confirmee";
+                if (chips[1]) chips[1].textContent = "Paye";
+                const lines = card.querySelectorAll("p.text-slate-600");
+                lines.forEach((line) => {
+                  if ((line.textContent || "").includes("Compte eleve")) {
+                    line.textContent = `Compte eleve: Cree (#${data.studentUserId || data.student_user_id || ""})`;
+                  }
+                });
+                acceptBtn.textContent = "Paiement accepte";
+                acceptBtn.disabled = true;
+                refuseBtn.disabled = true;
+                acceptedGrid.appendChild(card);
+              } catch (error) {
+                acceptBtn.textContent = "Erreur";
+              }
             });
             refuseBtn.addEventListener("click", async () => {
-              await fetch(`/api/admin/enrollments/${enrollment.id}/payment`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ paymentStatus: "Refuse", status: "Refusee" })
-              });
-              refuseBtn.textContent = "Paiement refuse";
-              refuseBtn.disabled = true;
+              try {
+                const res = await fetch(`/api/admin/enrollments/${enrollment.id}/reject`, { method: "POST" });
+                if (!res.ok) throw new Error("Erreur refus paiement.");
+                const chips = card.querySelectorAll(".metric-chip");
+                if (chips[0]) chips[0].textContent = "Refusee";
+                if (chips[1]) chips[1].textContent = "Refuse";
+                refuseBtn.textContent = "Paiement refuse";
+                refuseBtn.disabled = true;
+                acceptBtn.disabled = true;
+              } catch (error) {
+                refuseBtn.textContent = "Erreur";
+              }
             });
 
             card.appendChild(receiptBox);
             card.appendChild(actions);
             card.dataset.receiptDecorated = "true";
+
+            const isAccepted = enrollment.paymentStatus === "Paye" || enrollment.status === "Confirmee";
+            if (isAccepted) {
+              acceptedGrid.appendChild(card);
+            } else {
+              pendingGrid.appendChild(card);
+            }
           });
 
           return true;
