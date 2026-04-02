@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260402-03"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260402-03">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260402-03">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260402-04"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260402-04">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260402-04">
   </head>
   <body>
     <div id="root"></div>
@@ -624,7 +624,11 @@
             }
             acceptBtn.addEventListener("click", async () => {
               try {
-                const res = await fetch(`/api/admin/enrollments/${enrollment.id}/accept`, { method: "POST" });
+                const token = sessionStorage.getItem("token");
+                const res = await fetch(`/api/admin/enrollments/${enrollment.id}/accept`, {
+                  method: "POST",
+                  headers: token ? { Authorization: `Bearer ${token}` } : {}
+                });
                 if (!res.ok) throw new Error("Erreur validation paiement.");
                 const data = await res.json();
                 const chips = card.querySelectorAll(".metric-chip");
@@ -646,7 +650,11 @@
             });
             refuseBtn.addEventListener("click", async () => {
               try {
-                const res = await fetch(`/api/admin/enrollments/${enrollment.id}/reject`, { method: "POST" });
+                const token = sessionStorage.getItem("token");
+                const res = await fetch(`/api/admin/enrollments/${enrollment.id}/reject`, {
+                  method: "POST",
+                  headers: token ? { Authorization: `Bearer ${token}` } : {}
+                });
                 if (!res.ok) throw new Error("Erreur refus paiement.");
                 const chips = card.querySelectorAll(".metric-chip");
                 if (chips[0]) chips[0].textContent = "Refusee";
