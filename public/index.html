@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260402-04"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260402-04">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260402-04">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260402-05"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260402-05">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260402-05">
   </head>
   <body>
     <div id="root"></div>
@@ -682,6 +682,80 @@
           return true;
         };
 
+        const styleDemandesStatus = () => {
+          if (window.location.pathname !== "/demandes") return false;
+          const cards = Array.from(document.querySelectorAll("section,article,div")).filter((el) =>
+            (el.textContent || "").includes("Paiement:")
+          );
+          if (!cards.length) return false;
+
+          const makePill = (label, variant) => {
+            const span = document.createElement("span");
+            span.textContent = label;
+            span.style.display = "inline-flex";
+            span.style.alignItems = "center";
+            span.style.gap = "6px";
+            span.style.padding = "6px 12px";
+            span.style.borderRadius = "999px";
+            span.style.fontSize = "12px";
+            span.style.fontWeight = "700";
+            span.style.letterSpacing = "0.04em";
+            span.style.border = "1px solid transparent";
+            if (variant === "confirmed") {
+              span.style.background = "linear-gradient(135deg,#e6f9f0 0%,#d1fae5 45%,#f0fdf4 100%)";
+              span.style.color = "#0f6b3a";
+              span.style.borderColor = "#b7f0d1";
+            } else if (variant === "paid") {
+              span.style.background = "linear-gradient(135deg,#eef2ff 0%,#e0e7ff 45%,#f5f3ff 100%)";
+              span.style.color = "#4338ca";
+              span.style.borderColor = "#c7d2fe";
+            } else if (variant === "receipt") {
+              span.style.background = "linear-gradient(135deg,#fff7ed 0%,#ffedd5 45%,#fef3c7 100%)";
+              span.style.color = "#9a3412";
+              span.style.borderColor = "#fed7aa";
+            } else if (variant === "pending") {
+              span.style.background = "linear-gradient(135deg,#fef9ef 0%,#fdf2d7 45%,#fff7ed 100%)";
+              span.style.color = "#a16207";
+              span.style.borderColor = "#fde68a";
+            } else {
+              span.style.background = "#f8fafc";
+              span.style.color = "#475569";
+              span.style.borderColor = "#e2e8f0";
+            }
+            return span;
+          };
+
+          cards.forEach((card) => {
+            if (card.dataset.statusStyled) return;
+            const lines = Array.from(card.querySelectorAll("p,span,div"));
+            lines.forEach((line) => {
+              const text = (line.textContent || "").trim();
+              if (text === "Confirmee") {
+                line.textContent = "";
+                line.appendChild(makePill("Confirmee", "confirmed"));
+              }
+              if (text === "En attente") {
+                line.textContent = "";
+                line.appendChild(makePill("En attente", "pending"));
+              }
+              if (text.startsWith("Paiement:")) {
+                const value = text.replace("Paiement:", "").trim();
+                line.textContent = "";
+                if (value.toLowerCase().includes("paye")) {
+                  line.appendChild(makePill("Paiement: Paye", "paid"));
+                } else if (value.toLowerCase().includes("recu")) {
+                  line.appendChild(makePill("Paiement: Recu", "receipt"));
+                } else {
+                  line.appendChild(makePill(`Paiement: ${value || "En attente"}`, "pending"));
+                }
+              }
+            });
+            card.dataset.statusStyled = "true";
+          });
+
+          return true;
+        };
+
         const hookButtons = () => {
           document.querySelectorAll("button").forEach((btn) => {
             if (/s'inscrire/i.test(btn.textContent || "")) {
@@ -713,6 +787,7 @@
           hookValidateButton();
           injectDemandesUploader();
           decorateAdminPayments();
+          styleDemandesStatus();
         };
 
         const observer = new MutationObserver(tryInsert);
