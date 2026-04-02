@@ -35,6 +35,9 @@ export const serializeEnrollment = (item, training = null) => ({
   paymentCurrency: item.currency_code,
   paidAt: item.paid_at,
   paymentRef: item.payment_ref,
+  paymentReceiptUrl: item.payment_receipt_url,
+  paymentReceiptName: item.payment_receipt_name,
+  paymentReceiptUploadedAt: item.payment_receipt_uploaded_at,
   studentUserId: item.student_user_id ? String(item.student_user_id) : null,
   training: training
     ? {

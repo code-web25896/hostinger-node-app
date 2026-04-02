@@ -89,6 +89,24 @@ router.patch("/enrollments/:id", async (req, res) => {
   res.json(serializeEnrollment(updated, trainingFromEnrollmentRow(updated)));
 });
 
+router.patch("/enrollments/:id/payment", async (req, res) => {
+  const { paymentStatus, paymentRef, status } = req.body;
+  if (!paymentStatus) return res.status(400).json({ message: "Statut paiement obligatoire" });
+  await insert(
+    "UPDATE enrollment_requests SET payment_status = ?, payment_ref = COALESCE(?, payment_ref), status = COALESCE(?, status), paid_at = CASE WHEN ? = 'Paye' THEN NOW() ELSE paid_at END WHERE id = ?",
+    [paymentStatus, paymentRef || null, status || null, paymentStatus, req.params.id]
+  );
+  const [updated] = await query(
+    `SELECT er.*, t.id AS training_id_ref, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
+     FROM enrollment_requests er
+     INNER JOIN trainings t ON t.id = er.training_id
+     WHERE er.id = ?`,
+    [req.params.id]
+  );
+  if (!updated) return res.status(404).json({ message: "Demande introuvable" });
+  res.json(serializeEnrollment(updated, trainingFromEnrollmentRow(updated)));
+});
+
 router.post("/enrollments/:id/verify-payment", async (req, res) => {
   const [row] = await query(
     `SELECT er.*, t.id AS training_id_ref, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur

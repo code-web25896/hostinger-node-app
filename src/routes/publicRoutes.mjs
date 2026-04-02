@@ -1,7 +1,9 @@
 import express from "express";
+import path from "path";
 import bcrypt from "bcryptjs";
 import { insert, query } from "../config/db.mjs";
 import { paymentAmountForTraining, serializeEnrollment } from "../lib/enrollmentUtils.mjs";
+import { upload } from "../middleware/upload.mjs";
 
 const router = express.Router();
 
@@ -124,17 +126,77 @@ router.post("/enrollments/checkout", async (req, res) => {
         full_name, phone, email, password_hash, mode_label, training_id, notes, country_label,
         status, payment_status, payment_provider, amount_value, currency_code
        )
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'En attente', 'En attente', 'Virement/Visa', ?, ?)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'En attente', 'Recu manquant', 'Virement/Visa', ?, ?)`,
       [fullName, phone, normalizedEmail, passwordHash, mode || "Presentiel", trainingId, notes || "", country || "Tunisie", payment.amountValue, payment.token]
     );
 
     res.status(201).json({
-      message: "Inscription reussie. Le paiement se fait apres inscription par virement bancaire ou carte Visa (Binance, Redotpay)."
+      message: "Inscription reussie. Le paiement se fait apres inscription par virement bancaire ou carte Visa (Binance, Redotpay).",
+      enrollmentId: String(result.insertId),
+      paymentStatus: "Recu manquant"
     });
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: error.message || "Erreur lors de l inscription" });
   }
+});
+
+const buildReceiptUrl = (filename, folder) => `/uploads/${folder}/${filename}`;
+
+const updateReceiptForEnrollment = async (enrollmentId, file) => {
+  const extension = path.extname(file.originalname).replace(".", "").toUpperCase() || "FILE";
+  const targetFolder = file.mimetype.startsWith("image/") ? "images" : "documents";
+  const receiptUrl = buildReceiptUrl(file.filename, targetFolder);
+  await insert(
+    `UPDATE enrollment_requests
+     SET payment_receipt_url = ?, payment_receipt_name = ?, payment_receipt_uploaded_at = NOW(), payment_status = IF(payment_status = 'Paye', payment_status, 'Recu')
+     WHERE id = ?`,
+    [receiptUrl, file.originalname || extension, enrollmentId]
+  );
+  const [updated] = await query(
+    `SELECT er.*, t.id AS training_id, t.title AS training_title, t.price_tnd AS training_price_tnd, t.price_eur AS training_price_eur
+     FROM enrollment_requests er
+     INNER JOIN trainings t ON t.id = er.training_id
+     WHERE er.id = ?`,
+    [enrollmentId]
+  );
+  return updated ? serializeEnrollment(updated, trainingFromRow(updated)) : null;
+};
+
+router.post("/enrollments/:id/receipt", upload.single("file"), async (req, res) => {
+  const { email, phone } = req.body;
+  if (!req.file) return res.status(400).json({ message: "Le recu est obligatoire" });
+  if (!email || !phone) return res.status(400).json({ message: "Email et telephone obligatoires" });
+
+  const [row] = await query("SELECT * FROM enrollment_requests WHERE id = ? LIMIT 1", [req.params.id]);
+  if (!row) return res.status(404).json({ message: "Demande introuvable" });
+  if (row.email.toLowerCase() !== String(email).trim().toLowerCase() || row.phone !== String(phone).trim()) {
+    return res.status(403).json({ message: "Verification impossible. Email ou telephone incorrect." });
+  }
+
+  const updated = await updateReceiptForEnrollment(row.id, req.file);
+  res.status(201).json({ message: "Recu enregistre.", enrollment: updated });
+});
+
+router.post("/enrollments/receipt", upload.single("file"), async (req, res) => {
+  const { email, phone, trainingId } = req.body;
+  if (!req.file) return res.status(400).json({ message: "Le recu est obligatoire" });
+  if (!email || !phone) return res.status(400).json({ message: "Email et telephone obligatoires" });
+
+  const params = [String(email).trim().toLowerCase(), String(phone).trim()];
+  let sql =
+    "SELECT id FROM enrollment_requests WHERE email = ? AND phone = ? ";
+  if (trainingId) {
+    sql += "AND training_id = ? ";
+    params.push(Number(trainingId));
+  }
+  sql += "ORDER BY created_at DESC LIMIT 1";
+
+  const [row] = await query(sql, params);
+  if (!row) return res.status(404).json({ message: "Aucune demande retrouvee" });
+
+  const updated = await updateReceiptForEnrollment(row.id, req.file);
+  res.status(201).json({ message: "Recu enregistre.", enrollment: updated });
 });
 
 export default router;

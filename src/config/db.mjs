@@ -243,6 +243,9 @@ export const connectDB = async () => {
   await ensureColumn("enrollment_requests", "payment_status", "VARCHAR(50) DEFAULT 'En attente' AFTER status");
   await ensureColumn("enrollment_requests", "payment_provider", "VARCHAR(50) DEFAULT 'Virement/Visa' AFTER payment_status");
   await ensureColumn("enrollment_requests", "payment_ref", "VARCHAR(255) NULL AFTER payment_provider");
+  await ensureColumn("enrollment_requests", "payment_receipt_url", "TEXT NULL AFTER payment_ref");
+  await ensureColumn("enrollment_requests", "payment_receipt_name", "VARCHAR(191) NULL AFTER payment_receipt_url");
+  await ensureColumn("enrollment_requests", "payment_receipt_uploaded_at", "TIMESTAMP NULL AFTER payment_receipt_name");
   await ensureColumn("enrollment_requests", "amount_value", "DECIMAL(10,2) DEFAULT 0 AFTER payment_ref");
   await ensureColumn("enrollment_requests", "currency_code", "VARCHAR(10) DEFAULT 'TND' AFTER amount_value");
   await ensureColumn("enrollment_requests", "paid_at", "TIMESTAMP NULL AFTER currency_code");
