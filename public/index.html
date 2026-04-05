@@ -823,7 +823,11 @@
               <div style="display:flex;justify-content:center;">
                 <div style="width:min(760px,100%);">
                   <div style="border-radius:28px;overflow:hidden;border:1px solid #ead9c0;box-shadow:0 20px 50px rgba(15,23,42,0.12);background:#fff;">
-                    <video id="centre-video" src="/videopres.mp4" muted autoplay loop playsinline controls style="width:100%;height:auto;display:block;background:#000;"></video>
+                    <video id="centre-video" muted autoplay loop playsinline controls style="width:100%;height:auto;display:block;background:#000;">
+                      <source src="/videopres.mp4" type="video/mp4" />
+                      <source src="/videopres.MP4" type="video/mp4" />
+                      <source src="/videopres.webm" type="video/webm" />
+                    </video>
                   </div>
                   <p style="margin-top:10px;font-size:12px;color:#8a7f72;text-align:center;">Cliquez sur le haut-parleur pour activer le son si besoin.</p>
                 </div>
