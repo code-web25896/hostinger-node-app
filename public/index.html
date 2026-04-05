@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260405-05"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260405-05">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260405-05">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260405-06"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260405-06">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260405-06">
   </head>
   <body>
     <div id="root"></div>
@@ -800,10 +800,11 @@
       <script>
         (function () {
           const buildVideoSection = () => {
-            const headings = Array.from(document.querySelectorAll("h2"));
-            const target = headings.find(
-              (h) => (h.textContent || "").trim().toLowerCase() === "presentation du centre"
-            );
+            const headings = Array.from(document.querySelectorAll("h1,h2,h3,h4"));
+            const target = headings.find((h) => {
+              const text = (h.textContent || "").trim().toLowerCase();
+              return text.includes("presentation") && text.includes("centre");
+            });
             if (!target) return false;
 
             const section = target.closest("section") || target.parentElement;
