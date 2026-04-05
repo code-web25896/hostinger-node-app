@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260402-05"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260402-05">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260402-05">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260405-01"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260405-01">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260405-01">
   </head>
   <body>
     <div id="root"></div>
@@ -795,6 +795,71 @@
         wrapFetchOnce();
         window.addEventListener("load", tryInsert);
         setInterval(tryInsert, 1200);
+      })();
+    </script>
+    <script>
+      (function () {
+        const avatars = {
+          "Amira S.": "/Mme élodie témoignage.jpeg",
+          "Lina M.": "/Mme linda témoignage.jpeg",
+          "Yasmine B.": "/Mme marie témoignage.jpeg"
+        };
+
+        const injectAvatars = () => {
+          const cards = Array.from(document.querySelectorAll("article, div")).filter((el) =>
+            (el.textContent || "").includes("Avis eleve")
+          );
+          if (!cards.length) return false;
+
+          let changed = false;
+          cards.forEach((card) => {
+            if (card.dataset.avatarInjected) return;
+            const nameEl = Array.from(card.querySelectorAll("p,span,strong")).find((el) =>
+              Object.keys(avatars).some((name) => (el.textContent || "").trim() === name)
+            );
+            if (!nameEl) return;
+
+            const name = nameEl.textContent.trim();
+            const src = avatars[name];
+            if (!src) return;
+
+            const wrapper = document.createElement("div");
+            wrapper.style.display = "flex";
+            wrapper.style.alignItems = "center";
+            wrapper.style.gap = "10px";
+
+            const img = document.createElement("img");
+            img.src = encodeURI(src);
+            img.alt = name;
+            img.style.width = "44px";
+            img.style.height = "44px";
+            img.style.borderRadius = "999px";
+            img.style.objectFit = "cover";
+            img.style.border = "2px solid #f3e7d3";
+            img.style.boxShadow = "0 8px 18px rgba(15,23,42,0.12)";
+
+            const nameClone = nameEl.cloneNode(true);
+            nameEl.replaceWith(wrapper);
+            wrapper.appendChild(img);
+            wrapper.appendChild(nameClone);
+            card.dataset.avatarInjected = "true";
+            changed = true;
+          });
+
+          return changed;
+        };
+
+        const tryInject = () => {
+          if (injectAvatars()) {
+            observer.disconnect();
+            clearInterval(timer);
+          }
+        };
+
+        const observer = new MutationObserver(tryInject);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        const timer = setInterval(tryInject, 400);
+        window.addEventListener("load", tryInject);
       })();
     </script>
   </body>
