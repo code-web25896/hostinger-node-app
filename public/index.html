@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260405-04"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260405-04">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260405-04">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260405-05"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260405-05">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260405-05">
   </head>
   <body>
     <div id="root"></div>
@@ -797,13 +797,55 @@
         setInterval(tryInsert, 1200);
       })();
     </script>
-    <script>
-      (function () {
-        const mapping = {
-          "Amira S.": { name: "Mme Élodie", img: "/mme-elodie-temoignage.jpeg" },
-          "Lina M.": { name: "Mme Linda", img: "/mme-linda-temoignage.jpeg" },
-          "Yasmine B.": { name: "Mme Marie", img: "/mme-marie-temoignage.jpeg" }
-        };
+      <script>
+        (function () {
+          const buildVideoSection = () => {
+            const headings = Array.from(document.querySelectorAll("h2"));
+            const target = headings.find(
+              (h) => (h.textContent || "").trim().toLowerCase() === "presentation du centre"
+            );
+            if (!target) return false;
+
+            const section = target.closest("section") || target.parentElement;
+            if (!section || document.getElementById("presentation-video")) return false;
+
+            const wrapper = document.createElement("div");
+            wrapper.id = "presentation-video";
+            wrapper.style.marginTop = "18px";
+            wrapper.innerHTML = `
+              <div style="display:flex;justify-content:center;">
+                <div style="width:min(760px,100%);">
+                  <div style="border-radius:28px;overflow:hidden;border:1px solid #ead9c0;box-shadow:0 20px 50px rgba(15,23,42,0.12);background:#fff;">
+                    <video id="centre-video" src="/videopres.mp4" muted autoplay loop playsinline controls style="width:100%;height:auto;display:block;background:#000;"></video>
+                  </div>
+                  <p style="margin-top:10px;font-size:12px;color:#8a7f72;text-align:center;">Cliquez sur le haut-parleur pour activer le son si besoin.</p>
+                </div>
+              </div>
+            `;
+            section.appendChild(wrapper);
+            return true;
+          };
+
+          const tryInsert = () => {
+            if (buildVideoSection()) {
+              observer.disconnect();
+              clearInterval(timer);
+            }
+          };
+
+          const observer = new MutationObserver(tryInsert);
+          observer.observe(document.documentElement, { childList: true, subtree: true });
+          const timer = setInterval(tryInsert, 400);
+          window.addEventListener("load", tryInsert);
+        })();
+      </script>
+      <script>
+        (function () {
+          const mapping = {
+            "Amira S.": { name: "Mme Élodie", img: "/mme-elodie-temoignage.jpeg" },
+            "Lina M.": { name: "Mme Linda", img: "/mme-linda-temoignage.jpeg" },
+            "Yasmine B.": { name: "Mme Marie", img: "/mme-marie-temoignage.jpeg" }
+          };
 
         const findCard = (el) => {
           let current = el;
