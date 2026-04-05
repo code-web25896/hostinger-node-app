@@ -6,9 +6,9 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260405-01"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260405-01">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20260405-01">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260405-02"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260405-02">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20260405-02">
   </head>
   <body>
     <div id="root"></div>
@@ -799,49 +799,60 @@
     </script>
     <script>
       (function () {
-        const avatars = {
-          "Amira S.": "/Mme élodie témoignage.jpeg",
-          "Lina M.": "/Mme linda témoignage.jpeg",
-          "Yasmine B.": "/Mme marie témoignage.jpeg"
+        const mapping = {
+          "Amira S.": { name: "Mme Élodie", img: "/Mme élodie témoignage.jpeg" },
+          "Lina M.": { name: "Mme Linda", img: "/Mme linda témoignage.jpeg" },
+          "Yasmine B.": { name: "Mme Marie", img: "/Mme marie témoignage.jpeg" }
+        };
+
+        const findCard = (el) => {
+          let current = el;
+          for (let i = 0; i < 8 && current; i += 1) {
+            if ((current.textContent || "").includes("Avis eleve")) return current;
+            current = current.parentElement;
+          }
+          return null;
         };
 
         const injectAvatars = () => {
-          const cards = Array.from(document.querySelectorAll("article, div")).filter((el) =>
-            (el.textContent || "").includes("Avis eleve")
+          const nameEls = Array.from(document.querySelectorAll("p,span,strong")).filter((el) =>
+            Object.keys(mapping).includes((el.textContent || "").trim())
           );
-          if (!cards.length) return false;
+          if (!nameEls.length) return false;
 
           let changed = false;
-          cards.forEach((card) => {
-            if (card.dataset.avatarInjected) return;
-            const nameEl = Array.from(card.querySelectorAll("p,span,strong")).find((el) =>
-              Object.keys(avatars).some((name) => (el.textContent || "").trim() === name)
-            );
-            if (!nameEl) return;
+          nameEls.forEach((nameEl) => {
+            if (nameEl.closest(".testimonial-avatar-row")) return;
+            const card = findCard(nameEl);
+            if (!card || card.dataset.avatarInjected === "true") return;
+            const key = (nameEl.textContent || "").trim();
+            const data = mapping[key];
+            if (!data) return;
 
-            const name = nameEl.textContent.trim();
-            const src = avatars[name];
-            if (!src) return;
-
-            const wrapper = document.createElement("div");
-            wrapper.style.display = "flex";
-            wrapper.style.alignItems = "center";
-            wrapper.style.gap = "10px";
+            const row = document.createElement("div");
+            row.className = "testimonial-avatar-row";
+            row.style.display = "flex";
+            row.style.alignItems = "center";
+            row.style.gap = "12px";
 
             const img = document.createElement("img");
-            img.src = encodeURI(src);
-            img.alt = name;
-            img.style.width = "44px";
-            img.style.height = "44px";
+            img.src = encodeURI(data.img);
+            img.alt = data.name;
+            img.style.width = "46px";
+            img.style.height = "46px";
             img.style.borderRadius = "999px";
             img.style.objectFit = "cover";
             img.style.border = "2px solid #f3e7d3";
-            img.style.boxShadow = "0 8px 18px rgba(15,23,42,0.12)";
+            img.style.boxShadow = "0 10px 20px rgba(15,23,42,0.12)";
 
-            const nameClone = nameEl.cloneNode(true);
-            nameEl.replaceWith(wrapper);
-            wrapper.appendChild(img);
-            wrapper.appendChild(nameClone);
+            const nameSpan = document.createElement("span");
+            nameSpan.textContent = data.name;
+            nameSpan.style.fontWeight = "600";
+            nameSpan.style.color = "#0f172a";
+
+            row.appendChild(img);
+            row.appendChild(nameSpan);
+            nameEl.replaceWith(row);
             card.dataset.avatarInjected = "true";
             changed = true;
           });
