@@ -739,6 +739,9 @@
             const originalVerifyBtn = Array.from(card.querySelectorAll("button")).find((button) =>
               (button.textContent || "").trim().toLowerCase() === "verifier paiement"
             );
+            const originalDeleteBtn = Array.from(card.querySelectorAll("button")).find((button) =>
+              (button.textContent || "").trim().toLowerCase() === "supprimer"
+            );
 
             const refreshReceiptBox = (currentEnrollment) => {
               if (currentEnrollment.paymentReceiptUrl) {
@@ -840,6 +843,13 @@
                 }
               });
             }
+
+            [originalVerifyBtn, originalDeleteBtn].forEach((button) => {
+              if (!button) return;
+              button.style.display = "none";
+              button.setAttribute("aria-hidden", "true");
+              button.disabled = true;
+            });
 
             card.appendChild(receiptBox);
             card.appendChild(actions);
