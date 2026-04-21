@@ -6,6 +6,13 @@
     <title>Beauty Academy Tunis - Centre de Formation</title>
     <meta name="description" content="Centre premium de formation esthetique a Tunis Belvedere: microneedling, capillaire, hydrafacial, soins visage et plus." />
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
+    <script>
+      (function () {
+        if (!sessionStorage.getItem("academy_country")) {
+          sessionStorage.setItem("academy_country", "TN");
+        }
+      })();
+    </script>
     <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20260405-07"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20260405-07">
     <link rel="stylesheet" href="/hero-overrides.css?v=20260405-07">
@@ -47,6 +54,45 @@
     </script>
     <script>
       (function () {
+        const rewriteVisibleText = () => {
+          let changed = false;
+          const nodes = Array.from(document.querySelectorAll("p,span,div,button,a,strong,h1,h2,h3,h4"));
+          nodes.forEach((node) => {
+            const text = (node.textContent || "").trim();
+            if (!text) return;
+
+            if (text === "+216 +21695466836") {
+              node.textContent = "+216 95 466 836";
+              changed = true;
+            }
+
+            if (text === "France") {
+              const card = node.closest("div,section,article");
+              if (card && (card.textContent || "").includes("Contact")) {
+                node.textContent = "Belvedere, Tunis Tunisie";
+                changed = true;
+              }
+            }
+
+            if (text === "Tunis Belvedere, Tunisie" || text === "Tunis Belvedere") {
+              node.textContent = "Belvedere, Tunis Tunisie";
+              changed = true;
+            }
+          });
+
+          const countryButtons = Array.from(document.querySelectorAll("button")).filter((button) =>
+            (button.textContent || "").includes("Pays:")
+          );
+          countryButtons.forEach((button) => {
+            if ((button.textContent || "").trim() === "Pays: France") {
+              button.textContent = "Pays: Tunisie";
+              changed = true;
+            }
+          });
+
+          return changed;
+        };
+
         const upgrade = () => {
           let changed = false;
           const chips = Array.from(document.querySelectorAll("div,span,p,li"));
@@ -66,6 +112,10 @@
             if (!cvLink.querySelector(".cv-pill")) {
               cvLink.innerHTML = '<span class="cv-pill flex h-8 w-8 items-center justify-center rounded-full bg-white text-[11px] font-bold text-gold shadow-[0_8px_16px_rgba(15,23,42,0.12)]">PDF</span>Voir le CV';
             }
+            changed = true;
+          }
+
+          if (rewriteVisibleText()) {
             changed = true;
           }
 
@@ -994,7 +1044,7 @@
             </span>
             <span style="display:flex;flex-direction:column;align-items:flex-start;line-height:1.08;">
               <strong style="font-size:13px;font-weight:700;">Formulaire</strong>
-              <span style="font-size:11px;opacity:0.92;">S'inscrire</span>
+              <span style="font-size:11px;opacity:0.92;">Contact</span>
             </span>
           `;
           button.style.position = "fixed";
