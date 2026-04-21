@@ -616,9 +616,34 @@
           return true;
         };
 
-        const decorateAdminPayments = () => {
+        const getAdminEnrollments = async () => {
+          if (Array.isArray(window.__academyAdminEnrollments) && window.__academyAdminEnrollments.length > 0) {
+            return window.__academyAdminEnrollments;
+          }
+
+          const token = sessionStorage.getItem("token");
+          if (!token) return [];
+
+          try {
+            const res = await fetch("/api/admin/enrollments", {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+            if (!res.ok) return [];
+            const data = await res.json();
+            if (Array.isArray(data)) {
+              window.__academyAdminEnrollments = data;
+              return data;
+            }
+          } catch (error) {
+            return [];
+          }
+
+          return [];
+        };
+
+        const decorateAdminPayments = async () => {
           if (window.location.pathname !== "/admin") return false;
-          const enrollments = window.__academyAdminEnrollments;
+          const enrollments = await getAdminEnrollments();
           if (!Array.isArray(enrollments) || enrollments.length === 0) return false;
 
           const cards = Array.from(document.querySelectorAll(".dashboard-card")).filter((card) =>
@@ -692,6 +717,29 @@
               acceptBtn.textContent = "Recu manquant";
               acceptBtn.disabled = true;
             }
+
+            const originalVerifyBtn = Array.from(card.querySelectorAll("button")).find((button) =>
+              (button.textContent || "").trim().toLowerCase() === "verifier paiement"
+            );
+
+            const refreshReceiptBox = (currentEnrollment) => {
+              if (currentEnrollment.paymentReceiptUrl) {
+                receiptBox.innerHTML = `
+                  <p class="font-semibold text-[#091632]">Recu de virement</p>
+                  <a href="${currentEnrollment.paymentReceiptUrl}" target="_blank" rel="noopener" class="mt-2 inline-flex items-center gap-2 text-gold font-semibold">Voir le recu</a>
+                `;
+                acceptBtn.textContent = "Accepter paiement";
+                acceptBtn.disabled = false;
+              } else {
+                receiptBox.innerHTML = `
+                  <p class="font-semibold text-[#091632]">Recu de virement</p>
+                  <p>Recu non recu pour cette inscription.</p>
+                `;
+                acceptBtn.textContent = "Recu manquant";
+                acceptBtn.disabled = true;
+              }
+            };
+
             acceptBtn.addEventListener("click", async () => {
               try {
                 const token = sessionStorage.getItem("token");
@@ -701,6 +749,9 @@
                 });
                 if (!res.ok) throw new Error("Erreur validation paiement.");
                 const data = await res.json();
+                enrollment.paymentStatus = data.paymentStatus || "Paye";
+                enrollment.status = data.status || "Confirmee";
+                enrollment.studentUserId = data.studentUserId || data.student_user_id || enrollment.studentUserId;
                 const chips = card.querySelectorAll(".metric-chip");
                 if (chips[0]) chips[0].textContent = "Confirmee";
                 if (chips[1]) chips[1].textContent = "Paye";
@@ -713,6 +764,10 @@
                 acceptBtn.textContent = "Paiement accepte";
                 acceptBtn.disabled = true;
                 refuseBtn.disabled = true;
+                if (originalVerifyBtn) {
+                  originalVerifyBtn.textContent = "Paiement verifie";
+                  originalVerifyBtn.disabled = true;
+                }
                 acceptedGrid.appendChild(card);
               } catch (error) {
                 acceptBtn.textContent = "Erreur";
@@ -732,10 +787,41 @@
                 refuseBtn.textContent = "Paiement refuse";
                 refuseBtn.disabled = true;
                 acceptBtn.disabled = true;
+                if (originalVerifyBtn) {
+                  originalVerifyBtn.disabled = true;
+                }
               } catch (error) {
                 refuseBtn.textContent = "Erreur";
               }
             });
+
+            if (originalVerifyBtn && !originalVerifyBtn.dataset.receiptBound) {
+              originalVerifyBtn.dataset.receiptBound = "true";
+              originalVerifyBtn.addEventListener("click", async () => {
+                try {
+                  const token = sessionStorage.getItem("token");
+                  const res = await fetch(`/api/admin/enrollments/${enrollment.id}/verify-payment`, {
+                    headers: token ? { Authorization: `Bearer ${token}` } : {}
+                  });
+                  if (!res.ok) throw new Error("Verification impossible.");
+                  const fresh = await res.json();
+                  enrollment.paymentReceiptUrl = fresh.paymentReceiptUrl;
+                  enrollment.paymentReceiptName = fresh.paymentReceiptName;
+                  enrollment.paymentStatus = fresh.paymentStatus || enrollment.paymentStatus;
+                  enrollment.status = fresh.status || enrollment.status;
+                  refreshReceiptBox(enrollment);
+
+                  if (enrollment.paymentReceiptUrl) {
+                    originalVerifyBtn.textContent = "Verification ok";
+                    acceptBtn.click();
+                  } else {
+                    originalVerifyBtn.textContent = "Recu manquant";
+                  }
+                } catch (error) {
+                  originalVerifyBtn.textContent = "Erreur";
+                }
+              });
+            }
 
             card.appendChild(receiptBox);
             card.appendChild(actions);
