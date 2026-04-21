@@ -675,20 +675,38 @@
 
           const acceptedGrid = document.getElementById("payments-accepted-grid") || pendingGrid;
 
+          const normalizeText = (value) =>
+            (value || "")
+              .replace(/\s+/g, " ")
+              .trim()
+              .toLowerCase();
+
           cards.forEach((card) => {
             if (card.dataset.receiptDecorated) return;
             const titleEl = card.querySelector("p.text-lg") || card.querySelector("p.font-semibold");
-            const metaEl = card.querySelector("p.text-sm");
-            if (!metaEl) return;
-            const metaText = metaEl.textContent || "";
-            const [fullName, email] = metaText.split("|").map((t) => t.trim());
             const trainingTitle = titleEl ? titleEl.textContent.trim() : "";
-            const enrollment = enrollments.find(
-              (item) =>
-                item.fullName === fullName &&
-                item.email === email &&
-                (item.training?.title || "") === trainingTitle
-            );
+            const normalizedCardText = normalizeText(card.textContent || "");
+            const enrollment =
+              enrollments.find((item) => {
+                const fullName = normalizeText(item.fullName);
+                const email = normalizeText(item.email);
+                const training = normalizeText(item.training?.title);
+                const titleMatches = trainingTitle
+                  ? normalizeText(trainingTitle) === training || normalizedCardText.includes(training)
+                  : normalizedCardText.includes(training);
+                const emailMatches = email && normalizedCardText.includes(email);
+                const nameMatches = fullName && normalizedCardText.includes(fullName);
+                return titleMatches && (emailMatches || nameMatches);
+              }) ||
+              enrollments.find((item) => {
+                const email = normalizeText(item.email);
+                const training = normalizeText(item.training?.title);
+                return !!email && !!training && normalizedCardText.includes(email) && normalizedCardText.includes(training);
+              }) ||
+              enrollments.find((item) => {
+                const email = normalizeText(item.email);
+                return !!email && normalizedCardText.includes(email);
+              });
             if (!enrollment) return;
 
             const receiptBox = document.createElement("div");
