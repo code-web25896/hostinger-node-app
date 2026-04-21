@@ -8,8 +8,9 @@
     <meta name="keywords" content="#microneedling,#capillaire,#esthetiqueavancee,#formationprofessionnelle,#formationenligne,#formationpresentiel,#hydrafacial,#tunis" />
     <script>
       (function () {
-        if (!sessionStorage.getItem("academy_country")) {
+        if (!sessionStorage.getItem("academy_country_initialized")) {
           sessionStorage.setItem("academy_country", "TN");
+          sessionStorage.setItem("academy_country_initialized", "true");
         }
       })();
     </script>
@@ -66,18 +67,28 @@
               changed = true;
             }
 
-            if (text === "France") {
-              const card = node.closest("div,section,article");
-              if (card && (card.textContent || "").includes("Contact")) {
-                node.textContent = "Belvedere, Tunis Tunisie";
-                changed = true;
-              }
-            }
-
             if (text === "Tunis Belvedere, Tunisie" || text === "Tunis Belvedere") {
               node.textContent = "Belvedere, Tunis Tunisie";
               changed = true;
             }
+          });
+
+          const addressLabels = Array.from(document.querySelectorAll("p,span,strong,h3,h4")).filter((node) => {
+            const text = (node.textContent || "").trim().toLowerCase();
+            return text === "adresse";
+          });
+
+          addressLabels.forEach((label) => {
+            const container = label.closest("div,section,article");
+            if (!container) return;
+            const targets = Array.from(container.querySelectorAll("p,span,div")).filter((node) => {
+              const text = (node.textContent || "").trim();
+              return text === "France" || text === "Tunis Belvedere, Tunisie" || text === "Tunis Belvedere";
+            });
+            targets.forEach((node) => {
+              node.textContent = "Belvedere, Tunis Tunisie";
+              changed = true;
+            });
           });
 
           const countryButtons = Array.from(document.querySelectorAll("button")).filter((button) =>
@@ -88,6 +99,15 @@
               button.textContent = "Pays: Tunisie";
               changed = true;
             }
+          });
+
+          const chooserTexts = Array.from(document.querySelectorAll("p,span,div")).filter((node) => {
+            const text = (node.textContent || "").trim();
+            return text === "France par defaut. Tunisie en dinars, les autres pays en euros.";
+          });
+          chooserTexts.forEach((node) => {
+            node.textContent = "Tunisie par defaut. Tunisie en dinars, les autres pays en euros.";
+            changed = true;
           });
 
           return changed;
