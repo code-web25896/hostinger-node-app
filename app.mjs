@@ -6,6 +6,7 @@ import path from "path";
 import morgan from "morgan";
 import { fileURLToPath } from "url";
 import { connectDB } from "./src/config/db.mjs";
+import { resolveUploadsRoot } from "./src/utils/uploadsPath.mjs";
 import authRoutes from "./src/routes/authRoutes.mjs";
 import trainingRoutes from "./src/routes/trainingRoutes.mjs";
 import newsRoutes from "./src/routes/newsRoutes.mjs";
@@ -20,7 +21,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const publicDir = path.resolve(__dirname, "public");
-const uploadsDir = path.resolve(process.env.UPLOADS_DIR || path.join(__dirname, "uploads"));
+const uploadsDir = resolveUploadsRoot({ appDir: __dirname });
 const legacyUploadsDir = path.join(publicDir, "uploads");
 
 const ensureDir = (dir) => fs.mkdirSync(dir, { recursive: true });
@@ -44,6 +45,7 @@ ensureDir(path.join(uploadsDir, "images"));
 ensureDir(path.join(uploadsDir, "documents"));
 copyIfMissing(path.join(legacyUploadsDir, "images"), path.join(uploadsDir, "images"));
 copyIfMissing(path.join(legacyUploadsDir, "documents"), path.join(uploadsDir, "documents"));
+console.log(`[uploads] storage root: ${uploadsDir}`);
 
 app.use(cors({ origin: process.env.CLIENT_URL || true, credentials: true }));
 app.use(express.json());

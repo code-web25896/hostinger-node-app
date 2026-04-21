@@ -16,9 +16,13 @@ MYSQL_PORT=3306
 MYSQL_DATABASE=uXXXXXXXXX_beauty_center
 MYSQL_USER=uXXXXXXXXX_beauty_user
 MYSQL_PASSWORD=CHANGE_ME
+UPLOADS_DIR=/home/uXXXXXXXXX/academy-storage/uploads
 ```
 
 - Le compte eleve est cree automatiquement apres paiement valide.
+- Pour Hostinger, utilisez un `UPLOADS_DIR` situe hors du dossier de l'application afin que les images des formations et les recus restent apres chaque redeploiement.
+- Exemple conseille: `/home/uXXXXXXXXX/academy-storage/uploads`
+- Les URL restent servies par `/uploads/...`, seul l'emplacement disque change.
 
 ## Base de donnees
 - Le schema MySQL se cree automatiquement au demarrage.
