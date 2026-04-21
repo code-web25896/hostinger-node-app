@@ -1,3 +1,4 @@
+import fs from "fs";
 import path from "path";
 
 const uniqueCandidates = (values) => {
@@ -26,5 +27,20 @@ export const resolveUploadsRoot = ({ appDir = process.cwd() } = {}) => {
     path.join(appDir, "uploads")
   ]);
 
-  return path.resolve(candidates[0] || path.join(appDir, "uploads"));
+  for (const candidate of candidates) {
+    try {
+      const resolved = path.resolve(candidate);
+      fs.mkdirSync(path.join(resolved, "images"), { recursive: true });
+      fs.mkdirSync(path.join(resolved, "documents"), { recursive: true });
+      fs.accessSync(resolved, fs.constants.R_OK | fs.constants.W_OK);
+      return resolved;
+    } catch (error) {
+      console.warn(`[uploads] unavailable path skipped: ${candidate} (${error.message})`);
+    }
+  }
+
+  const fallbackDir = path.resolve(path.join(appDir, "uploads"));
+  fs.mkdirSync(path.join(fallbackDir, "images"), { recursive: true });
+  fs.mkdirSync(path.join(fallbackDir, "documents"), { recursive: true });
+  return fallbackDir;
 };
