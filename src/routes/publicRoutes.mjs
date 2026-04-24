@@ -6,6 +6,55 @@ import { paymentAmountForTraining, serializeEnrollment } from "../lib/enrollment
 import { upload } from "../middleware/upload.mjs";
 
 const router = express.Router();
+const CONTACT_API_URL = process.env.CONTACT_API_URL || "http://51.75.19.161:8000/api/v1/messages/";
+
+const normalizeContactPayload = (body = {}) => {
+  const fullName = String(body.fullName || body.nom_complet || "").trim();
+  const email = String(body.email || "").trim().toLowerCase();
+  const phone = String(body.phone || body.telephone || "").trim();
+  const subject = String(body.subject || body.sujet || "Message site academie").trim();
+  const message = String(body.message || "").trim();
+
+  return { fullName, email, phone, subject, message };
+};
+
+const forwardContactMessage = async ({ fullName, email, phone, subject, message }) => {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 12000);
+
+  try {
+    const response = await fetch(CONTACT_API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        nom_complet: fullName,
+        telephone: phone,
+        message,
+        subject
+      }),
+      signal: controller.signal
+    });
+
+    const isJson = (response.headers.get("content-type") || "").includes("application/json");
+    const payload = isJson ? await response.json().catch(() => ({})) : await response.text().catch(() => "");
+
+    if (!response.ok) {
+      const apiMessage =
+        typeof payload === "object" && payload !== null
+          ? payload.message || payload.detail
+          : "";
+      throw new Error(apiMessage || "L'API externe a refuse l'envoi du message.");
+    }
+
+    return payload;
+  } finally {
+    clearTimeout(timeout);
+  }
+};
 
 const mapTraining = (row) => ({
   id: row.id,
@@ -71,24 +120,42 @@ router.get("/enrollments/status", async (req, res) => {
 });
 
 router.post("/contact", async (req, res) => {
-  const { fullName, phone, email, message } = req.body;
-  const result = await insert(
-    `INSERT INTO contact_requests (full_name, phone, email, message, status)
-     VALUES (?, ?, ?, ?, 'Nouveau')`,
-    [fullName, phone, email || null, message]
-  );
-  const [contact] = await query("SELECT * FROM contact_requests WHERE id = ?", [result.insertId]);
-  res.status(201).json({
-    message: "Votre message a ete envoye.",
-    contact: {
-      _id: String(contact.id),
-      fullName: contact.full_name,
-      phone: contact.phone,
-      email: contact.email,
-      message: contact.message,
-      status: contact.status
+  try {
+    const { fullName, phone, email, subject, message } = normalizeContactPayload(req.body);
+
+    if (!fullName || !email || !phone || !message) {
+      return res.status(400).json({ message: "Nom complet, email, telephone et message sont obligatoires." });
     }
-  });
+
+    await forwardContactMessage({ fullName, email, phone, subject, message });
+
+    const result = await insert(
+      `INSERT INTO contact_requests (full_name, phone, email, subject, message, status)
+       VALUES (?, ?, ?, ?, ?, 'Nouveau')`,
+      [fullName, phone, email || null, subject || null, message]
+    );
+    const [contact] = await query("SELECT * FROM contact_requests WHERE id = ?", [result.insertId]);
+    res.status(201).json({
+      message: "Votre message a ete envoye.",
+      contact: {
+        _id: String(contact.id),
+        fullName: contact.full_name,
+        phone: contact.phone,
+        email: contact.email,
+        subject: contact.subject,
+        message: contact.message,
+        status: contact.status
+      }
+    });
+  } catch (error) {
+    const statusCode = error.name === "AbortError" ? 504 : 502;
+    res.status(statusCode).json({
+      message:
+        error.name === "AbortError"
+          ? "Le serveur de messagerie externe ne repond pas pour le moment."
+          : error.message || "Impossible d'envoyer le message au serveur externe."
+    });
+  }
 });
 
 router.post("/enrollments/checkout", async (req, res) => {

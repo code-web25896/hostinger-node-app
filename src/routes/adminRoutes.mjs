@@ -63,7 +63,7 @@ router.get("/students", async (_req, res) => {
 
 router.get("/contacts", async (_req, res) => {
   const contacts = await query("SELECT * FROM contact_requests ORDER BY created_at DESC");
-  res.json(contacts.map((item) => ({ _id: String(item.id), fullName: item.full_name, phone: item.phone, email: item.email, message: item.message, status: item.status, createdAt: item.created_at })));
+  res.json(contacts.map((item) => ({ _id: String(item.id), fullName: item.full_name, phone: item.phone, email: item.email, subject: item.subject, message: item.message, status: item.status, createdAt: item.created_at })));
 });
 
 router.get("/enrollments", async (_req, res) => {
@@ -198,7 +198,7 @@ router.patch("/contacts/:id", async (req, res) => {
   const result = await insert("UPDATE contact_requests SET status = ? WHERE id = ?", [req.body.status, req.params.id]);
   if (!result.affectedRows) return res.status(404).json({ message: "Message introuvable" });
   const [updated] = await query("SELECT * FROM contact_requests WHERE id = ?", [req.params.id]);
-  res.json({ _id: String(updated.id), fullName: updated.full_name, phone: updated.phone, email: updated.email, message: updated.message, status: updated.status });
+  res.json({ _id: String(updated.id), fullName: updated.full_name, phone: updated.phone, email: updated.email, subject: updated.subject, message: updated.message, status: updated.status });
 });
 
 router.put("/students/:id", async (req, res) => {

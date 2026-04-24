@@ -58,6 +58,7 @@ const schemaStatements = [
     full_name VARCHAR(191) NOT NULL,
     phone VARCHAR(50) NOT NULL,
     email VARCHAR(191) NULL,
+    subject VARCHAR(191) NULL,
     message TEXT NOT NULL,
     status VARCHAR(50) DEFAULT 'Nouveau',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -236,6 +237,7 @@ export const connectDB = async () => {
   const connection = getPool();
   await connection.query("SELECT 1");
   for (const statement of schemaStatements) await connection.query(statement);
+  await ensureColumn("contact_requests", "subject", "VARCHAR(191) NULL AFTER email");
   await ensureColumn("trainings", "category_label", "VARCHAR(120) DEFAULT 'Esthetique avancee' AFTER description");
   await ensureColumn("trainings", "price_eur", "DECIMAL(10,2) NOT NULL DEFAULT 0 AFTER price_tnd");
   await ensureColumn("enrollment_requests", "password_hash", "VARCHAR(255) NULL AFTER email");
