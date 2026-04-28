@@ -1129,12 +1129,23 @@
           );
           if (!existingImages.length) return false;
 
+          const cards = existingImages
+            .map((img) => img.closest("div"))
+            .filter(Boolean);
           const grid =
+            cards[0]?.parentElement ||
             existingImages[0]?.closest(".grid, .flex") ||
             existingImages
               .map((img) => img.parentElement)
               .find((parent) => parent && /(grid|flex)/i.test(parent.className || ""));
           if (!grid) return false;
+
+          if (!grid.dataset.extraPartnersStyled) {
+            grid.style.display = "grid";
+            grid.style.gridTemplateColumns = "repeat(auto-fit, minmax(190px, 1fr))";
+            grid.style.gap = "24px";
+            grid.dataset.extraPartnersStyled = "true";
+          }
 
           let changed = false;
           extraPartners.forEach((partner) => {
@@ -1152,6 +1163,7 @@
             card.style.alignItems = "center";
             card.style.justifyContent = "center";
             card.style.minHeight = "168px";
+            card.style.width = "100%";
 
             const image = document.createElement("img");
             image.src = partner.src;
