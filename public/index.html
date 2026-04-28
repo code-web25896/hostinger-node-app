@@ -200,15 +200,28 @@
           });
 
           if (contactColumn && !contactColumn.dataset.footerFranceUpdated) {
-            const lines = Array.from(contactColumn.querySelectorAll("span,p,div")).filter((el) => {
-              const text = (el.textContent || "").trim();
-              return text === "France" || text === "+216 +21695466836" || text === "+216 95 466 836" || text === "contact@academie.tn";
-            });
-            lines.forEach((line) => {
-              const text = (line.textContent || "").trim();
-              if (text === "France") line.textContent = "FRANCE - 75002 PARIS";
-              if (text === "+216 +21695466836" || text === "+216 95 466 836") line.textContent = "+33 6 63 11 14 15";
-            });
+            contactColumn.innerHTML = `
+              <h4 class="text-xl font-semibold text-espresso md:text-2xl">Contact</h4>
+              <div class="mt-4" style="display:grid;gap:14px;">
+                <div style="display:flex;align-items:center;gap:14px;border-radius:18px;background:rgba(255,255,255,0.86);padding:14px 16px;border:1px solid #eadfce;box-shadow:0 10px 24px rgba(15,23,48,0.05);">
+                  <span style="display:flex;height:42px;width:42px;align-items:center;justify-content:center;border-radius:999px;background:#fbf2e2;color:#caa56a;flex-shrink:0;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="height:20px;width:20px;">
+                      <path d="M12 21s-6-5.33-6-11a6 6 0 1 1 12 0c0 5.67-6 11-6 11Z"></path>
+                      <circle cx="12" cy="10" r="2.5"></circle>
+                    </svg>
+                  </span>
+                  <span style="font-size:14px;font-weight:600;color:#475569;">FRANCE - 75002 PARIS</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:14px;border-radius:18px;background:rgba(255,255,255,0.86);padding:14px 16px;border:1px solid #eadfce;box-shadow:0 10px 24px rgba(15,23,48,0.05);">
+                  <span style="display:flex;height:42px;width:42px;align-items:center;justify-content:center;border-radius:999px;background:#fbf2e2;color:#caa56a;flex-shrink:0;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="height:20px;width:20px;">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07A19.5 19.5 0 0 1 5.15 12.8 19.86 19.86 0 0 1 2.08 4.09 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.63 2.61a2 2 0 0 1-.45 2.11L8 9.91a16 16 0 0 0 6.09 6.09l1.47-1.24a2 2 0 0 1 2.11-.45c.83.3 1.71.51 2.61.63A2 2 0 0 1 22 16.92Z"></path>
+                    </svg>
+                  </span>
+                  <a href="tel:+33663111415" style="font-size:14px;font-weight:600;color:#475569;text-decoration:none;">+33 6 63 11 14 15</a>
+                </div>
+              </div>
+            `;
             contactColumn.dataset.footerFranceUpdated = "true";
           }
 
