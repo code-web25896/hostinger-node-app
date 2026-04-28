@@ -62,13 +62,18 @@
             const text = (node.textContent || "").trim();
             if (!text) return;
 
-            if (text === "+216 +21695466836") {
-              node.textContent = "+216 95 466 836";
+            if (text === "+216 +21695466836" || text === "+216 95 466 836" || text === "+21695466836") {
+              node.textContent = "+33 6 63 11 14 15";
               changed = true;
             }
 
-            if (text === "Tunis Belvedere, Tunisie" || text === "Tunis Belvedere") {
-              node.textContent = "Belvedere, Tunis Tunisie";
+            if (
+              text === "Tunis Belvedere, Tunisie" ||
+              text === "Tunis Belvedere" ||
+              text === "Belvedere, Tunis Tunisie" ||
+              text === "France"
+            ) {
+              node.textContent = "FRANCE - 75002 PARIS";
               changed = true;
             }
           });
@@ -86,9 +91,21 @@
               return text === "France" || text === "Tunis Belvedere, Tunisie" || text === "Tunis Belvedere";
             });
             targets.forEach((node) => {
-              node.textContent = "Belvedere, Tunis Tunisie";
+              node.textContent = "FRANCE - 75002 PARIS";
               changed = true;
             });
+          });
+
+          document.querySelectorAll('a[href^="tel:"], button[aria-label*="telephone"], button[aria-label*="Contact telephone"]').forEach((node) => {
+            if (node.tagName === "A") {
+              node.setAttribute("href", "tel:+33663111415");
+            }
+            if (node.tagName === "BUTTON") {
+              node.onclick = () => {
+                window.location.href = "tel:+33663111415";
+              };
+            }
+            changed = true;
           });
 
           const countryButtons = Array.from(document.querySelectorAll("button")).filter((button) =>
@@ -153,6 +170,105 @@
         observer.observe(document.documentElement, { childList: true, subtree: true });
         const timer = setInterval(tryUpgrade, 400);
         window.addEventListener("load", tryUpgrade);
+      })();
+    </script>
+    <script>
+      (function () {
+        const buildFooterMenu = () => {
+          const footer = document.querySelector("footer");
+          if (!footer) return false;
+
+          const contactCards = Array.from(footer.querySelectorAll("div")).filter((el) => {
+            const text = (el.textContent || "").trim();
+            return text.includes("Contact") || text.includes("Mots-cles");
+          });
+          if (!contactCards.length) return false;
+
+          const footerColumns = Array.from(footer.querySelectorAll("div")).filter((el) => {
+            const heading = el.querySelector("h4");
+            return heading && ((heading.textContent || "").trim() === "Contact" || (heading.textContent || "").trim() === "Mots-cles");
+          });
+
+          const keywordsColumn = footerColumns.find((el) => {
+            const heading = el.querySelector("h4");
+            return heading && (heading.textContent || "").trim() === "Mots-cles";
+          });
+
+          const contactColumn = footerColumns.find((el) => {
+            const heading = el.querySelector("h4");
+            return heading && (heading.textContent || "").trim() === "Contact";
+          });
+
+          if (contactColumn && !contactColumn.dataset.footerFranceUpdated) {
+            const lines = Array.from(contactColumn.querySelectorAll("span,p,div")).filter((el) => {
+              const text = (el.textContent || "").trim();
+              return text === "France" || text === "+216 +21695466836" || text === "+216 95 466 836" || text === "contact@academie.tn";
+            });
+            lines.forEach((line) => {
+              const text = (line.textContent || "").trim();
+              if (text === "France") line.textContent = "FRANCE - 75002 PARIS";
+              if (text === "+216 +21695466836" || text === "+216 95 466 836") line.textContent = "+33 6 63 11 14 15";
+            });
+            contactColumn.dataset.footerFranceUpdated = "true";
+          }
+
+          if (!keywordsColumn || keywordsColumn.dataset.menuPlatformApplied === "true") return !!contactColumn;
+
+          const menuItems = [
+            { label: "Accueil", href: "/" },
+            { label: "Formations", href: "/formations" },
+            { label: "Actualites", href: "/actualites" },
+            { label: "Recherche", href: "/recherche" },
+            { label: "Demandes", href: "/demandes" }
+          ];
+
+          keywordsColumn.innerHTML = `
+            <h4 class="text-xl font-semibold text-espresso md:text-2xl">Menu plateforme</h4>
+            <div class="mt-4 grid gap-3"></div>
+          `;
+
+          const list = keywordsColumn.querySelector("div");
+          menuItems.forEach((item) => {
+            const link = document.createElement("a");
+            link.href = item.href;
+            link.style.display = "flex";
+            link.style.alignItems = "center";
+            link.style.gap = "12px";
+            link.style.padding = "12px 14px";
+            link.style.borderRadius = "18px";
+            link.style.background = "rgba(255,255,255,0.8)";
+            link.style.border = "1px solid #eadfce";
+            link.style.color = "#475569";
+            link.style.fontSize = "14px";
+            link.style.fontWeight = "600";
+            link.style.textDecoration = "none";
+            link.innerHTML = `
+              <span style="display:flex;height:38px;width:38px;align-items:center;justify-content:center;border-radius:999px;background:#fbf2e2;color:#caa56a;flex-shrink:0;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="height:18px;width:18px;">
+                  <path d="M4 12h16"></path>
+                  <path d="M12 4v16"></path>
+                </svg>
+              </span>
+              <span>${item.label}</span>
+            `;
+            list.appendChild(link);
+          });
+
+          keywordsColumn.dataset.menuPlatformApplied = "true";
+          return true;
+        };
+
+        const tryBuildFooterMenu = () => {
+          if (buildFooterMenu()) {
+            observer.disconnect();
+            clearInterval(timer);
+          }
+        };
+
+        const observer = new MutationObserver(tryBuildFooterMenu);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        const timer = setInterval(tryBuildFooterMenu, 500);
+        window.addEventListener("load", tryBuildFooterMenu);
       })();
     </script>
     <script>
