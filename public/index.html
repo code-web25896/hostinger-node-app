@@ -1111,6 +1111,79 @@
     </script>
     <script>
       (function () {
+        const extraPartners = [
+          { name: "MDC Capillaire Paris", src: "/mdc%20partenaire.jpeg" },
+          { name: "Qualiopi", src: "/qualiopi%20partenaire.jpeg" }
+        ];
+
+        const enhancePartnersSection = () => {
+          const headings = Array.from(document.querySelectorAll("h1,h2,h3,h4"));
+          const partnersHeading = headings.find((heading) => (heading.textContent || "").trim() === "Nos Partenaires");
+          if (!partnersHeading) return false;
+
+          const section = partnersHeading.closest("section");
+          if (!section) return false;
+
+          const existingImages = Array.from(section.querySelectorAll("img")).filter((img) =>
+            /partenaire|mdc|qualiopi/i.test(img.getAttribute("src") || "")
+          );
+          if (!existingImages.length) return false;
+
+          const grid =
+            existingImages[0]?.closest(".grid, .flex") ||
+            existingImages
+              .map((img) => img.parentElement)
+              .find((parent) => parent && /(grid|flex)/i.test(parent.className || ""));
+          if (!grid) return false;
+
+          let changed = false;
+          extraPartners.forEach((partner) => {
+            const alreadyThere = Array.from(section.querySelectorAll("img")).some((img) => {
+              const src = img.getAttribute("src") || "";
+              const alt = img.getAttribute("alt") || "";
+              return src.includes(partner.src.replace("/", "")) || alt.trim() === partner.name;
+            });
+            if (alreadyThere) return;
+
+            const card = document.createElement("div");
+            card.className =
+              "rounded-[24px] border border-[#ead9c0] bg-white/95 p-4 shadow-[0_12px_32px_rgba(36,28,21,0.08)]";
+            card.style.display = "flex";
+            card.style.alignItems = "center";
+            card.style.justifyContent = "center";
+            card.style.minHeight = "168px";
+
+            const image = document.createElement("img");
+            image.src = partner.src;
+            image.alt = partner.name;
+            image.loading = "lazy";
+            image.style.maxWidth = "100%";
+            image.style.maxHeight = "108px";
+            image.style.objectFit = "contain";
+
+            card.appendChild(image);
+            grid.appendChild(card);
+            changed = true;
+          });
+
+          return changed;
+        };
+
+        const tryEnhance = () => {
+          if (enhancePartnersSection()) {
+            observer.disconnect();
+            clearInterval(timer);
+          }
+        };
+
+        const observer = new MutationObserver(tryEnhance);
+        observer.observe(document.documentElement, { childList: true, subtree: true });
+        const timer = setInterval(tryEnhance, 500);
+        window.addEventListener("load", tryEnhance);
+      })();
+    </script>
+    <script>
+      (function () {
         const isHomePage = () => window.location.pathname === "/" || window.location.pathname === "";
 
         const findVisibleEnrollmentArea = () => {
