@@ -1,281 +1,582 @@
-.hero{
-  position:relative;
-  isolation:isolate;
-  display:flex;
-  align-items:center;
-  min-height:420px;
-  padding:clamp(28px,6vw,44px) clamp(18px,6vw,32px);
-  border-radius:30px;
-  overflow:hidden;
-  background-image:url("/images/backgroundesthetique.jpg");
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-  background-color:#f7efe6;
+/* ==========================================================================
+   ACADÉMIE INTERNATIONALE DE BEAUTÉ - STYLES PRESTIGE HAUTE DÉFINITION
+   Harmonisation officielle avec la charte du logo (Bleu Nuit & Or Noble)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --navy-primary: #0F1730;
+  --navy-deep: #070D1E;
+  --navy-light: #1A264D;
+  --gold-primary: #C5A059;
+  --gold-rich: #D4AF37;
+  --gold-light: #F7EAD0;
+  --gold-pale: #FFFBF2;
+  --gold-border: rgba(197, 160, 89, 0.45);
+  --gold-gradient: linear-gradient(135deg, #C5A059 0%, #E6CB96 48%, #B88D42 100%);
+  --gold-gradient-hover: linear-gradient(135deg, #D4AF37 0%, #F5DEB3 48%, #C5A059 100%);
+  --navy-gradient: linear-gradient(135deg, #0F1730 0%, #1A264D 100%);
+  --bg-creme: #FDFBF8;
+  --surface-white: #FFFFFF;
+  --text-dark: #0A1024;
+  --text-muted: #4B5565;
+  --shadow-prestige: 0 20px 45px -12px rgba(15, 23, 48, 0.08), 0 0 1px 1px rgba(197, 160, 89, 0.18);
+  --shadow-gold: 0 12px 28px -6px rgba(197, 160, 89, 0.4);
 }
 
-.hero::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(180deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,.62) 100%);
-  border-radius:inherit;
+/* Base & Typographie nette (suppression de tout aspect terne / flou) */
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  background-color: var(--bg-creme) !important;
+  color: var(--text-dark) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.hero-content{
-  position:relative;
-  z-index:2;
-  max-width:540px;
-  padding:22px 20px;
-  border-radius:24px;
-  background:rgba(255,255,255,.76);
-  box-shadow:0 22px 60px rgba(20,24,40,.12);
-  -webkit-backdrop-filter:blur(6px);
-  backdrop-filter:blur(6px);
+h1, h2, h3, .font-display {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  letter-spacing: -0.01em;
 }
 
-.hero .subtitle{
-  font-size:.62rem;
-  font-weight:700;
-  letter-spacing:.34em;
-  text-transform:uppercase;
-  color:#b28b54;
-  margin-bottom:12px;
+/* --------------------------------------------------------------------------
+   1. HEADER & BARRE DE NAVIGATION ÉLÉGANTE
+   -------------------------------------------------------------------------- */
+header,
+nav[class*="backdrop-blur"] {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-bottom: 1px solid var(--gold-border) !important;
+  box-shadow: 0 4px 20px rgba(15, 23, 48, 0.04) !important;
 }
 
-.hero h1{
-  font-family:"Cormorant Garamond",serif;
-  font-size:clamp(1.9rem,5vw,2.8rem);
-  line-height:1.05;
-  letter-spacing:.01em;
-  color:#121827;
-  margin-bottom:14px;
+/* --------------------------------------------------------------------------
+   2. SECTION HÉRO HAUT DE GAMME (NET, LUMINEUX, SANS FLOU)
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative !important;
+  isolation: isolate;
+  display: flex !important;
+  align-items: center !important;
+  min-height: 520px !important;
+  padding: clamp(32px, 6vw, 64px) clamp(20px, 6vw, 48px) !important;
+  border-radius: 36px !important;
+  overflow: hidden !important;
+  background-image: url("/backgroundesthetique.jpeg"), url("/images/backgroundesthetique.jpg") !important;
+  background-size: cover !important;
+  background-position: center 30% !important;
+  background-repeat: no-repeat !important;
+  background-color: #faf5ec !important;
+  border: 1px solid var(--gold-border) !important;
+  box-shadow: var(--shadow-prestige) !important;
 }
 
-.hero h1 span{
-  display:inline-block;
-  color:#b08a55;
-  font-style:italic;
+/* Voile lumineux et cristallin (adieu l'effet brumeux) */
+.hero::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 252, 245, 0.88) 50%, rgba(253, 246, 234, 0.75) 100%) !important;
+  border-radius: inherit !important;
+  z-index: 1 !important;
 }
 
-.hero .description{
-  font-size:clamp(.95rem,2.6vw,1.05rem);
-  line-height:1.75;
-  color:#4b5563;
+.hero-grid {
+  position: relative !important;
+  z-index: 2 !important;
+  width: 100% !important;
+  display: grid !important;
+  gap: 32px !important;
+  align-items: center !important;
 }
 
-.section-title{
-  text-align:center;
-  font-weight:700;
+@media (min-width: 1024px) {
+  .hero-grid {
+    grid-template-columns: 1.15fr 0.85fr !important;
+  }
 }
 
-.section-title + p,
-.section-title + .mt-2,
-.section-title + .mt-3{
-  text-align:center;
-  margin-left:auto;
-  margin-right:auto;
+/* Carte de contenu principale du Héro */
+.hero-content {
+  position: relative !important;
+  z-index: 3 !important;
+  max-width: 640px !important;
+  padding: clamp(24px, 4vw, 36px) !important;
+  border-radius: 28px !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(197, 160, 89, 0.4) !important;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 48, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.8) inset !important;
 }
 
+/* Badge au-dessus du titre Héro */
+.hero .subtitle,
+.hero-content > p:first-child {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.28em !important;
+  text-transform: uppercase !important;
+  color: #9c7633 !important;
+  background: var(--gold-pale) !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(197, 160, 89, 0.35) !important;
+  margin-bottom: 14px !important;
+}
+
+/* Titre Héro avec élégance royale */
+.hero h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: clamp(2.3rem, 5vw, 3.8rem) !important;
+  line-height: 1.05 !important;
+  font-weight: 700 !important;
+  color: var(--navy-primary) !important;
+  margin-top: 10px !important;
+  margin-bottom: 16px !important;
+}
+
+.hero h1 span {
+  display: inline-block !important;
+  background: var(--gold-gradient) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  font-style: italic !important;
+  padding-right: 4px !important;
+}
+
+.hero .description,
+.hero-content p.text-slate-900 {
+  font-size: clamp(0.98rem, 2vw, 1.1rem) !important;
+  line-height: 1.8 !important;
+  color: #374151 !important;
+}
+
+/* --------------------------------------------------------------------------
+   3. LES 3 CARTES SOUS LE HERO (RÉACTIVATION ET REMPLACEMENT PRO)
+   -------------------------------------------------------------------------- */
 .hero [class="mt-8 grid gap-3 sm:grid-cols-3"],
-.hero [class*=" mt-8 grid gap-3 sm:grid-cols-3"]{
-  display:none;
+.hero [class*=" mt-8 grid gap-3 sm:grid-cols-3"] {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin-top: 24px !important;
 }
 
-@media (max-width: 480px){
-  .hero{
-    min-height:480px;
-    padding:24px 16px;
-    border-radius:26px;
-  }
-
-  .hero::before{
-    border-radius:26px;
-  }
-
-  .hero-content{
-    padding:20px 18px;
-    border-radius:20px;
+@media (max-width: 640px) {
+  .hero [class="mt-8 grid gap-3 sm:grid-cols-3"],
+  .hero [class*=" mt-8 grid gap-3 sm:grid-cols-3"] {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
   }
 }
 
-@media (min-width: 768px){
-  .hero{
-    min-height:620px;
-    padding:52px 42px;
+.hero [class*="sm:grid-cols-3"] > div {
+  background: #ffffff !important;
+  border: 1px solid rgba(197, 160, 89, 0.38) !important;
+  border-radius: 20px !important;
+  padding: 14px 12px !important;
+  box-shadow: 0 10px 24px rgba(15, 23, 48, 0.04) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
+  text-align: center !important;
+}
+
+.hero [class*="sm:grid-cols-3"] > div:hover {
+  transform: translateY(-3px) !important;
+  border-color: var(--gold-primary) !important;
+  box-shadow: 0 16px 32px rgba(197, 160, 89, 0.16) !important;
+}
+
+.hero [class*="sm:grid-cols-3"] > div .rounded-full {
+  background: var(--gold-pale) !important;
+  border: 1px solid rgba(197, 160, 89, 0.35) !important;
+  color: var(--gold-primary) !important;
+  width: 44px !important;
+  height: 44px !important;
+  margin: 0 auto !important;
+}
+
+.hero [class*="sm:grid-cols-3"] > div p.text-3xl,
+.hero [class*="sm:grid-cols-3"] > div p.text-4xl,
+.hero [class*="sm:grid-cols-3"] > div p.font-bold {
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  color: var(--navy-primary) !important;
+  margin-top: 8px !important;
+  margin-bottom: 2px !important;
+}
+
+.hero [class*="sm:grid-cols-3"] > div p.text-\[11px\],
+.hero [class*="sm:grid-cols-3"] > div p.text-xs {
+  font-size: 0.68rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  color: #6B7280 !important;
+  text-transform: uppercase !important;
+}
+
+/* Carte latérale d'informations réelles dans le Héro */
+.glass-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(197, 160, 89, 0.45) !important;
+  border-radius: 28px !important;
+  padding: clamp(20px, 3vw, 28px) !important;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 48, 0.1) !important;
+}
+
+.glass-card .rounded-\[22px\] {
+  background: #FAF8F5 !important;
+  border: 1px solid #EFE4D2 !important;
+  transition: all 0.2s ease !important;
+}
+
+.glass-card .rounded-\[22px\]:hover {
+  background: #ffffff !important;
+  border-color: var(--gold-primary) !important;
+  transform: translateX(3px) !important;
+}
+
+/* --------------------------------------------------------------------------
+   4. TOUS LES BOUTONS DU SITE ("DESIGN TOP")
+   -------------------------------------------------------------------------- */
+/* Bouton Primaire Or Royal Prestige */
+.btn-primary,
+button[type="submit"].btn-primary,
+a.btn-primary {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  background: var(--gold-gradient) !important;
+  color: #0A1128 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 0.96rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+  padding: 13px 28px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow: var(--shadow-gold) !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+
+.btn-primary:hover,
+button[type="submit"].btn-primary:hover,
+a.btn-primary:hover {
+  background: var(--gold-gradient-hover) !important;
+  color: #050B1D !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 16px 36px -6px rgba(197, 160, 89, 0.52) !important;
+}
+
+.btn-primary:active,
+button[type="submit"].btn-primary:active {
+  transform: translateY(0) scale(0.98) !important;
+}
+
+/* Bouton Secondaire Bleu Nuit Impérial */
+.btn-secondary,
+a.btn-secondary,
+button.btn-secondary {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  background: #0F1730 !important;
+  color: #F7EAD0 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
+  padding: 13px 28px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(197, 160, 89, 0.35) !important;
+  box-shadow: 0 10px 24px rgba(15, 23, 48, 0.12) !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+}
+
+.btn-secondary:hover,
+a.btn-secondary:hover,
+button.btn-secondary:hover {
+  background: #1A264D !important;
+  color: #FFFFFF !important;
+  border-color: var(--gold-primary) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 16px 32px rgba(15, 23, 48, 0.2) !important;
+}
+
+.btn-secondary:active {
+  transform: translateY(0) scale(0.98) !important;
+}
+
+/* Bouton Panneau Sombre / Contact */
+.panel-dark {
+  background: var(--navy-gradient) !important;
+  border: 1px solid rgba(197, 160, 89, 0.3) !important;
+  box-shadow: 0 18px 40px rgba(10, 16, 36, 0.16) !important;
+}
+
+button.panel-dark {
+  background: var(--gold-gradient) !important;
+  color: #0A1128 !important;
+  font-weight: 800 !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  box-shadow: var(--shadow-gold) !important;
+  transition: all 0.25s ease !important;
+}
+
+button.panel-dark:hover {
+  background: var(--gold-gradient-hover) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 20px 42px rgba(197, 160, 89, 0.48) !important;
+}
+
+/* --------------------------------------------------------------------------
+   5. CARTES DE FORMATIONS & OFFRES
+   -------------------------------------------------------------------------- */
+.dashboard-card,
+article.dashboard-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(197, 160, 89, 0.28) !important;
+  border-radius: 28px !important;
+  padding: clamp(20px, 3.5vw, 28px) !important;
+  box-shadow: 0 14px 34px rgba(15, 23, 48, 0.05) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
+}
+
+article.dashboard-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: var(--gold-primary) !important;
+  box-shadow: 0 24px 50px rgba(197, 160, 89, 0.15) !important;
+}
+
+/* Badges de catégories de formations */
+span.rounded-full.bg-\[\#fff7ea\] {
+  background: #FFF9EE !important;
+  color: #9C742A !important;
+  border: 1px solid rgba(197, 160, 89, 0.35) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+}
+
+/* Prix des formations en grand */
+.text-gold {
+  color: var(--gold-primary) !important;
+}
+
+span.text-4xl.font-bold.text-gold,
+span.text-5xl.font-bold.text-gold {
+  font-family: 'Cormorant Garamond', serif !important;
+  color: #B88934 !important;
+  font-size: 2.8rem !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Liste des avantages de chaque formation */
+.training-list {
+  margin-top: 16px !important;
+  padding-left: 0 !important;
+  list-style: none !important;
+  display: grid !important;
+  gap: 8px !important;
+}
+
+.training-list li {
+  position: relative !important;
+  padding-left: 22px !important;
+  font-size: 0.88rem !important;
+  color: #4B5565 !important;
+  font-weight: 500 !important;
+}
+
+.training-list li::before {
+  content: "✓" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  color: var(--gold-primary) !important;
+  font-weight: 800 !important;
+  font-size: 0.92rem !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. SECTION FORMATRICES & ÉQUIPE PÉDAGOGIQUE
+   -------------------------------------------------------------------------- */
+#nos-formatrices,
+section.border-\[\#ead9c0\] {
+  background: linear-gradient(135deg, #FFFDF9 0%, #FAF4EA 50%, #FFFBF4 100%) !important;
+  border: 1px solid rgba(197, 160, 89, 0.35) !important;
+  box-shadow: var(--shadow-prestige) !important;
+}
+
+/* Boutons Voir le CV (formatrices) */
+a[href$=".pdf"] {
+  background: var(--gold-gradient) !important;
+  color: #0A1128 !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 10px 24px rgba(197, 160, 89, 0.3) !important;
+  transition: all 0.25s ease !important;
+}
+
+a[href$=".pdf"]:hover {
+  background: var(--gold-gradient-hover) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 16px 32px rgba(197, 160, 89, 0.45) !important;
+}
+
+/* --------------------------------------------------------------------------
+   7. GALERIES ATELIERS & ÉTUDIANTES (NETS ET RAFFINÉS)
+   -------------------------------------------------------------------------- */
+.atelier-card,
+.students-card {
+  border-radius: 24px !important;
+  border: 1px solid rgba(197, 160, 89, 0.3) !important;
+  box-shadow: 0 12px 28px rgba(15, 23, 48, 0.05) !important;
+  overflow: hidden !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+  background: #ffffff !important;
+}
+
+.atelier-card:hover,
+.students-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: var(--gold-primary) !important;
+  box-shadow: 0 20px 40px rgba(197, 160, 89, 0.16) !important;
+}
+
+.atelier-card img,
+.students-card img {
+  transition: transform 0.4s ease !important;
+}
+
+.atelier-card:hover img,
+.students-card:hover img {
+  transform: scale(1.04) !important;
+}
+
+/* --------------------------------------------------------------------------
+   8. TÉMOIGNAGES & PREUVE SOCIALE
+   -------------------------------------------------------------------------- */
+.testimonial-avatar-row img {
+  border: 2px solid var(--gold-primary) !important;
+  box-shadow: 0 6px 16px rgba(197, 160, 89, 0.28) !important;
+}
+
+/* --------------------------------------------------------------------------
+   9. PARTENAIRES DE PRESTIGE (QUALIOPI, MDC, ETC.)
+   -------------------------------------------------------------------------- */
+.partners-card {
+  border-radius: 20px !important;
+  border: 1px solid rgba(197, 160, 89, 0.25) !important;
+  box-shadow: 0 8px 20px rgba(15, 23, 48, 0.04) !important;
+  background: #ffffff !important;
+  transition: transform 0.2s ease, border-color 0.2s ease !important;
+}
+
+.partners-card:hover {
+  transform: translateY(-2px) !important;
+  border-color: var(--gold-primary) !important;
+  box-shadow: 0 14px 28px rgba(197, 160, 89, 0.12) !important;
+}
+
+/* --------------------------------------------------------------------------
+   10. FOOTER LUXE ACCORDÉ AU LOGO
+   -------------------------------------------------------------------------- */
+footer {
+  background: var(--navy-primary) !important;
+  color: #F8F9FA !important;
+  border-top: 2px solid var(--gold-primary) !important;
+}
+
+footer h4 {
+  color: #F7EAD0 !important;
+  font-family: 'Cormorant Garamond', serif !important;
+}
+
+footer p,
+footer span,
+footer a {
+  color: #D1D5DB !important;
+}
+
+footer a:hover {
+  color: #F7EAD0 !important;
+}
+
+/* --------------------------------------------------------------------------
+   11. INPUTS ET FORMULAIRES DE CONTACT
+   -------------------------------------------------------------------------- */
+.soft-input {
+  background: #ffffff !important;
+  border: 1.5px solid #E5D7C3 !important;
+  border-radius: 16px !important;
+  color: var(--text-dark) !important;
+  padding: 12px 16px !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.soft-input:focus {
+  outline: none !important;
+  border-color: var(--gold-primary) !important;
+  box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.15) !important;
+}
+
+/* --------------------------------------------------------------------------
+   12. BOUTON FLOTTANT DU FORMULAIRE DE CONTACT
+   -------------------------------------------------------------------------- */
+#floating-enrollment-button {
+  background: var(--gold-gradient) !important;
+  color: #0A1128 !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 18px 40px rgba(197, 160, 89, 0.45) !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+#floating-enrollment-button:hover {
+  background: var(--gold-gradient-hover) !important;
+  box-shadow: 0 22px 48px rgba(197, 160, 89, 0.6) !important;
+}
+
+/* Bouton Flottant WhatsApp */
+#floating-whatsapp-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+  z-index: 9997;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 14px 34px rgba(18, 140, 126, 0.38);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+#floating-whatsapp-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 18px 42px rgba(18, 140, 126, 0.5);
+  color: #ffffff;
+}
+
+@media (max-width: 640px) {
+  #floating-whatsapp-btn {
+    bottom: 80px;
+    right: 14px;
+    padding: 10px 14px;
+    font-size: 13px;
   }
-
-  .hero-content{
-    padding:30px 28px;
-    border-radius:26px;
-  }
-
-  .hero .subtitle{
-    font-size:.72rem;
-    letter-spacing:.38em;
-  }
-
-  .hero .description{
-    font-size:1.05rem;
-  }
 }
-
-.hero-grid{
-  align-items:center;
-}
-
-.glass-card{
-  background:rgba(255,252,248,.82);
-  -webkit-backdrop-filter:blur(8px);
-  backdrop-filter:blur(8px);
-}
-
-.payment-chip{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:6px 12px;
-  border-radius:999px;
-  border:1px solid rgba(184,154,103,.35);
-  background:rgba(255,255,255,.9);
-  color:#0f1730;
-  font-weight:600;
-}
-
-.payment-icon{
-  display:inline-flex;
-  width:26px;
-  height:26px;
-  align-items:center;
-  justify-content:center;
-  border-radius:999px;
-  background:#fbf2e2;
-  color:#b08a55;
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.04em;
-}
-
-
-.payment-success-box{
-  max-width:420px;
-  margin:0 auto;
-  text-align:center;
-  border:1px solid rgba(176,138,85,.18);
-  box-shadow:0 14px 30px rgba(15,23,42,.08);
-}
-
-
-#contact img[src*='logo'],
-#contact img[alt*='Logo']{
-  max-width:240px;
-  width:100%;
-  height:auto;
-  object-fit:contain;
-  margin:0 auto;
-  display:block;
-}
-
-.atelier-gallery{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:16px;
-}
-
-@media (min-width: 640px){
-  .atelier-gallery{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-}
-
-@media (min-width: 1024px){
-  .atelier-gallery{
-    grid-template-columns:repeat(4,minmax(0,1fr));
-    gap:20px;
-  }
-}
-
-.atelier-card img{
-  width:100%;
-  height:160px;
-  object-fit:cover;
-}
-
-@media (min-width: 1024px){
-  .atelier-card img{
-    height:190px;
-  }
-}
-
-.students-gallery{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:16px;
-}
-
-@media (min-width: 1024px){
-  .students-gallery{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:20px;
-  }
-}
-
-.students-card img{
-  width:100%;
-  height:180px;
-  object-fit:cover;
-}
-
-@media (min-width: 1024px){
-  .students-card{
-    background:#fff;
-  }
-
-  .students-card img{
-    height:320px;
-    object-fit:contain;
-    padding:6px 10px;
-  }
-}
-
-.partners-gallery{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:16px;
-}
-
-@media (min-width: 768px){
-  .partners-gallery{
-    grid-template-columns:repeat(3,minmax(0,1fr));
-  }
-}
-
-@media (min-width: 1024px){
-  .partners-gallery{
-    grid-template-columns:repeat(5,minmax(0,1fr));
-    gap:20px;
-  }
-}
-
-.partners-card img{
-  width:100%;
-  height:120px;
-  object-fit:contain;
-  padding:8px 10px;
-  background:#fff;
-}
-
-@media (min-width: 1024px){
-  .partners-card img{
-    height:140px;
-  }
-}
-
-
-
-@media (min-width: 1024px){
-  .hero{
-    min-height:min(100svh,760px);
-  }
-}
-
