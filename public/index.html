@@ -17,9 +17,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261021-02"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261021-02">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20261021-02">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261021-03"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261021-03">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20261021-03">
   </head>
   <body>
     <div id="root"></div>
@@ -235,13 +235,10 @@
           footer.style.marginTop = "0";
           footer.style.padding = "0";
           footer.style.backdropFilter = "none";
-          footer.style.borderRadius = "0";
-
           const footerInner = footer.querySelector(".mx-auto") || footer;
-
           footerInner.innerHTML = `
             <!-- top row -->
-            <div style="max-width:1200px;margin:0 auto;padding:52px 24px 36px;display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;align-items:start;">
+            <div class="ecom-stripe-footer-grid">
 
               <!-- Brand col -->
               <div>
@@ -635,6 +632,12 @@
             `;
 
             ateliersSection.parentNode.insertBefore(hero2, ateliersSection);
+            ateliersSection.style.display = "none";
+            // Supprimer ou masquer tout doublon résiduel d'atelier
+            document.querySelectorAll(".atelier-gallery").forEach(el => {
+              const sec = el.closest("section, article");
+              if (sec && !sec.contains(hero2)) sec.style.display = "none";
+            });
             return true;
           };
 
@@ -964,7 +967,7 @@
             category: "Laser Médical & Dermo-Esthétique",
             badge: "Best Seller",
             rating: "5.0 ★ (98 avis)",
-            image: "/formation epilation laser.jpeg",
+            image: "/formation-epilation-laser.jpeg",
             features: ["Pratique sur modèle", "Protocoles certifiés", "Matériel de pointe"]
           },
           {
@@ -972,7 +975,7 @@
             category: "Anti-Âge Haute Technologie",
             badge: "Tendance 2026",
             rating: "4.9 ★ (84 avis)",
-            image: "/formation hifu.jpeg",
+            image: "/formation-hifu.jpeg",
             features: ["Ultrasons focalisés", "Raffermissement visage & corps", "Certificat d'aptitude"]
           },
           {
@@ -980,7 +983,7 @@
             category: "Techniques Non-Invasives",
             badge: "Coup de Cœur",
             rating: "4.9 ★ (112 avis)",
-            image: "/formation hyaluron pen.jpeg",
+            image: "/formation-hyaluron-pen.jpeg",
             features: ["Sans aiguille", "Comblement & repulpant", "Kit pratique inclus"]
           },
           {
@@ -988,7 +991,7 @@
             category: "Parcours Professionnel Complet",
             badge: "Signature",
             rating: "5.0 ★ (145 avis)",
-            image: "/formation pro training .jpeg",
+            image: "/formation-pro-training.jpeg",
             features: ["Cursus complet", "Accompagnement installation", "Double certification"]
           },
           {
@@ -996,7 +999,7 @@
             category: "Dermo-Nettoyage & Éclat",
             badge: "Incontournable",
             rating: "5.0 ★ (130 avis)",
-            image: "/formation soin visage & hydrafaciale en  .jpeg",
+            image: "/formation-soin-visage.jpeg",
             features: ["Nettoyage profond", "Infusion d'actifs", "Directement rentable"]
           },
           {
@@ -1004,7 +1007,7 @@
             category: "Masterclass Multi-Technologies",
             badge: "Exclusivité",
             rating: "5.0 ★ (76 avis)",
-            image: "/master pack laser & technologies.jpeg",
+            image: "/master-pack-laser.jpeg",
             features: ["Laser + IPL + Radiofréquence", "Maîtrise totale cabine", "Diplôme d'excellence"]
           },
           {
@@ -1012,8 +1015,16 @@
             category: "Régénération & Collagène",
             badge: "Innovation",
             rating: "4.9 ★ (92 avis)",
-            image: "/radio fréquence & oxygeneo.jpeg",
+            image: "/radio-frequence-oxygeneo.jpeg",
             features: ["Effet liftant immédiat", "Oxygénation cellulaire", "Support illimité"]
+          },
+          {
+            title: "Formation Microneedling & BB Glow Cutané",
+            category: "Dermo-Régénération & Éclat",
+            badge: "Haute Précision",
+            rating: "5.0 ★ (118 avis)",
+            image: "/formation-microneedling.jpeg",
+            features: ["Induction de collagène", "Teint unifié immédiat", "Kit dermo inclus"]
           }
         ];
 
@@ -1258,20 +1269,45 @@
         ];
 
         const FORMATRICES = [
-          { name: "Formatrice Gharbi", img: "/formatrice-gharbi.jpeg", cv: "/formatrice-gharbi.pdf" }
+          { name: "Madame Gharbi", role: "Formatrice Internationale Esthétique", img: "/formatrice-gharbi.jpeg", cv: "/formatrice-gharbi.pdf" },
+          { name: "Madame Oumayma", role: "Formatrice Experte Technologies & Soins", img: "/formatrice-oumayma.jpg", cv: "/cv-oumayma.pdf" }
+        ];
+
+        const STUDENT_IMGS = [
+          { src: "/etudiante1.jpeg", alt: "Remise des diplômes certifiants" },
+          { src: "/etudiante2.jpeg", alt: "Session pratique sur modèle réel" },
+          { src: "/atelier1.jpeg", alt: "Atelier soin visage haute précision" },
+          { src: "/atelier3.jpeg", alt: "Démonstration technologies de pointe" }
+        ];
+
+        const TESTIMONIALS = [
+          { name: "Mme Élodie", role: "Diplômée Hydrafacial & Soins", text: "La formation est structurée, très classe et surtout directement applicable en institut.", img: "/mme-elodie-temoignage.jpeg" },
+          { name: "Mme Linda", role: "Diplômée Esthétique Avancée & Laser", text: "J'ai retrouvé une vraie exigence professionnelle et un suivi sérieux de la directrice.", img: "/mme-linda-temoignage.jpeg" },
+          { name: "Mme Marie", role: "Parcours Expert & Technologies", text: "Le planning, les documents et le stage sont clairs. L'expérience élève est vraiment fluide.", img: "/mme-marie-temoignage.jpeg" }
         ];
 
         const buildAboutPage = () => {
-          if (window.location.pathname !== "/a-propos") return false;
+          const isAbout = window.location.pathname.replace(/\/$/, "") === "/a-propos";
+          if (!isAbout) {
+            const existing = document.getElementById("about-page-injected");
+            if (existing) existing.remove();
+            return false;
+          }
+
           if (document.getElementById("about-page-injected")) return true;
 
-          // Find main React container
-          const main = document.querySelector("main, #root > div > div");
-          if (!main) return false;
+          // Cible prioritaire : le container natif créé par le router React, ou fallback #root
+          const container = document.getElementById("a-propos-root") ||
+                            document.querySelector("#root > div > div:nth-child(3)") ||
+                            document.querySelector("#root > div");
+          if (!container) return false;
 
-          // Hide React-rendered home content on /a-propos route
-          const reactContent = main.querySelector(".mx-auto.max-w-7xl");
-          if (reactContent) reactContent.style.display = "none";
+          // Masquer tout contenu home ou résiduel dans le conteneur principal
+          document.querySelectorAll("#root > div > div:not(header):not(footer):not(#a-propos-root)").forEach(el => {
+            if (el.id !== "about-page-injected" && !el.contains(container)) {
+              el.style.display = "none";
+            }
+          });
 
           const page = document.createElement("div");
           page.id = "about-page-injected";
@@ -1286,8 +1322,8 @@
                 <p class="about-hero-desc">Découvrez l'Académie Internationale de Beauté — une institution fondée sur la passion, l'exigence et l'amour du beau geste.</p>
                 <div class="about-hero-stats">
                   <div class="about-stat-item">
-                    <span class="about-stat-num">7+</span>
-                    <span class="about-stat-label">Branches</span>
+                    <span class="about-stat-num">8+</span>
+                    <span class="about-stat-label">Spécialités</span>
                   </div>
                   <div class="about-stat-item">
                     <span class="about-stat-num">200+</span>
@@ -1307,34 +1343,34 @@
                 <div class="about-col-text">
                   <span class="about-badge-gold">PRÉSENTATION DU CENTRE</span>
                   <h2 class="about-section-title">Une académie pensée<br>comme une <em>marque premium</em></h2>
-                  <p class="about-section-desc">Parcours certifiants, pratique encadrée, pédagogie exigeante et parcours administratifs clairs. Chaque interaction avec l'académie est conçue pour vous hisser au niveau des grandes institutions internationales de beauté.</p>
+                  <p class="about-section-desc">Parcours certifiants, pratique encadrée sur modèles réels, pédagogie exigeante et parcours administratifs clairs. Chaque interaction avec l'académie est conçue pour vous hisser au niveau des grandes institutions internationales de beauté.</p>
                   <div class="about-info-cards">
                     <div class="about-info-card">
                       <div class="about-info-icon">📍</div>
                       <div>
                         <div class="about-info-label">Adresse</div>
-                        <div class="about-info-value">Tunis Belvédère, Tunisie</div>
+                        <div class="about-info-value">Tunis Belvédère & Paris 75002</div>
                       </div>
                     </div>
                     <div class="about-info-card">
                       <div class="about-info-icon">📞</div>
                       <div>
-                        <div class="about-info-label">Téléphone</div>
-                        <div class="about-info-value">+216 95 466 836</div>
+                        <div class="about-info-label">Téléphone / WhatsApp</div>
+                        <div class="about-info-value">+33 6 63 11 14 15 / +216 95 466 836</div>
                       </div>
                     </div>
                     <div class="about-info-card">
                       <div class="about-info-icon">🎓</div>
                       <div>
                         <div class="about-info-label">Formats</div>
-                        <div class="about-info-value">Présentiel & En ligne</div>
+                        <div class="about-info-value">Présentiel & En ligne certifiant</div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="about-col-visual">
                   <div class="about-visual-card">
-                    <div class="about-visual-badge">ACADÉMIE PREMIUM</div>
+                    <div class="about-visual-badge">ACADÉMIE OFFICIELLE</div>
                     <img src="/logo.jpeg" alt="Académie Internationale de Beauté" class="about-visual-logo" onerror="this.src='/picpro.jpeg'">
                     <div class="about-visual-tagline">« L'excellence esthétique, notre signature »</div>
                   </div>
@@ -1347,8 +1383,8 @@
               <div class="about-section-inner">
                 <div class="about-section-header">
                   <span class="about-badge-gold">BRANCHES DE FORMATION</span>
-                  <h2 class="about-section-title">Nos <em>10 Spécialités</em> d'Excellence</h2>
-                  <p class="about-section-subdesc">Un cursus complet couvrant toutes les disciplines de l'esthétique moderne et des technologies de pointe.</p>
+                  <h2 class="about-section-title">Nos <em>10 Domaines</em> d'Expertise</h2>
+                  <p class="about-section-subdesc">Un cursus complet couvrant toutes les disciplines de l'esthétique moderne et des technologies médicalisées.</p>
                 </div>
                 <div class="about-branches-grid" id="branches-grid"></div>
               </div>
@@ -1365,7 +1401,7 @@
                   <div class="about-fondatrice-quote">
                     <span class="about-quote-mark">"</span>
                     <p>L'esthétique est un art qui exige rigueur, passion et innovation perpétuelle.</p>
-                    <span class="about-quote-author">— Madame Ichrak</span>
+                    <span class="about-quote-author">— Madame Ichrak, Fondatrice</span>
                   </div>
                 </div>
                 <div class="about-col-text">
@@ -1376,10 +1412,10 @@
                     <span class="about-tag">🎓 Académie Internationale</span>
                     <span class="about-tag">🌍 Formatrice Internationale</span>
                   </div>
-                  <p class="about-section-desc" style="margin-top:16px;">Madame Ichrak est une figure emblématique de l'esthétique internationale. Forte d'une expérience de plus d'une décennie dans les plus grandes institutions de beauté, elle a fondé l'Académie avec une vision claire : offrir en Tunisie une formation d'excellence comparable aux standards européens et parisiens.</p>
-                  <p class="about-section-desc">Sa pédagogie allie expertise technique rigoureuse, suivi personnalisé de chaque apprenante et transmission des dernières innovations du secteur.</p>
-                  <a href="https://wa.me/33663111415?text=Bonjour%2C%20je%20souhaite%20en%20savoir%20plus%20sur%20l'Académie%20et%20ses%20formations." target="_blank" rel="noopener noreferrer" class="about-cta-btn">
-                    <span>💬 Nous contacter sur WhatsApp</span>
+                  <p class="about-section-desc" style="margin-top:16px;">Madame Ichrak est une figure emblématique de l'esthétique internationale. Forte d'une expérience de plus d'une décennie dans les plus prestigieuses institutions de beauté, elle a fondé l'Académie avec une vision claire : offrir une formation d'excellence comparable aux standards européens les plus élevés.</p>
+                  <p class="about-section-desc">Sa pédagogie allie expertise technique rigoureuse, suivi personnalisé de chaque apprenante et transmission concrète des clés de rentabilité en institut.</p>
+                  <a href="https://wa.me/33663111415?text=Bonjour%2C%20je%20souhaite%20échanger%20avec%20la%20direction%20de%20l'Académie." target="_blank" rel="noopener noreferrer" class="about-cta-btn">
+                    <span>💬 Contacter la Direction sur WhatsApp</span>
                   </a>
                 </div>
               </div>
@@ -1390,8 +1426,8 @@
               <div class="about-section-inner">
                 <div class="about-section-header">
                   <span class="about-badge-gold">NOS FORMATRICES</span>
-                  <h2 class="about-section-title">Des <em>Expertes</em> à votre service</h2>
-                  <p class="about-section-subdesc">Chaque formatrice est sélectionnée pour son niveau d'expertise, sa passion pédagogique et son excellence professionnelle.</p>
+                  <h2 class="about-section-title">Des <em>Formatrices Expertes</em></h2>
+                  <p class="about-section-subdesc">Chaque formatrice est sélectionnée pour son haut niveau d'expertise, sa rigueur pédagogique et ses certifications internationales.</p>
                 </div>
                 <div class="about-formatrices-grid" id="formatrices-grid"></div>
               </div>
@@ -1401,9 +1437,9 @@
             <section class="about-section" id="about-etudiants">
               <div class="about-section-inner">
                 <div class="about-section-header">
-                  <span class="about-badge-gold">NOS ÉTUDIANTS</span>
+                  <span class="about-badge-gold">NOS ÉTUDIANTES & AVIS</span>
                   <h2 class="about-section-title">Des parcours <em>inspirants</em></h2>
-                  <p class="about-section-subdesc">Des centaines d'apprenantes ont transformé leur passion en carrière grâce à l'Académie Internationale de Beauté.</p>
+                  <p class="about-section-subdesc">Découvrez nos diplômées en situation de pratique et leurs témoignages authentiques après formation.</p>
                 </div>
 
                 <!-- Galerie photos étudiantes -->
@@ -1418,8 +1454,8 @@
             <section class="about-cta-section">
               <div class="about-cta-inner">
                 <span class="about-badge-gold" style="background:rgba(197,160,89,0.15);color:#c5a059;">REJOIGNEZ-NOUS</span>
-                <h2 class="about-section-title" style="color:#fff;margin-top:12px;">Commencez votre <em style="color:#c5a059;">aventure</em></h2>
-                <p style="color:rgba(255,255,255,0.75);font-size:1rem;max-width:520px;margin:0 auto 28px;">Inscrivez-vous dès aujourd'hui et rejoignez une communauté d'expertes passionnées.</p>
+                <h2 class="about-section-title" style="color:#fff;margin-top:12px;">Démarrez votre <em style="color:#c5a059;">carrière d'élite</em></h2>
+                <p style="color:rgba(255,255,255,0.75);font-size:1rem;max-width:520px;margin:0 auto 28px;">Places limitées par atelier pour garantir un suivi pratique individuel. Réservez votre session dès aujourd'hui.</p>
                 <a href="https://wa.me/33663111415?text=Bonjour%2C%20je%20souhaite%20m'inscrire%20à%20l'Académie%20Internationale%20de%20Beauté." target="_blank" rel="noopener noreferrer" class="about-cta-btn about-cta-btn-hero">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
                   <span>S'inscrire via WhatsApp</span>
@@ -1428,9 +1464,11 @@
             </section>
           `;
 
-          main.appendChild(page);
+          // Insérer la page dans le conteneur
+          container.innerHTML = "";
+          container.appendChild(page);
 
-          // Inject branches grid
+          // Remplir la grille des branches
           const branchesGrid = page.querySelector("#branches-grid");
           if (branchesGrid) {
             BRANCHES.forEach((b) => {
@@ -1443,7 +1481,7 @@
             });
           }
 
-          // Inject formatrices grid
+          // Remplir les formatrices avec photos réelles et CV
           const formGrid = page.querySelector("#formatrices-grid");
           if (formGrid) {
             FORMATRICES.forEach((f) => {
@@ -1455,10 +1493,10 @@
                 </div>
                 <div class="about-formatrice-body">
                   <h3 class="about-formatrice-name">${f.name}</h3>
-                  <p class="about-formatrice-role">Formatrice Experte</p>
+                  <p class="about-formatrice-role">${f.role}</p>
                   <a href="${f.cv}" class="about-formatrice-cv" target="_blank" rel="noopener">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
-                    Voir CV complet
+                    Télécharger le CV officiel
                   </a>
                 </div>
               `;
@@ -1466,26 +1504,18 @@
             });
           }
 
-          // Inject students gallery from React DOM
+          // Remplir la galerie étudiantes avec photos réelles
           const studentsGallery = page.querySelector("#students-gallery-about");
-          const reactStudentsImgs = document.querySelectorAll(".students-gallery img, .students-card img");
-          if (studentsGallery && reactStudentsImgs.length) {
-            reactStudentsImgs.forEach((img) => {
-              const clone = document.createElement("div");
-              clone.className = "about-student-img-wrap";
-              const imgEl = document.createElement("img");
-              imgEl.src = img.src;
-              imgEl.alt = img.alt || "Étudiante";
-              imgEl.className = "about-student-img";
-              imgEl.onerror = () => { imgEl.style.display = "none"; };
-              clone.appendChild(imgEl);
-              studentsGallery.appendChild(clone);
+          if (studentsGallery) {
+            STUDENT_IMGS.forEach((img) => {
+              const wrap = document.createElement("div");
+              wrap.className = "about-student-img-wrap";
+              wrap.innerHTML = `<img src="${img.src}" alt="${img.alt}" class="about-student-img" onerror="this.src='/logo.jpeg'">`;
+              studentsGallery.appendChild(wrap);
             });
-          } else if (studentsGallery) {
-            studentsGallery.innerHTML = '<p style="text-align:center;color:#9ca3af;padding:24px;">Galerie en cours de chargement…</p>';
           }
 
-          // Inject testimonials
+          // Remplir les avis étudiantes avec photos authentiques
           const testimonialsDiv = page.querySelector("#testimonials-about");
           if (testimonialsDiv) {
             TESTIMONIALS.forEach((t) => {
@@ -1494,7 +1524,7 @@
               card.innerHTML = `
                 <div class="about-testimonial-quote">"${t.text}"</div>
                 <div class="about-testimonial-author">
-                  <div class="about-testimonial-avatar">${t.avatar}</div>
+                  <img src="${t.img}" alt="${t.name}" style="width:44px;height:44px;border-radius:999px;object-fit:cover;border:2px solid #C5A059;flex-shrink:0;" onerror="this.style.display='none'">
                   <div>
                     <div class="about-testimonial-name">${t.name}</div>
                     <div class="about-testimonial-role">${t.role}</div>
@@ -1558,11 +1588,55 @@
           return false;
         };
 
+        // ── Garantir que toutes les 8 formations sont visibles sur /formations ──
+        const enhanceFormationsPage = () => {
+          if (!window.location.pathname.startsWith("/formations")) return;
+          const grid = document.querySelector(".sm\\:grid-cols-2.lg\\:grid-cols-3, div[class*='grid-cols']");
+          if (!grid) return;
+          if (grid.dataset.allFormationsEnsured === "true") return;
+
+          const cards = grid.querySelectorAll("article, .dashboard-card, div.rounded-\\[24px\\], div.rounded-\\[28px\\]");
+          if (cards.length > 0 && cards.length < 6) {
+            ECOM_FORMATIONS.forEach((f) => {
+              const alreadyThere = Array.from(cards).some((c) =>
+                (c.textContent || "").toLowerCase().includes(f.title.toLowerCase().slice(0, 15))
+              );
+              if (!alreadyThere) {
+                const card = document.createElement("article");
+                card.className = "ecom-card rounded-[24px] border border-[#eadfce] bg-white p-4 shadow-[0_12px_28px_rgba(15,23,42,0.06)]";
+                card.innerHTML = `
+                  <div class="relative overflow-hidden rounded-[20px] bg-[#07153b]">
+                    <img src="${f.image}" alt="${f.title}" class="h-52 w-full object-cover md:h-56" onerror="this.src='/logo.jpeg'">
+                    <span class="absolute top-3 left-3 rounded-full bg-[#caa56a] px-3 py-1 text-xs font-bold text-white shadow">${f.badge}</span>
+                  </div>
+                  <div class="mt-4">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-gold">${f.category}</span>
+                    <h3 class="mt-1 text-xl font-bold text-[#0f1730]">${f.title}</h3>
+                    <div class="mt-2 text-xs text-amber-600 font-semibold">${f.rating}</div>
+                    <ul class="mt-3 space-y-1.5 text-xs text-slate-600">
+                      ${f.features.map((feat) => `<li>✓ ${feat}</li>`).join("")}
+                    </ul>
+                    <div class="mt-4 pt-3 border-t border-[#f1e6d6]">
+                      <a href="https://wa.me/33663111415?text=${encodeURIComponent("Bonjour, je souhaite m'inscrire à la formation : " + f.title)}" target="_blank" rel="noopener noreferrer" class="btn-primary w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-full text-sm font-bold text-white bg-[#25D366] hover:bg-[#128C7E] transition shadow" style="text-decoration:none;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
+                        <span>S'inscrire via WhatsApp</span>
+                      </a>
+                    </div>
+                  </div>
+                `;
+                grid.appendChild(card);
+              }
+            });
+            grid.dataset.allFormationsEnsured = "true";
+          }
+        };
+
         const runAll = () => {
           homeCleanup();
           injectAboutNavLink();
           addAboutFooterLink();
           buildAboutPage();
+          enhanceFormationsPage();
         };
 
         // React router navigation — re-run on route change

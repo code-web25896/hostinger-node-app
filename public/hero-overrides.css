@@ -2157,3 +2157,58 @@ div:has(> input[type="file"][name="receipt"]) {
     height: 110px;
   }
 }
+
+/* ==========================================================================
+   20. RESPONSIVE STRIPE FOOTER & MASQUAGE DOUBLONS ATELIERS
+   ========================================================================== */
+
+/* -- Suppression de la 2ème section Nos Ateliers (React d'origine) ------- */
+section:has(.atelier-gallery):not(#ateliers-hero2 *),
+article:has(.atelier-gallery):not(#ateliers-hero2 *),
+.atelier-gallery {
+  display: none !important;
+}
+
+/* -- Container natif A-Propos ------------------------------------------ */
+#a-propos-root {
+  width: 100%;
+  min-height: 80vh;
+  display: block;
+}
+
+/* -- Footer E-commerce Style Stripe Ultra-Responsive ------------------- */
+.ecom-stripe-footer-wrap {
+  width: 100%;
+  background: #0F1730 !important;
+  color: #F7EAD0;
+}
+
+.ecom-stripe-footer-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 52px 24px 36px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.1fr 1.2fr;
+  gap: 36px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .ecom-stripe-footer-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 32px 24px !important;
+    padding: 40px 20px 28px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .ecom-stripe-footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+    padding: 32px 16px 24px !important;
+  }
+  
+  .ecom-stripe-footer-grid > div {
+    width: 100% !important;
+  }
+}

@@ -20,6 +20,105 @@ const normalizeImage = (value) => {
   return image;
 };
 
+export const DEFAULT_ALL_TRAININGS = [
+  {
+    id: 1,
+    _id: "1",
+    title: "Épilation Laser Diode & Alexandrite",
+    image: "/formation-epilation-laser.jpeg",
+    description: "Formation certifiante complète en épilation définitive laser diode & alexandrite. Protocoles de sécurité, réglages longueurs d'ondes, phototypes et pratique réelle.",
+    category: "Laser & IPL",
+    duration: "3 jours",
+    priceTND: 1200,
+    priceEUR: 390,
+    availability: ["Présentiel", "En ligne"]
+  },
+  {
+    id: 2,
+    _id: "2",
+    title: "HIFU Lifting Non-Chirurgical & Remodelage",
+    image: "/formation-hifu.jpeg",
+    description: "Maîtrise des ultrasons focalisés de haute intensité (HIFU) visage & corps. Rajeunissement cutané profond, cartouches multi-profondeurs et protocoles anti-âge.",
+    category: "Esthétique avancée",
+    duration: "2 jours",
+    priceTND: 1100,
+    priceEUR: 350,
+    availability: ["Présentiel", "En ligne"]
+  },
+  {
+    id: 3,
+    _id: "3",
+    title: "Hyaluron Pen & Volumétrie des Lèvres",
+    image: "/formation-hyaluron-pen.jpeg",
+    description: "Technique d'injection sans aiguille par pression d'acide hyaluronique. Comblement des ridules, hydratation profonde et augmentation subtile du volume labial.",
+    category: "Dermo-esthétique",
+    duration: "2 jours",
+    priceTND: 950,
+    priceEUR: 310,
+    availability: ["Présentiel", "En ligne"]
+  },
+  {
+    id: 4,
+    _id: "4",
+    title: "Master Pro Esthétique Avancée & Gestion d'Institut",
+    image: "/formation-pro-training.jpeg",
+    description: "Cursus d'élite complet pour futures cheffes d'institut : diagnostic cutané high-tech, maîtrise de 7 technologies, hygiène médicale et gestion commerciale rentable.",
+    category: "Expertise & Innovation",
+    duration: "6 semaines",
+    priceTND: 1800,
+    priceEUR: 580,
+    availability: ["Présentiel", "En ligne"]
+  },
+  {
+    id: 5,
+    _id: "5",
+    title: "Soin Visage Expert & Hydrafacial 7 en 1",
+    image: "/formation-soin-visage.jpeg",
+    description: "Protocole signature complet en hydro-dermabrasion, peeling doux, infusion sérums et luminothérapie LED. Nettoyage profond et éclat immédiat.",
+    category: "Soins visage",
+    duration: "2 jours",
+    priceTND: 850,
+    priceEUR: 275,
+    availability: ["Présentiel", "En ligne"]
+  },
+  {
+    id: 6,
+    _id: "6",
+    title: "Master Pack Laser & Nouvelles Technologies 2026",
+    image: "/master-pack-laser.jpeg",
+    description: "Le cursus ultime combinant Laser Diode, HIFU 7D, Radiofréquence fractionnée et Cryolipolyse. Devenez une référence technique incontournable.",
+    category: "Technologies esthétiques",
+    duration: "5 jours",
+    priceTND: 2200,
+    priceEUR: 710,
+    availability: ["Présentiel", "En ligne"]
+  },
+  {
+    id: 7,
+    _id: "7",
+    title: "Radiofréquence & Oxygénéo Révolution",
+    image: "/radio-frequence-oxygeneo.jpeg",
+    description: "Soin 3-en-1 stimulant la production naturelle de collagène par oxygénation sous-cutanée, exfoliation douce et resserrement tissulaire radiofréquence.",
+    category: "Technologies esthétiques",
+    duration: "2 jours",
+    priceTND: 900,
+    priceEUR: 290,
+    availability: ["Présentiel", "En ligne"]
+  },
+  {
+    id: 8,
+    _id: "8",
+    title: "Microneedling & BB Glow Cutané",
+    image: "/formation-microneedling.jpeg",
+    description: "Induction de collagène par micro-perforations contrôlées, traitement des cicatrices, vergetures, hyperpigmentations et unification du teint BB Glow.",
+    category: "Dermo-esthétique",
+    duration: "2 jours",
+    priceTND: 850,
+    priceEUR: 275,
+    availability: ["Présentiel", "En ligne"]
+  }
+];
+
 const mapTraining = (row) => ({
   id: row.id,
   _id: String(row.id),
@@ -30,16 +129,48 @@ const mapTraining = (row) => ({
   duration: row.duration,
   priceTND: Number(row.price_tnd),
   priceEUR: Number(row.price_eur),
-  availability: row.availability_json ? JSON.parse(row.availability_json) : []
+  availability: row.availability_json ? (typeof row.availability_json === "string" ? JSON.parse(row.availability_json) : row.availability_json) : []
 });
 
 router.get("/", async (_req, res) => {
   try {
     const trainings = await query("SELECT * FROM trainings ORDER BY price_tnd ASC, id DESC");
-    res.json(trainings.map(mapTraining));
+    if (trainings && trainings.length >= 7) {
+      return res.json(trainings.map(mapTraining));
+    }
+
+    // Si la base a moins de 7 formations, on fusionne ou enrichit avec les 8 formations réelles
+    const existingTitles = new Set((trainings || []).map((t) => (t.title || "").toLowerCase().trim()));
+    const missing = DEFAULT_ALL_TRAININGS.filter(
+      (d) => !existingTitles.has(d.title.toLowerCase().trim())
+    );
+
+    // Auto-insérer les formations manquantes dans MySQL pour pérenniser
+    for (const item of missing) {
+      try {
+        await insert(
+          `INSERT INTO trainings (title, image, description, category_label, duration, price_tnd, price_eur, availability_json)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [item.title, item.image, item.description, item.category, item.duration, item.priceTND, item.priceEUR, JSON.stringify(item.availability)]
+        );
+      } catch (_e) {
+        // En cas d'erreur insertion, continuer
+      }
+    }
+
+    // Récupérer la liste complète mise à jour
+    try {
+      const refreshed = await query("SELECT * FROM trainings ORDER BY price_tnd ASC, id DESC");
+      if (refreshed && refreshed.length) {
+        return res.json(refreshed.map(mapTraining));
+      }
+    } catch (_e) {}
+
+    // Fallback direct sur les 8 formations garanties
+    return res.json(DEFAULT_ALL_TRAININGS);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message || "Erreur lors du chargement des formations" });
+    console.error("Erreur DB trainings, utilisation des 8 formations par défaut:", error.message);
+    res.json(DEFAULT_ALL_TRAININGS);
   }
 });
 
