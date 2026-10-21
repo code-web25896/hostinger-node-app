@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ACADÉMIE INTERNATIONALE DE BEAUTÉ - STYLES PRESTIGE HAUTE DÉFINITION
+   ACADÃMIE INTERNATIONALE DE BEAUTÃ - STYLES PRESTIGE HAUTE DÃFINITION
    Harmonisation officielle avec la charte du logo (Bleu Nuit & Or Noble)
    ========================================================================== */
 
@@ -40,7 +40,7 @@ h1, h2, h3, .font-display {
 }
 
 /* --------------------------------------------------------------------------
-   1. HEADER & BARRE DE NAVIGATION ÉLÉGANTE
+   1. HEADER & BARRE DE NAVIGATION ÃLÃGANTE
    -------------------------------------------------------------------------- */
 header,
 nav[class*="backdrop-blur"] {
@@ -50,7 +50,7 @@ nav[class*="backdrop-blur"] {
 }
 
 /* --------------------------------------------------------------------------
-   2. SECTION HÉRO HAUT DE GAMME (NET, LUMINEUX, SANS FLOU)
+   2. SECTION HÃRO HAUT DE GAMME (NET, LUMINEUX, SANS FLOU)
    -------------------------------------------------------------------------- */
 .hero {
   position: relative !important;
@@ -95,7 +95,7 @@ nav[class*="backdrop-blur"] {
   }
 }
 
-/* Carte de contenu principale du Héro */
+/* Carte de contenu principale du HÃ©ro */
 .hero-content {
   position: relative !important;
   z-index: 3 !important;
@@ -107,7 +107,7 @@ nav[class*="backdrop-blur"] {
   box-shadow: 0 25px 50px -12px rgba(15, 23, 48, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.8) inset !important;
 }
 
-/* Badge au-dessus du titre Héro */
+/* Badge au-dessus du titre HÃ©ro */
 .hero .subtitle,
 .hero-content > p:first-child {
   display: inline-flex !important;
@@ -126,7 +126,7 @@ nav[class*="backdrop-blur"] {
   margin-bottom: 14px !important;
 }
 
-/* Titre Héro avec élégance royale */
+/* Titre HÃ©ro avec Ã©lÃ©gance royale */
 .hero h1 {
   font-family: 'Cormorant Garamond', Georgia, serif !important;
   font-size: clamp(2.3rem, 5vw, 3.8rem) !important;
@@ -154,7 +154,7 @@ nav[class*="backdrop-blur"] {
 }
 
 /* --------------------------------------------------------------------------
-   3. LES 3 CARTES SOUS LE HERO (RÉACTIVATION ET REMPLACEMENT PRO)
+   3. LES 3 CARTES SOUS LE HERO (RÃACTIVATION ET REMPLACEMENT PRO)
    -------------------------------------------------------------------------- */
 .hero [class="mt-8 grid gap-3 sm:grid-cols-3"],
 .hero [class*=" mt-8 grid gap-3 sm:grid-cols-3"] {
@@ -217,7 +217,7 @@ nav[class*="backdrop-blur"] {
   text-transform: uppercase !important;
 }
 
-/* Carte latérale d'informations réelles dans le Héro */
+/* Carte latÃ©rale d'informations rÃ©elles dans le HÃ©ro */
 .glass-card {
   background: #ffffff !important;
   border: 1px solid rgba(197, 160, 89, 0.45) !important;
@@ -278,7 +278,7 @@ button[type="submit"].btn-primary:active {
   transform: translateY(0) scale(0.98) !important;
 }
 
-/* Bouton Secondaire Bleu Nuit Impérial */
+/* Bouton Secondaire Bleu Nuit ImpÃ©rial */
 .btn-secondary,
 a.btn-secondary,
 button.btn-secondary {
@@ -356,7 +356,7 @@ article.dashboard-card:hover {
   box-shadow: 0 24px 50px rgba(197, 160, 89, 0.15) !important;
 }
 
-/* Badges de catégories de formations */
+/* Badges de catÃ©gories de formations */
 span.rounded-full.bg-\[\#fff7ea\] {
   background: #FFF9EE !important;
   color: #9C742A !important;
@@ -396,7 +396,7 @@ span.text-5xl.font-bold.text-gold {
 }
 
 .training-list li::before {
-  content: "✓" !important;
+  content: "â" !important;
   position: absolute !important;
   left: 0 !important;
   top: 0 !important;
@@ -406,7 +406,7 @@ span.text-5xl.font-bold.text-gold {
 }
 
 /* --------------------------------------------------------------------------
-   6. SECTION FORMATRICES & ÉQUIPE PÉDAGOGIQUE
+   6. SECTION FORMATRICES & ÃQUIPE PÃDAGOGIQUE
    -------------------------------------------------------------------------- */
 #nos-formatrices,
 section.border-\[\#ead9c0\] {
@@ -432,7 +432,7 @@ a[href$=".pdf"]:hover {
 }
 
 /* --------------------------------------------------------------------------
-   7. GALERIES ATELIERS & ÉTUDIANTES (NETS ET RAFFINÉS)
+   7. GALERIES ATELIERS & ÃTUDIANTES (NETS ET RAFFINÃS)
    -------------------------------------------------------------------------- */
 .atelier-card,
 .students-card {
@@ -462,7 +462,7 @@ a[href$=".pdf"]:hover {
 }
 
 /* --------------------------------------------------------------------------
-   8. TÉMOIGNAGES & PREUVE SOCIALE
+   8. TÃMOIGNAGES & PREUVE SOCIALE
    -------------------------------------------------------------------------- */
 .testimonial-avatar-row img {
   border: 2px solid var(--gold-primary) !important;
@@ -487,7 +487,7 @@ a[href$=".pdf"]:hover {
 }
 
 /* --------------------------------------------------------------------------
-   10. FOOTER LUXE ACCORDÉ AU LOGO
+   10. FOOTER LUXE ACCORDÃ AU LOGO
    -------------------------------------------------------------------------- */
 footer {
   background: var(--navy-primary) !important;
@@ -582,40 +582,89 @@ footer a:hover {
 }
 
 /* ==========================================================================
-   13. SECTION E-COMMERCE HAUTE BEAUTÉ & CARROUSEL DES FORMATIONS
+   13. SECTION E-COMMERCE HAUTE BEAUTÃ & CARROUSEL DES FORMATIONS
    ========================================================================== */
 
-/* Top Announcement Bar E-commerce */
+/* Top Announcement Bar E-commerce - Hero Single-Line Animated Ticker */
 #top-announcement-bar {
-  background: linear-gradient(90deg, #070D1E 0%, #0F1730 50%, #070D1E 100%);
+  background: linear-gradient(90deg, #060b1a 0%, #0d1733 50%, #060b1a 100%);
   color: #F7EAD0;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 9px 16px;
-  border-bottom: 1px solid rgba(197, 160, 89, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 36px;
+  line-height: 36px;
+  border-bottom: 1px solid rgba(197, 160, 89, 0.45);
   position: relative;
   z-index: 60;
-  letter-spacing: 0.04em;
-  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  padding: 0;
+  display: block;
+}
+
+.top-bar-marquee {
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.top-bar-track {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  will-change: transform;
+  animation: topBarMarquee 26s linear infinite;
+}
+
+.top-bar-marquee:hover .top-bar-track {
+  animation-play-state: paused;
+}
+
+@keyframes topBarMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.top-bar-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0 16px;
+  color: #f7ead0;
+}
+
+.top-bar-separator {
+  color: #c5a059;
+  font-size: 10px;
+  opacity: 0.75;
+  padding: 0 8px;
 }
 
 #top-announcement-bar .badge-gold {
   background: var(--gold-gradient);
   color: #0A1128;
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 800;
-  padding: 3px 8px;
+  padding: 2.5px 8px;
   border-radius: 999px;
   text-transform: uppercase;
-  margin-right: 10px;
-  letter-spacing: 0.12em;
+  margin-right: 6px;
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+  display: inline-block;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-/* Section E-commerce Showcase (juste après le Héro) */
+/* Section E-commerce Showcase (juste aprÃ¨s le HÃ©ro) */
 #formations-showcase-section {
   position: relative;
   margin-top: 48px;
@@ -705,21 +754,26 @@ footer a:hover {
 .ecom-card-media {
   position: relative;
   width: 100%;
-  height: 380px;
-  background: #0F1730;
+  height: 300px;
+  background: radial-gradient(circle at center, #152244 0%, #070d1e 100%);
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ecom-card-media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s ease;
+  object-fit: contain;
+  object-position: center;
+  padding: 6px;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   display: block;
 }
 
 .ecom-card:hover .ecom-card-media img {
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
 
 /* Badges E-commerce sur l'image */
@@ -853,7 +907,7 @@ footer a:hover {
 }
 
 /* --------------------------------------------------------------------------
-   14. BANDEAU DE RÉASSURANCE E-COMMERCE (TRUST BAR)
+   14. BANDEAU DE RÃASSURANCE E-COMMERCE (TRUST BAR)
    -------------------------------------------------------------------------- */
 #ecommerce-trust-bar {
   margin-top: 36px;
@@ -920,7 +974,7 @@ footer a:hover {
 }
 
 /* --------------------------------------------------------------------------
-   15. FOOTER E-COMMERCE ENRICHI (PAIEMENT SÉCURISÉ & LIENS)
+   15. FOOTER E-COMMERCE ENRICHI (PAIEMENT SÃCURISÃ & LIENS)
    -------------------------------------------------------------------------- */
 .ecom-payment-badges {
   display: flex;
@@ -944,7 +998,7 @@ footer a:hover {
 }
 
 /* --------------------------------------------------------------------------
-   16. OPTIMISATION MOBILE AVANCÉE : LARGEUR 98% ET TAILLES CONTENUS COMPACTES
+   16. OPTIMISATION MOBILE AVANCÃE : LARGEUR 98% ET TAILLES CONTENUS COMPACTES
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
   html, body {
@@ -952,7 +1006,7 @@ footer a:hover {
     width: 100% !important;
   }
 
-  /* Élargissement maximal du contenu pour éviter les marges vides latérales */
+  /* Ãlargissement maximal du contenu pour Ã©viter les marges vides latÃ©rales */
   .mx-auto,
   .max-w-7xl,
   .max-w-6xl,
@@ -973,7 +1027,7 @@ footer a:hover {
     padding-right: 6px !important;
   }
 
-  /* Section Hero compacte et proportionnée */
+  /* Section Hero compacte et proportionnÃ©e */
   .hero {
     min-height: auto !important;
     padding: 16px 8px !important;
@@ -1062,7 +1116,7 @@ footer a:hover {
     font-size: 13px !important;
   }
 
-  /* Bandeau de réassurance Trust Bar Mobile */
+  /* Bandeau de rÃ©assurance Trust Bar Mobile */
   #ecommerce-trust-bar {
     grid-template-columns: 1fr !important;
     gap: 10px !important;
@@ -1096,9 +1150,9 @@ footer a:hover {
 }
 
 /* --------------------------------------------------------------------------
-   17. SUPPRESSION DU PAIEMENT EN LIGNE, DEVIS, REÇUS ET DEMANDES
+   17. SUPPRESSION DU PAIEMENT EN LIGNE, DEVIS, REÃUS ET DEMANDES
    -------------------------------------------------------------------------- */
-/* Masquer tout lien ou élément de menu "Demandes" */
+/* Masquer tout lien ou Ã©lÃ©ment de menu "Demandes" */
 a[href*="/demandes"],
 a[href="/demandes"],
 nav a[href*="demande"],
@@ -1106,7 +1160,7 @@ button[data-tab="demandes"] {
   display: none !important;
 }
 
-/* Masquer les formulaires ou boutons de reçu de virement */
+/* Masquer les formulaires ou boutons de reÃ§u de virement */
 [data-receipt-form],
 #receipt-upload-section,
 .receipt-dropzone,
@@ -1114,7 +1168,7 @@ div:has(> input[type="file"][name="receipt"]) {
   display: none !important;
 }
 
-/* Masquer les mentions de devis ou de reçus résiduelles */
+/* Masquer les mentions de devis ou de reÃ§us rÃ©siduelles */
 .country-verbose-badge,
 [data-country-badge] {
   display: none !important;
@@ -1122,7 +1176,7 @@ div:has(> input[type="file"][name="receipt"]) {
 
 
 /* ==========================================================================
-   18. PAGE � PROPOS � DESIGN PRESTIGE HAUTE D�FINITION
+   18. PAGE À PROPOS  DESIGN PRESTIGE HAUTE DÉFINITION
    ========================================================================== */
 
 /* -- Wrapper global ----------------------------------------------------- */
@@ -1230,7 +1284,7 @@ div:has(> input[type="file"][name="receipt"]) {
   color: rgba(255,255,255,0.55);
 }
 
-/* -- SECTIONS G�N�RALES ------------------------------------------------ */
+/* -- SECTIONS GÉNÉRALES ------------------------------------------------ */
 .about-section {
   padding: clamp(60px, 8vw, 100px) clamp(16px, 5vw, 64px);
   background: #FDFBF8;
@@ -1319,7 +1373,7 @@ div:has(> input[type="file"][name="receipt"]) {
   }
 }
 
-/* -- PR�SENTATION � info cards ---------------------------------------- */
+/* -- PRÉSENTATION  info cards ---------------------------------------- */
 .about-info-cards {
   margin-top: 28px;
   display: flex;
@@ -1364,7 +1418,7 @@ div:has(> input[type="file"][name="receipt"]) {
   margin-top: 2px;
 }
 
-/* -- PR�SENTATION � visual card ---------------------------------------- */
+/* -- PRÉSENTATION  visual card ---------------------------------------- */
 .about-col-visual {
   display: flex;
   align-items: center;
@@ -1631,7 +1685,7 @@ div:has(> input[type="file"][name="receipt"]) {
   border-color: #C5A059;
 }
 
-/* -- �TUDIANTS � galerie ----------------------------------------------- */
+/* -- ÉTUDIANTS  galerie ----------------------------------------------- */
 .about-students-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -1659,7 +1713,7 @@ div:has(> input[type="file"][name="receipt"]) {
   display: block;
 }
 
-/* -- �TUDIANTS � t�moignages ------------------------------------------- */
+/* -- ÉTUDIANTS  témoignages ------------------------------------------- */
 .about-testimonials {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1797,7 +1851,7 @@ div:has(> input[type="file"][name="receipt"]) {
 }
 
 /* ==========================================================================
-   19. HERO 2 NOS ATELIERS � Design anim� premium + Vid�o T�l�phone
+   19. HERO 2 NOS ATELIERS  Design animé premium + Vidéo Téléphone
    ========================================================================== */
 
 /* -- Wrapper global Hero2 ----------------------------------------------- */
@@ -1932,7 +1986,7 @@ div:has(> input[type="file"][name="receipt"]) {
   box-shadow: 0 18px 36px rgba(37,211,102,0.45);
 }
 
-/* -- GALLERY SIDE � Grille anim�e 2�2 ---------------------------------- */
+/* -- GALLERY SIDE  Grille animée 2×2 ---------------------------------- */
 .ateliers-hero2-gallery {
   position: relative;
   z-index: 2;
@@ -2021,7 +2075,7 @@ div:has(> input[type="file"][name="receipt"]) {
   justify-content: center;
 }
 
-/* -- VIDEO SECTION � T�l�phone portrait --------------------------------- */
+/* -- VIDEO SECTION  Téléphone portrait --------------------------------- */
 .ateliers-video-section {
   background: #FDFBF8;
   padding: clamp(52px, 7vw, 96px) clamp(20px, 5vw, 72px);
@@ -2162,7 +2216,7 @@ div:has(> input[type="file"][name="receipt"]) {
    20. RESPONSIVE STRIPE FOOTER & MASQUAGE DOUBLONS ATELIERS
    ========================================================================== */
 
-/* -- Suppression de la 2�me section Nos Ateliers (React d'origine) ------- */
+/* -- Suppression de la 2ème section Nos Ateliers (React d'origine) ------- */
 section:has(.atelier-gallery):not(#ateliers-hero2 *),
 article:has(.atelier-gallery):not(#ateliers-hero2 *),
 .atelier-gallery {
@@ -2213,7 +2267,7 @@ article:has(.atelier-gallery):not(#ateliers-hero2 *),
   }
 }
 
-/* -- S�curit� affichage Header sur toutes les pages -------------------- */
+/* -- Sécurité affichage Header sur toutes les pages -------------------- */
 header, #root header {
   display: block !important;
   visibility: visible !important;
@@ -2221,4 +2275,144 @@ header, #root header {
   position: sticky !important;
   top: 0 !important;
   z-index: 50 !important;
+}
+
+/* ==========================================================================
+   16. OPTIMISATION MOBILE - IMAGES DE FORMATION & BARRE TICKER EN 1 SEULE LIGNE
+   ========================================================================== */
+
+/* Garantir que les images des formations sont 100% visibles et professionnelles */
+.dashboard-card .relative.overflow-hidden,
+article .relative.overflow-hidden {
+  background: radial-gradient(circle at center, #152244 0%, #070d1e 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.dashboard-card img,
+.dashboard-card img.object-cover,
+article img.h-52,
+article img.object-cover,
+div[class*='grid'] article img {
+  object-fit: contain !important;
+  object-position: center !important;
+}
+
+/* Version Mobile (< 768px) */
+@media (max-width: 768px) {
+  /* 1. Barre d'annonce en haut du header : 1 seule ligne, animée, pas large */
+  #top-announcement-bar {
+    height: 32px !important;
+    line-height: 32px !important;
+    padding: 0 !important;
+    font-size: 11px !important;
+  }
+
+  .top-bar-marquee {
+    height: 32px !important;
+  }
+
+  .top-bar-item {
+    font-size: 11px !important;
+    padding: 0 10px !important;
+    gap: 6px !important;
+  }
+
+  #top-announcement-bar .badge-gold {
+    font-size: 8.5px !important;
+    padding: 1.5px 6px !important;
+    margin-right: 4px !important;
+  }
+
+  .top-bar-track {
+    animation-duration: 20s !important;
+  }
+
+  /* 2. Affichage des images des formations réduit et 100% visible (PRO) */
+  .ecom-card {
+    flex: 0 0 270px !important;
+    border-radius: 22px !important;
+  }
+
+  .ecom-card-media {
+    height: 220px !important;
+    background: radial-gradient(circle at center, #152244 0%, #070d1e 100%) !important;
+    padding: 4px !important;
+  }
+
+  .ecom-card-media img {
+    height: 100% !important;
+    max-height: 220px !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    padding: 4px !important;
+  }
+
+  .ecom-card-badge {
+    top: 10px !important;
+    left: 10px !important;
+    font-size: 9.5px !important;
+    padding: 4px 10px !important;
+  }
+
+  .ecom-card-rating {
+    bottom: 10px !important;
+    left: 10px !important;
+    font-size: 10px !important;
+    padding: 3px 8px !important;
+  }
+
+  .ecom-card-body {
+    padding: 16px 14px 18px 14px !important;
+  }
+
+  .ecom-card-title {
+    font-size: 1.05rem !important;
+    line-height: 1.35 !important;
+    min-height: auto !important;
+  }
+
+  /* Page /formations : Cartes & images réduites et pro */
+  .dashboard-card .relative.overflow-hidden,
+  article .relative.overflow-hidden,
+  div[class*='grid'] article .relative.overflow-hidden {
+    height: 220px !important;
+    background: radial-gradient(circle at center, #152244 0%, #070d1e 100%) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 18px !important;
+  }
+
+  .dashboard-card img,
+  article img.h-52,
+  div[class*='grid'] article img {
+    height: 100% !important;
+    max-height: 220px !important;
+    width: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    padding: 6px !important;
+  }
+
+  .dashboard-card,
+  div[class*='grid'] article {
+    padding: 16px 14px 18px 14px !important;
+    border-radius: 22px !important;
+  }
+
+  .dashboard-card h2,
+  .dashboard-card h3,
+  div[class*='grid'] article h3 {
+    font-size: 1.15rem !important;
+    line-height: 1.35 !important;
+    margin-top: 10px !important;
+  }
+
+  .dashboard-card p,
+  div[class*='grid'] article p {
+    font-size: 0.86rem !important;
+    line-height: 1.45 !important;
+  }
 }
