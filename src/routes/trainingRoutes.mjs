@@ -5,10 +5,25 @@ import { insert, query } from "../config/db.mjs";
 
 const router = express.Router();
 
-const normalizeImage = (value) => {
-  const image = (value || "").trim();
-  if (!image) return "";
-  if (["/logo.jpeg", "logo.jpeg", "/picpro.jpeg", "picpro.jpeg", "/foundatrice.jpeg", "foundatrice.jpeg", "/brand-logo.svg", "brand-logo.svg", "/logo-academie.svg", "logo-academie.svg"].includes(image)) return "";
+const normalizeImage = (value, title = "") => {
+  let image = (value || "").trim();
+  if (
+    !image ||
+    image.includes("unsplash.com") ||
+    ["/logo.jpeg", "logo.jpeg", "/picpro.jpeg", "picpro.jpeg", "/foundatrice.jpeg", "foundatrice.jpeg", "/brand-logo.svg", "brand-logo.svg", "/logo-academie.svg", "logo-academie.svg"].includes(image)
+  ) {
+    const t = (title || "").toLowerCase();
+    if (t.includes("microneedling")) return "/formation-microneedling.jpeg";
+    if (t.includes("hydrafacial") || t.includes("soin visage")) return "/formation-soin-visage.jpeg";
+    if (t.includes("laser") && t.includes("pack")) return "/master-pack-laser.jpeg";
+    if (t.includes("laser") || t.includes("epilation") || t.includes("épilation")) return "/formation-epilation-laser.jpeg";
+    if (t.includes("hifu")) return "/formation-hifu.jpeg";
+    if (t.includes("hyaluron")) return "/formation-hyaluron-pen.jpeg";
+    if (t.includes("radio") || t.includes("oxy")) return "/radio-frequence-oxygeneo.jpeg";
+    if (t.includes("pro") || t.includes("master")) return "/formation-pro-training.jpeg";
+    if (t.includes("esth") || t.includes("avancee") || t.includes("avancée")) return "/backgroundesthetique.jpeg";
+    return "/formation-microneedling.jpeg";
+  }
   if (image.startsWith("/uploads/")) return image;
   if (image.startsWith("uploads/")) return `/${image}`;
   const uploadsIndex = image.indexOf("/uploads/");
@@ -24,6 +39,42 @@ export const DEFAULT_ALL_TRAININGS = [
   {
     id: 1,
     _id: "1",
+    title: "Microneedling & BB Glow Cutané",
+    image: "/formation-microneedling.jpeg",
+    description: "Induction de collagène par micro-perforations contrôlées, traitement des cicatrices, vergetures, hyperpigmentations et unification du teint BB Glow.",
+    category: "Dermo-esthétique",
+    duration: "2 jours",
+    priceTND: 850,
+    priceEUR: 275,
+    availability: ["Présentiel", "En ligne"]
+  },
+  {
+    id: 2,
+    _id: "2",
+    title: "Hydrafacial & Dermo-Nettoyage Profond",
+    image: "/formation-soin-visage.jpeg",
+    description: "Protocole signature complet en hydro-dermabrasion, peeling doux, extraction des comédons, infusion de sérums vitaminés et luminothérapie LED.",
+    category: "Soins visage",
+    duration: "2 jours",
+    priceTND: 750,
+    priceEUR: 240,
+    availability: ["Présentiel", "En ligne"]
+  },
+  {
+    id: 3,
+    _id: "3",
+    title: "Esthétique Avancée Professionnelle",
+    image: "/backgroundesthetique.jpeg",
+    description: "Formation intensive complète aux soins dermo-esthétiques modernes : diagnostic cutané, protocoles anti-âge, peeling aux acides de fruits et soins régénérants.",
+    category: "Esthétique avancée",
+    duration: "4 semaines",
+    priceTND: 1200,
+    priceEUR: 390,
+    availability: ["Présentiel", "En ligne"]
+  },
+  {
+    id: 4,
+    _id: "4",
     title: "Épilation Laser Diode & Alexandrite",
     image: "/formation-epilation-laser.jpeg",
     description: "Formation certifiante complète en épilation définitive laser diode & alexandrite. Protocoles de sécurité, réglages longueurs d'ondes, phototypes et pratique réelle.",
@@ -34,20 +85,20 @@ export const DEFAULT_ALL_TRAININGS = [
     availability: ["Présentiel", "En ligne"]
   },
   {
-    id: 2,
-    _id: "2",
+    id: 5,
+    _id: "5",
     title: "HIFU Lifting Non-Chirurgical & Remodelage",
     image: "/formation-hifu.jpeg",
     description: "Maîtrise des ultrasons focalisés de haute intensité (HIFU) visage & corps. Rajeunissement cutané profond, cartouches multi-profondeurs et protocoles anti-âge.",
-    category: "Esthétique avancée",
+    category: "Anti-Âge Haute Technologie",
     duration: "2 jours",
     priceTND: 1100,
     priceEUR: 350,
     availability: ["Présentiel", "En ligne"]
   },
   {
-    id: 3,
-    _id: "3",
+    id: 6,
+    _id: "6",
     title: "Hyaluron Pen & Volumétrie des Lèvres",
     image: "/formation-hyaluron-pen.jpeg",
     description: "Technique d'injection sans aiguille par pression d'acide hyaluronique. Comblement des ridules, hydratation profonde et augmentation subtile du volume labial.",
@@ -58,8 +109,8 @@ export const DEFAULT_ALL_TRAININGS = [
     availability: ["Présentiel", "En ligne"]
   },
   {
-    id: 4,
-    _id: "4",
+    id: 7,
+    _id: "7",
     title: "Master Pro Esthétique Avancée & Gestion d'Institut",
     image: "/formation-pro-training.jpeg",
     description: "Cursus d'élite complet pour futures cheffes d'institut : diagnostic cutané high-tech, maîtrise de 7 technologies, hygiène médicale et gestion commerciale rentable.",
@@ -70,20 +121,20 @@ export const DEFAULT_ALL_TRAININGS = [
     availability: ["Présentiel", "En ligne"]
   },
   {
-    id: 5,
-    _id: "5",
+    id: 8,
+    _id: "8",
     title: "Soin Visage Expert & Hydrafacial 7 en 1",
     image: "/formation-soin-visage.jpeg",
-    description: "Protocole signature complet en hydro-dermabrasion, peeling doux, infusion sérums et luminothérapie LED. Nettoyage profond et éclat immédiat.",
+    description: "Protocole haute technologie 7-en-1 : hydro-peeling, ultrasons, radiofréquence, marteau cryo et pulvérisation d'oxygène pur pour un éclat immédiat.",
     category: "Soins visage",
-    duration: "2 jours",
+    duration: "3 jours",
     priceTND: 850,
     priceEUR: 275,
     availability: ["Présentiel", "En ligne"]
   },
   {
-    id: 6,
-    _id: "6",
+    id: 9,
+    _id: "9",
     title: "Master Pack Laser & Nouvelles Technologies 2026",
     image: "/master-pack-laser.jpeg",
     description: "Le cursus ultime combinant Laser Diode, HIFU 7D, Radiofréquence fractionnée et Cryolipolyse. Devenez une référence technique incontournable.",
@@ -94,8 +145,8 @@ export const DEFAULT_ALL_TRAININGS = [
     availability: ["Présentiel", "En ligne"]
   },
   {
-    id: 7,
-    _id: "7",
+    id: 10,
+    _id: "10",
     title: "Radiofréquence & Oxygénéo Révolution",
     image: "/radio-frequence-oxygeneo.jpeg",
     description: "Soin 3-en-1 stimulant la production naturelle de collagène par oxygénation sous-cutanée, exfoliation douce et resserrement tissulaire radiofréquence.",
@@ -104,18 +155,6 @@ export const DEFAULT_ALL_TRAININGS = [
     priceTND: 900,
     priceEUR: 290,
     availability: ["Présentiel", "En ligne"]
-  },
-  {
-    id: 8,
-    _id: "8",
-    title: "Microneedling & BB Glow Cutané",
-    image: "/formation-microneedling.jpeg",
-    description: "Induction de collagène par micro-perforations contrôlées, traitement des cicatrices, vergetures, hyperpigmentations et unification du teint BB Glow.",
-    category: "Dermo-esthétique",
-    duration: "2 jours",
-    priceTND: 850,
-    priceEUR: 275,
-    availability: ["Présentiel", "En ligne"]
   }
 ];
 
@@ -123,27 +162,32 @@ const mapTraining = (row) => ({
   id: row.id,
   _id: String(row.id),
   title: row.title,
-  image: normalizeImage(row.image),
+  image: normalizeImage(row.image, row.title),
   description: row.description,
   category: row.category_label,
   duration: row.duration,
   priceTND: Number(row.price_tnd),
   priceEUR: Number(row.price_eur),
-  availability: row.availability_json ? (typeof row.availability_json === "string" ? JSON.parse(row.availability_json) : row.availability_json) : []
+  availability: row.availability_json ? (typeof row.availability_json === "string" ? JSON.parse(row.availability_json) : row.availability_json) : ["Présentiel", "En ligne"]
 });
 
 router.get("/", async (_req, res) => {
   try {
-    const trainings = await query("SELECT * FROM trainings ORDER BY price_tnd ASC, id DESC");
-    if (trainings && trainings.length >= 7) {
-      return res.json(trainings.map(mapTraining));
-    }
+    let trainings = await query("SELECT * FROM trainings ORDER BY price_tnd ASC, id ASC");
+    if (!trainings) trainings = [];
 
-    // Si la base a moins de 7 formations, on fusionne ou enrichit avec les 8 formations réelles
-    const existingTitles = new Set((trainings || []).map((t) => (t.title || "").toLowerCase().trim()));
-    const missing = DEFAULT_ALL_TRAININGS.filter(
-      (d) => !existingTitles.has(d.title.toLowerCase().trim())
-    );
+    // Identifier les formations par défaut manquantes
+    const existingTitles = new Set(trainings.map((t) => (t.title || "").toLowerCase().trim()));
+    const missing = DEFAULT_ALL_TRAININGS.filter((d) => {
+      const dt = d.title.toLowerCase().trim();
+      if (existingTitles.has(dt)) return false;
+      return !trainings.some((t) => {
+        const tt = (t.title || "").toLowerCase().trim();
+        return (tt === "microneedling" && dt.includes("microneedling")) ||
+               (tt === "hydrafacial" && dt.includes("hydrafacial & dermo")) ||
+               (tt.includes("esthetique avancee") && dt.includes("esthétique avancée pro"));
+      });
+    });
 
     // Auto-insérer les formations manquantes dans MySQL pour pérenniser
     for (const item of missing) {
@@ -153,23 +197,23 @@ router.get("/", async (_req, res) => {
            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
           [item.title, item.image, item.description, item.category, item.duration, item.priceTND, item.priceEUR, JSON.stringify(item.availability)]
         );
-      } catch (_e) {
-        // En cas d'erreur insertion, continuer
-      }
+      } catch (_e) {}
     }
 
-    // Récupérer la liste complète mise à jour
-    try {
-      const refreshed = await query("SELECT * FROM trainings ORDER BY price_tnd ASC, id DESC");
-      if (refreshed && refreshed.length) {
-        return res.json(refreshed.map(mapTraining));
-      }
-    } catch (_e) {}
+    if (missing.length > 0) {
+      try {
+        const refreshed = await query("SELECT * FROM trainings ORDER BY price_tnd ASC, id ASC");
+        if (refreshed && refreshed.length) trainings = refreshed;
+      } catch (_e) {}
+    }
 
-    // Fallback direct sur les 8 formations garanties
+    if (trainings.length >= 7) {
+      return res.json(trainings.map(mapTraining));
+    }
+
     return res.json(DEFAULT_ALL_TRAININGS);
   } catch (error) {
-    console.error("Erreur DB trainings, utilisation des 8 formations par défaut:", error.message);
+    console.error("Erreur DB trainings, utilisation des 10 formations par défaut:", error.message);
     res.json(DEFAULT_ALL_TRAININGS);
   }
 });

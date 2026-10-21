@@ -17,9 +17,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261021-05"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261021-05">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20261021-05">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261021-08"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261021-08">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20261021-08">
   </head>
   <body>
     <div id="root"></div>
@@ -476,13 +476,14 @@
             }
           });
 
-          // 3. Remplacer les mentions de devis par inscription WhatsApp
-          document.querySelectorAll("p, span, div, li").forEach((el) => {
+          // 3. Remplacer les mentions de devis par inscription WhatsApp (feuilles de texte uniquement)
+          document.querySelectorAll("p, span, li").forEach((el) => {
+            if (el.children.length > 0) return;
             const txt = (el.textContent || "").trim();
             if (txt.includes("Vous recevrez alors le devis")) {
-              el.textContent = "Nos formations sont réservables directement en ligne auprès de nos conseillères sur WhatsApp.";
+              el.textContent = "Nos formations sont réservables directement auprès de nos conseillères sur WhatsApp.";
             }
-            if (txt.includes("Paiement par virement ou Visa")) {
+            if (txt.includes("Paiement par virement ou Visa") || txt === "Paiement par virement ou Visa") {
               el.textContent = "Inscription & réservation directe sur WhatsApp";
             }
           });
@@ -963,11 +964,47 @@
       (function () {
         const ECOM_FORMATIONS = [
           {
+            title: "Formation Microneedling & BB Glow Cutané",
+            category: "Dermo-Régénération & Éclat",
+            badge: "Haute Précision",
+            rating: "5.0 ★ (118 avis)",
+            image: "/formation-microneedling.jpeg",
+            duration: "2 jours",
+            priceDisplay: "850 TND / 275 €",
+            description: "Induction de collagène par micro-perforations contrôlées, traitement des cicatrices, vergetures, hyperpigmentations et unification du teint BB Glow.",
+            features: ["Induction de collagène", "Teint unifié immédiat", "Kit dermo inclus"]
+          },
+          {
+            title: "Formation Hydrafacial & Dermo-Nettoyage Profond",
+            category: "Soins Visage & Dermo-Nettoyage",
+            badge: "Incontournable",
+            rating: "5.0 ★ (130 avis)",
+            image: "/formation-soin-visage.jpeg",
+            duration: "2 jours",
+            priceDisplay: "750 TND / 240 €",
+            description: "Protocole signature complet en hydro-dermabrasion, peeling doux, extraction des comédons, infusion de sérums vitaminés et luminothérapie LED.",
+            features: ["Hydro-dermabrasion", "Infusion d'actifs & sérums", "Directement rentable"]
+          },
+          {
+            title: "Formation Esthétique Avancée Professionnelle",
+            category: "Esthétique Avancée & Expertise",
+            badge: "Diplôme Certifié",
+            rating: "4.9 ★ (105 avis)",
+            image: "/backgroundesthetique.jpeg",
+            duration: "4 semaines",
+            priceDisplay: "1200 TND / 390 €",
+            description: "Formation intensive complète aux soins dermo-esthétiques modernes : diagnostic cutané, protocoles anti-âge, peeling aux acides de fruits et soins régénérants.",
+            features: ["Diagnostic cutané expert", "Peelings chimiques & acides", "Protocoles anti-âge globaux"]
+          },
+          {
             title: "Formation Épilation Laser & Protocoles de Sécurité",
             category: "Laser Médical & Dermo-Esthétique",
             badge: "Best Seller",
             rating: "5.0 ★ (98 avis)",
             image: "/formation-epilation-laser.jpeg",
+            duration: "3 jours",
+            priceDisplay: "1200 TND / 390 €",
+            description: "Formation certifiante complète en épilation définitive laser diode & alexandrite. Protocoles de sécurité, réglages longueurs d'ondes, phototypes et pratique réelle.",
             features: ["Pratique sur modèle", "Protocoles certifiés", "Matériel de pointe"]
           },
           {
@@ -976,6 +1013,9 @@
             badge: "Tendance 2026",
             rating: "4.9 ★ (84 avis)",
             image: "/formation-hifu.jpeg",
+            duration: "2 jours",
+            priceDisplay: "1100 TND / 350 €",
+            description: "Maîtrise des ultrasons focalisés de haute intensité (HIFU) visage & corps. Rajeunissement cutané profond, cartouches multi-profondeurs et protocoles anti-âge.",
             features: ["Ultrasons focalisés", "Raffermissement visage & corps", "Certificat d'aptitude"]
           },
           {
@@ -984,6 +1024,9 @@
             badge: "Coup de Cœur",
             rating: "4.9 ★ (112 avis)",
             image: "/formation-hyaluron-pen.jpeg",
+            duration: "2 jours",
+            priceDisplay: "950 TND / 310 €",
+            description: "Technique d'injection sans aiguille par pression d'acide hyaluronique. Comblement des ridules, hydratation profonde et augmentation subtile du volume labial.",
             features: ["Sans aiguille", "Comblement & repulpant", "Kit pratique inclus"]
           },
           {
@@ -992,15 +1035,21 @@
             badge: "Signature",
             rating: "5.0 ★ (145 avis)",
             image: "/formation-pro-training.jpeg",
+            duration: "6 semaines",
+            priceDisplay: "1800 TND / 580 €",
+            description: "Cursus d'élite complet pour futures cheffes d'institut : diagnostic cutané high-tech, maîtrise de 7 technologies, hygiène médicale et gestion commerciale rentable.",
             features: ["Cursus complet", "Accompagnement installation", "Double certification"]
           },
           {
-            title: "Formation Soin Visage & Hydrafacial Avancé",
+            title: "Formation Soin Visage Expert & Hydrafacial 7 en 1",
             category: "Dermo-Nettoyage & Éclat",
-            badge: "Incontournable",
-            rating: "5.0 ★ (130 avis)",
+            badge: "Nouveauté 2026",
+            rating: "5.0 ★ (95 avis)",
             image: "/formation-soin-visage.jpeg",
-            features: ["Nettoyage profond", "Infusion d'actifs", "Directement rentable"]
+            duration: "3 jours",
+            priceDisplay: "850 TND / 275 €",
+            description: "Protocole haute technologie 7-en-1 : hydro-peeling, spatule ultrasons, radiofréquence bipolaire, marteau cryo et pulvérisation d'oxygène pur.",
+            features: ["Spatule ultrasons & cryo", "Radiofréquence bipolaire", "Infusion d'oxygène"]
           },
           {
             title: "Master Pack Laser & Nouvelles Technologies",
@@ -1008,6 +1057,9 @@
             badge: "Exclusivité",
             rating: "5.0 ★ (76 avis)",
             image: "/master-pack-laser.jpeg",
+            duration: "5 jours",
+            priceDisplay: "2200 TND / 710 €",
+            description: "Le cursus ultime combinant Laser Diode, HIFU 7D, Radiofréquence fractionnée et Cryolipolyse. Devenez une référence technique incontournable.",
             features: ["Laser + IPL + Radiofréquence", "Maîtrise totale cabine", "Diplôme d'excellence"]
           },
           {
@@ -1016,15 +1068,10 @@
             badge: "Innovation",
             rating: "4.9 ★ (92 avis)",
             image: "/radio-frequence-oxygeneo.jpeg",
+            duration: "2 jours",
+            priceDisplay: "900 TND / 290 €",
+            description: "Soin 3-en-1 stimulant la production naturelle de collagène par oxygénation sous-cutanée, exfoliation douce et resserrement tissulaire radiofréquence.",
             features: ["Effet liftant immédiat", "Oxygénation cellulaire", "Support illimité"]
-          },
-          {
-            title: "Formation Microneedling & BB Glow Cutané",
-            category: "Dermo-Régénération & Éclat",
-            badge: "Haute Précision",
-            rating: "5.0 ★ (118 avis)",
-            image: "/formation-microneedling.jpeg",
-            features: ["Induction de collagène", "Teint unifié immédiat", "Kit dermo inclus"]
           }
         ];
 
@@ -1605,40 +1652,50 @@
           return false;
         };
 
-        // ── Garantir que toutes les 8 formations sont visibles sur /formations ──
+        // ── Garantir que toutes les 10 formations sont visibles sur /formations ──
         const enhanceFormationsPage = () => {
           if (!window.location.pathname.startsWith("/formations")) return;
-          const grid = document.querySelector(".sm\\:grid-cols-2.lg\\:grid-cols-3, div[class*='grid-cols']");
+          const grid = document.querySelector(".sm\\:grid-cols-2.xl\\:grid-cols-3, .sm\\:grid-cols-2.lg\\:grid-cols-3, div[class*='grid-cols']");
           if (!grid) return;
           if (grid.dataset.allFormationsEnsured === "true") return;
 
-          const cards = grid.querySelectorAll("article, .dashboard-card, div.rounded-\\[24px\\], div.rounded-\\[28px\\]");
-          if (cards.length > 0 && cards.length < 6) {
+          const cards = Array.from(grid.querySelectorAll("article, .dashboard-card, div.rounded-\\[24px\\], div.rounded-\\[28px\\]"));
+          if (cards.length < ECOM_FORMATIONS.length) {
             ECOM_FORMATIONS.forEach((f) => {
-              const alreadyThere = Array.from(cards).some((c) =>
-                (c.textContent || "").toLowerCase().includes(f.title.toLowerCase().slice(0, 15))
-              );
+              const alreadyThere = cards.some((c) => {
+                const cardTxt = (c.textContent || "").toLowerCase();
+                const keywords = f.title.toLowerCase().split(/\s+/).filter(w => w.length > 4);
+                return keywords.some(k => cardTxt.includes(k));
+              });
               if (!alreadyThere) {
                 const card = document.createElement("article");
-                card.className = "ecom-card rounded-[24px] border border-[#eadfce] bg-white p-4 shadow-[0_12px_28px_rgba(15,23,42,0.06)]";
+                card.className = "dashboard-card overflow-hidden rounded-[24px] border border-[#eadfce] bg-white p-5 shadow-[0_12px_28px_rgba(15,23,42,0.06)] flex flex-col justify-between";
                 card.innerHTML = `
-                  <div class="relative overflow-hidden rounded-[20px] bg-[#07153b]">
-                    <img src="${f.image}" alt="${f.title}" class="h-52 w-full object-cover md:h-56" onerror="this.src='/logo.jpeg'">
-                    <span class="absolute top-3 left-3 rounded-full bg-[#caa56a] px-3 py-1 text-xs font-bold text-white shadow">${f.badge}</span>
-                  </div>
-                  <div class="mt-4">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-gold">${f.category}</span>
-                    <h3 class="mt-1 text-xl font-bold text-[#0f1730]">${f.title}</h3>
-                    <div class="mt-2 text-xs text-amber-600 font-semibold">${f.rating}</div>
-                    <ul class="mt-3 space-y-1.5 text-xs text-slate-600">
-                      ${f.features.map((feat) => `<li>✓ ${feat}</li>`).join("")}
-                    </ul>
-                    <div class="mt-4 pt-3 border-t border-[#f1e6d6]">
-                      <a href="https://wa.me/33663111415?text=${encodeURIComponent("Bonjour, je souhaite m'inscrire à la formation : " + f.title)}" target="_blank" rel="noopener noreferrer" class="btn-primary w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-full text-sm font-bold text-white bg-[#25D366] hover:bg-[#128C7E] transition shadow" style="text-decoration:none;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
-                        <span>S'inscrire via WhatsApp</span>
-                      </a>
+                  <div>
+                    <div class="relative overflow-hidden rounded-[20px] bg-[#07153b]">
+                      <img src="${f.image}" alt="${f.title}" class="h-52 w-full object-cover md:h-56" onerror="this.src='/logo.jpeg'">
+                      <span class="absolute top-3 left-3 rounded-full bg-[#caa56a] px-3 py-1 text-xs font-bold text-white shadow">${f.badge}</span>
                     </div>
+                    <div class="mt-4">
+                      <div class="flex items-center justify-between gap-2">
+                        <span class="rounded-full bg-[#fff7ea] px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-gold">${f.category}</span>
+                        <span class="shrink-0 rounded-full bg-[#eef4ff] px-3 py-1 text-xs font-semibold text-[#304a82]">${f.duration || "2-3 jours"}</span>
+                      </div>
+                      <h3 class="mt-3 text-xl font-bold uppercase leading-snug text-[#0f1730]">${f.title}</h3>
+                      <div class="mt-2 text-xs text-amber-600 font-semibold">${f.rating}</div>
+                      <p class="mt-3 text-sm leading-6 text-slate-600">${f.description || ""}</p>
+                      <ul class="mt-3 space-y-1.5 text-xs text-slate-600">
+                        ${f.features.map((feat) => `<li>✓ ${feat}</li>`).join("")}
+                        <li>✓ Inscription & réservation directe sur WhatsApp</li>
+                      </ul>
+                      <div class="mt-4 text-2xl font-bold text-gold">${f.priceDisplay || ""}</div>
+                    </div>
+                  </div>
+                  <div class="mt-5 pt-3 border-t border-[#f1e6d6]">
+                    <a href="https://wa.me/33663111415?text=${encodeURIComponent("Bonjour, je souhaite m'inscrire à la formation : " + f.title)}" target="_blank" rel="noopener noreferrer" class="btn-primary w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-full text-sm font-bold text-white bg-[#25D366] hover:bg-[#128C7E] transition shadow" style="text-decoration:none;">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
+                      <span>S'inscrire via WhatsApp</span>
+                    </a>
                   </div>
                 `;
                 grid.appendChild(card);
