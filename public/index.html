@@ -17,9 +17,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261021-09"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261021-09">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20261021-09">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261021-10"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261021-10">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20261021-10">
   </head>
   <body>
     <div id="root"></div>
@@ -65,18 +65,17 @@
             const text = (node.textContent || "").trim();
             if (!text) return;
 
-            if (text === "+216 +21695466836" || text === "+216 95 466 836" || text === "+21695466836") {
-              node.textContent = "+33 6 63 11 14 15";
+            if (text === "+216 95 466 836" || text === "+216 +21695466836" || text === "+21695466836") {
+              node.textContent = "+216 95 466 836";
               changed = true;
             }
 
             if (
-              text === "Tunis Belvedere, Tunisie" ||
-              text === "Tunis Belvedere" ||
-              text === "Belvedere, Tunis Tunisie" ||
+              text === "FRANCE - 75002 PARIS" ||
+              text === "France — 75002 Paris" ||
               text === "France"
             ) {
-              node.textContent = "FRANCE - 75002 PARIS";
+              node.textContent = "Tunis Belvédère, Tunisie";
               changed = true;
             }
           });
@@ -91,21 +90,21 @@
             if (!container) return;
             const targets = Array.from(container.querySelectorAll("p,span,div")).filter((node) => {
               const text = (node.textContent || "").trim();
-              return text === "France" || text === "Tunis Belvedere, Tunisie" || text === "Tunis Belvedere";
+              return text === "France" || text === "FRANCE - 75002 PARIS" || text === "France — 75002 Paris";
             });
             targets.forEach((node) => {
-              node.textContent = "FRANCE - 75002 PARIS";
+              node.textContent = "Tunis Belvédère, Tunisie";
               changed = true;
             });
           });
 
           document.querySelectorAll('a[href^="tel:"], button[aria-label*="telephone"], button[aria-label*="Contact telephone"]').forEach((node) => {
             if (node.tagName === "A") {
-              node.setAttribute("href", "tel:+33663111415");
+              node.setAttribute("href", "tel:+21695466836");
             }
             if (node.tagName === "BUTTON") {
               node.onclick = () => {
-                window.location.href = "tel:+33663111415";
+                window.location.href = "tel:+21695466836";
               };
             }
             changed = true;
@@ -248,10 +247,10 @@
                 </a>
                 <p style="font-size:13px;line-height:1.8;color:rgba(247,234,208,0.55);max-width:260px;">Formation esthétique certifiante d'excellence à Tunis Belvédère — en présentiel & en ligne.</p>
                 <div style="margin-top:20px;display:flex;gap:10px;">
-                  <a href="https://wa.me/33663111415" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.3);color:#25D366;text-decoration:none;transition:all 0.2s;" title="WhatsApp">
+                  <a href="https://wa.me/21695466836" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.3);color:#25D366;text-decoration:none;transition:all 0.2s;" title="WhatsApp">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
                   </a>
-                  <a href="tel:+33663111415" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;background:rgba(197,160,89,0.12);border:1px solid rgba(197,160,89,0.25);color:#C5A059;text-decoration:none;" title="Téléphone">
+                  <a href="tel:+21695466836" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;background:rgba(197,160,89,0.12);border:1px solid rgba(197,160,89,0.25);color:#C5A059;text-decoration:none;" title="Téléphone">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07A19.5 19.5 0 0 1 5.15 12.8 19.86 19.86 0 0 1 2.08 4.09 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.63 2.61a2 2 0 0 1-.45 2.11L8 9.91a16 16 0 0 0 6.09 6.09l1.47-1.24a2 2 0 0 1 2.11-.45c.83.3 1.71.51 2.61.63A2 2 0 0 1 22 16.92Z"/></svg>
                   </a>
                   <a href="mailto:contact@academie.tn" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;background:rgba(197,160,89,0.12);border:1px solid rgba(197,160,89,0.25);color:#C5A059;text-decoration:none;" title="Email">
@@ -276,6 +275,9 @@
                   <a href="/a-propos" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.8-3.2 4.55-4.8 8-4.8s6.2 1.6 8 4.8"/></svg>À Propos
                   </a>
+                  <a href="/contact" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Contact
+                  </a>
                   <a href="/recherche" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Recherche
                   </a>
@@ -286,18 +288,21 @@
               <div>
                 <p style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(247,234,208,0.35);margin-bottom:16px;">Contact</p>
                 <div style="display:flex;flex-direction:column;gap:10px;">
-                  <a href="tel:+33663111415" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07A19.5 19.5 0 0 1 5.15 12.8 19.86 19.86 0 0 1 2.08 4.09 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.63 2.61a2 2 0 0 1-.45 2.11L8 9.91a16 16 0 0 0 6.09 6.09l1.47-1.24a2 2 0 0 1 2.11-.45c.83.3 1.71.51 2.61.63A2 2 0 0 1 22 16.92Z"/></svg>+33 6 63 11 14 15
+                  <a href="tel:+21695466836" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07A19.5 19.5 0 0 1 5.15 12.8 19.86 19.86 0 0 1 2.08 4.09 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.63 2.61a2 2 0 0 1-.45 2.11L8 9.91a16 16 0 0 0 6.09 6.09l1.47-1.24a2 2 0 0 1 2.11-.45c.83.3 1.71.51 2.61.63A2 2 0 0 1 22 16.92Z"/></svg>+216 95 466 836
                   </a>
                   <a href="mailto:contact@academie.tn" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m6 8 6 5 6-5"/></svg>contact@academie.tn
                   </a>
                   <span style="font-size:14px;color:rgba(247,234,208,0.65);display:flex;align-items:center;gap:8px;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-6-5.33-6-11a6 6 0 1 1 12 0c0 5.67-6 11-6 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>France — 75002 Paris
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-6-5.33-6-11a6 6 0 1 1 12 0c0 5.67-6 11-6 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>Tunis Belvédère, Tunisie
                   </span>
-                  <a href="https://wa.me/33663111415?text=Bonjour%2C%20je%20souhaite%20un%20renseignement." target="_blank" rel="noopener" style="margin-top:4px;display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);color:#25D366;font-size:13px;font-weight:700;text-decoration:none;">
+                  <span style="font-size:13px;color:rgba(197,160,89,0.85);display:flex;align-items:center;gap:8px;font-weight:600;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>Partenaires : France & Turquie
+                  </span>
+                  <a href="https://wa.me/21695466836?text=Bonjour%2C%20je%20souhaite%20un%20renseignement." target="_blank" rel="noopener" style="margin-top:4px;display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);color:#25D366;font-size:13px;font-weight:700;text-decoration:none;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
-                    WhatsApp
+                    WhatsApp : 95 466 836
                   </a>
                 </div>
               </div>
@@ -506,7 +511,7 @@
                 }
               }
 
-              const waUrl = "https://wa.me/33663111415?text=" + encodeURIComponent("Bonjour, je souhaite m'inscrire à la formation : " + trainingTitle);
+              const waUrl = "https://wa.me/21695466836?text=" + encodeURIComponent("Bonjour, je souhaite m'inscrire à la formation : " + trainingTitle);
 
               // Rediriger au clic
               btn.onclick = (e) => {
@@ -583,7 +588,7 @@
                     <div class="ah2-feat"><span class="ah2-feat-icon">🏆</span><div><strong>Instructrices Certifiées</strong><span>Formatrices internationales</span></div></div>
                     <div class="ah2-feat"><span class="ah2-feat-icon">📜</span><div><strong>Certificat Remis</strong><span>Attestation officielle à chaque session</span></div></div>
                   </div>
-                  <a href="https://wa.me/33663111415?text=Bonjour%2C%20je%20souhaite%20réserver%20une%20place%20en%20atelier." target="_blank" rel="noopener noreferrer" class="ateliers-hero2-cta">
+                  <a href="https://wa.me/21695466836?text=Bonjour%2C%20je%20souhaite%20réserver%20une%20place%20en%20atelier." target="_blank" rel="noopener noreferrer" class="ateliers-hero2-cta">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
                     <span>Réserver ma place</span>
                   </a>
@@ -920,7 +925,7 @@
         const createWhatsAppButton = () => {
           const a = document.createElement("a");
           a.id = "floating-whatsapp-btn";
-          a.href = "https://wa.me/33663111415?text=Bonjour%2C%20je%20souhaite%20des%20renseignements%20sur%20les%20formations%20de%20l'Acad%C3%A9mie.";
+          a.href = "https://wa.me/21695466836?text=Bonjour%2C%20je%20souhaite%20des%20renseignements%20sur%20les%20formations%20de%20l'Acad%C3%A9mie.";
           a.target = "_blank";
           a.rel = "noopener noreferrer";
           a.setAttribute("aria-label", "Discuter sur WhatsApp");
@@ -1088,7 +1093,7 @@
                 <span class="top-bar-separator">✦</span>
                 <span class="top-bar-item">💎 Places Limitées par Promotion</span>
                 <span class="top-bar-separator">✦</span>
-                <span class="top-bar-item"><span class="badge-gold">WHATSAPP DIRECT</span> 💬 Réservation immédiate au +33 6 63 11 14 15</span>
+                <span class="top-bar-item"><span class="badge-gold">WHATSAPP DIRECT</span> 💬 Réservation immédiate au +216 95 466 836</span>
                 <span class="top-bar-separator">✦</span>
                 <!-- Défilement continu infini -->
                 <span class="top-bar-item"><span class="badge-gold">SESSION 2026-2027</span> ✨ Inscriptions Ouvertes : Formations Certifiantes & Ateliers Cliniques Pratiques</span>
@@ -1097,7 +1102,7 @@
                 <span class="top-bar-separator">✦</span>
                 <span class="top-bar-item">💎 Places Limitées par Promotion</span>
                 <span class="top-bar-separator">✦</span>
-                <span class="top-bar-item"><span class="badge-gold">WHATSAPP DIRECT</span> 💬 Réservation immédiate au +33 6 63 11 14 15</span>
+                <span class="top-bar-item"><span class="badge-gold">WHATSAPP DIRECT</span> 💬 Réservation immédiate au +216 95 466 836</span>
                 <span class="top-bar-separator">✦</span>
               </div>
             </div>
@@ -1116,7 +1121,7 @@
           section.className = "mx-auto max-w-7xl px-4 md:px-8";
 
           const cardsHtml = ECOM_FORMATIONS.map((item) => {
-            const waUrl = "https://wa.me/33663111415?text=" + encodeURIComponent("Bonjour, je souhaite m'inscrire à la formation : " + item.title);
+            const waUrl = "https://wa.me/21695466836?text=" + encodeURIComponent("Bonjour, je souhaite m'inscrire à la formation : " + item.title);
             const featuresHtml = item.features.map(f => `<span class="ecom-feature-pill">✓ ${f}</span>`).join("");
             return `
               <article class="ecom-card">
@@ -1432,14 +1437,14 @@
                       <div class="about-info-icon">📍</div>
                       <div>
                         <div class="about-info-label">Adresse</div>
-                        <div class="about-info-value">Tunis Belvédère & Paris 75002</div>
+                        <div class="about-info-value">Tunis Belvédère, Tunisie</div>
                       </div>
                     </div>
                     <div class="about-info-card">
                       <div class="about-info-icon">📞</div>
                       <div>
                         <div class="about-info-label">Téléphone / WhatsApp</div>
-                        <div class="about-info-value">+33 6 63 11 14 15 / +216 95 466 836</div>
+                        <div class="about-info-value">+216 95 466 836 / +216 95 466 836</div>
                       </div>
                     </div>
                     <div class="about-info-card">
@@ -1497,7 +1502,7 @@
                   </div>
                   <p class="about-section-desc" style="margin-top:16px;">Madame Ichrak est une figure emblématique de l'esthétique internationale. Forte d'une expérience de plus d'une décennie dans les plus prestigieuses institutions de beauté, elle a fondé l'Académie avec une vision claire : offrir une formation d'excellence comparable aux standards européens les plus élevés.</p>
                   <p class="about-section-desc">Sa pédagogie allie expertise technique rigoureuse, suivi personnalisé de chaque apprenante et transmission concrète des clés de rentabilité en institut.</p>
-                  <a href="https://wa.me/33663111415?text=Bonjour%2C%20je%20souhaite%20échanger%20avec%20la%20direction%20de%20l'Académie." target="_blank" rel="noopener noreferrer" class="about-cta-btn">
+                  <a href="https://wa.me/21695466836?text=Bonjour%2C%20je%20souhaite%20échanger%20avec%20la%20direction%20de%20l'Académie." target="_blank" rel="noopener noreferrer" class="about-cta-btn">
                     <span>💬 Contacter la Direction sur WhatsApp</span>
                   </a>
                 </div>
@@ -1539,7 +1544,7 @@
                 <span class="about-badge-gold" style="background:rgba(197,160,89,0.15);color:#c5a059;">REJOIGNEZ-NOUS</span>
                 <h2 class="about-section-title" style="color:#fff;margin-top:12px;">Démarrez votre <em style="color:#c5a059;">carrière d'élite</em></h2>
                 <p style="color:rgba(255,255,255,0.75);font-size:1rem;max-width:520px;margin:0 auto 28px;">Places limitées par atelier pour garantir un suivi pratique individuel. Réservez votre session dès aujourd'hui.</p>
-                <a href="https://wa.me/33663111415?text=Bonjour%2C%20je%20souhaite%20m'inscrire%20à%20l'Académie%20Internationale%20de%20Beauté." target="_blank" rel="noopener noreferrer" class="about-cta-btn about-cta-btn-hero">
+                <a href="https://wa.me/21695466836?text=Bonjour%2C%20je%20souhaite%20m'inscrire%20à%20l'Académie%20Internationale%20de%20Beauté." target="_blank" rel="noopener noreferrer" class="about-cta-btn about-cta-btn-hero">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
                   <span>S'inscrire via WhatsApp</span>
                 </a>
@@ -1621,31 +1626,42 @@
           return true;
         };
 
-        // ── Ajout du lien "À Propos" dans le header React ─────────────────
-        const injectAboutNavLink = () => {
-          // Vérifier si le lien existe déjà
-          if (document.querySelector('a[href="/a-propos"]')) return true;
-
-          // On attend que le header soit rendu
+        // ── Ajout des liens "À Propos" et "Contact" dans le header React ─
+        const injectNavLinks = () => {
           const nav = document.querySelector("header nav");
           if (!nav) return false;
 
-          const link = document.createElement("a");
-          link.href = "/a-propos";
-          link.textContent = "À Propos";
-          link.className = "text-sm font-semibold tracking-wide text-slate-600 hover:text-gold";
-          link.style.textDecoration = "none";
+          if (!nav.querySelector('a[href="/a-propos"]')) {
+            const linkAbout = document.createElement("a");
+            linkAbout.href = "/a-propos";
+            linkAbout.textContent = "À Propos";
+            linkAbout.className = "text-sm font-semibold tracking-wide text-slate-600 hover:text-gold";
+            linkAbout.style.textDecoration = "none";
+            linkAbout.addEventListener("click", (e) => {
+              e.preventDefault();
+              window.history.pushState({}, "", "/a-propos");
+              window.dispatchEvent(new PopStateEvent("popstate"));
+            });
+            nav.appendChild(linkAbout);
+          }
 
-          // Navigate via React router (SPA)
-          link.addEventListener("click", (e) => {
-            e.preventDefault();
-            window.history.pushState({}, "", "/a-propos");
-            window.dispatchEvent(new PopStateEvent("popstate"));
-          });
+          if (!nav.querySelector('a[href="/contact"]')) {
+            const linkContact = document.createElement("a");
+            linkContact.href = "/contact";
+            linkContact.textContent = "Contact";
+            linkContact.className = "text-sm font-semibold tracking-wide text-slate-600 hover:text-gold";
+            linkContact.style.textDecoration = "none";
+            linkContact.addEventListener("click", (e) => {
+              e.preventDefault();
+              window.history.pushState({}, "", "/contact");
+              window.dispatchEvent(new PopStateEvent("popstate"));
+            });
+            nav.appendChild(linkContact);
+          }
 
-          nav.appendChild(link);
           return true;
         };
+        const injectAboutNavLink = injectNavLinks;
 
         // ── Ajout lien À Propos dans le footer ────────────────────────────
         const addAboutFooterLink = () => {
@@ -1672,7 +1688,317 @@
         };
 
         // ── Garantir que toutes les 10 formations sont visibles sur /formations ──
-        const enhanceFormationsPage = () => {
+        
+        // ── PAGE /contact – Construction complète E-commerce Pro ─────────
+        const buildContactPage = () => {
+          const pathname = (window.location.pathname || "").replace(/\/$/, "");
+          const isContact = pathname === "/contact";
+          if (!isContact) {
+            const existing = document.getElementById("contact-page-injected");
+            if (existing) existing.remove();
+            return false;
+          }
+
+          if (document.getElementById("contact-page-injected")) return true;
+
+          const header = document.querySelector("header");
+          if (!header) return false;
+          header.style.display = "";
+
+          let container = document.getElementById("contact-root");
+          if (!container) {
+            container = document.createElement("div");
+            container.id = "contact-root";
+            const footer = document.querySelector("footer");
+            if (footer && footer.parentNode) {
+              footer.parentNode.insertBefore(container, footer);
+            } else if (header.parentNode) {
+              header.parentNode.insertBefore(container, header.nextSibling);
+            }
+          }
+          if (!container) return false;
+
+          // Masquer les blocs de la home s'ils sont présents
+          document.querySelectorAll("#ateliers-hero2, #nos-formations-ecom, #presentation-video, #about-page-injected").forEach(el => {
+            el.style.display = "none";
+          });
+
+          const page = document.createElement("div");
+          page.id = "contact-page-injected";
+          page.className = "contact-page-wrap";
+
+          page.innerHTML = `
+            <!-- Hero Contact -->
+            <div class="contact-hero">
+              <span class="contact-hero-badge">✦ CONTACT & CONSEIL PÉDAGOGIQUE</span>
+              <h1 class="contact-hero-title">Contactez <em>l'Académie Internationale</em></h1>
+              <p class="contact-hero-sub">Une question sur nos cursus certifiants, les prochaines sessions ou nos partenariats internationaux ? Nos conseillères sont à votre disposition pour vous orienter.</p>
+            </div>
+
+            <!-- Main Grid -->
+            <div class="contact-grid-main">
+              <!-- Left: Contact Form -->
+              <div class="contact-form-card">
+                <div class="contact-form-header">
+                  <h3>Formulaire d'Orientation & Devis</h3>
+                  <p>Remplissez vos coordonnées ci-dessous pour recevoir notre programme détaillé et les disponibilités.</p>
+                </div>
+
+                <form id="ecom-contact-form" onsubmit="return false;">
+                  <div class="contact-form-group">
+                    <label class="contact-form-label" for="contact-fullname">Nom complet <span class="req">*</span></label>
+                    <input type="text" id="contact-fullname" class="contact-input" placeholder="Ex: Mariem Ben Salem" required autocomplete="name" />
+                  </div>
+
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <div class="contact-form-group">
+                      <label class="contact-form-label" for="contact-phone">Numéro WhatsApp / Téléphone <span class="req">*</span></label>
+                      <input type="tel" id="contact-phone" class="contact-input" placeholder="+216 95 466 836" required autocomplete="tel" />
+                    </div>
+                    <div class="contact-form-group">
+                      <label class="contact-form-label" for="contact-email">Adresse Email <span class="req">*</span></label>
+                      <input type="email" id="contact-email" class="contact-input" placeholder="mariem@exemple.com" required autocomplete="email" />
+                    </div>
+                  </div>
+
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <div class="contact-form-group">
+                      <label class="contact-form-label" for="contact-training">Formation souhaitée</label>
+                      <select id="contact-training" class="contact-select">
+                        <option value="Épilation Laser">Épilation Laser & Protocoles Cliniques</option>
+                        <option value="HIFU Lifting">HIFU Lifting & Ultrasons Focalisés</option>
+                        <option value="Hyaluron Pen">Hyaluron Pen & Volumétrie Cutanée</option>
+                        <option value="Hydrafacial">Hydrafacial & Dermo-Nettoyage Profond</option>
+                        <option value="Microneedling & BB Glow">Microneedling & BB Glow Cutané</option>
+                        <option value="Esthétique Avancée">Esthétique Avancée Professionnelle</option>
+                        <option value="Master Pro Laser">Master Pack Laser & Dermo-Technologies</option>
+                        <option value="Soin Visage 7 en 1">Soin Visage 7 en 1 Expert</option>
+                        <option value="Radiofréquence">Radiofréquence & Remodelage</option>
+                        <option value="Autre demande">Autre formation ou renseignement</option>
+                      </select>
+                    </div>
+                    <div class="contact-form-group">
+                      <label class="contact-form-label" for="contact-mode">Format de cours</label>
+                      <select id="contact-mode" class="contact-select">
+                        <option value="Présentiel (Tunis Belvédère)">Présentiel — Tunis Belvédère</option>
+                        <option value="En Ligne Certifiant">En Ligne à distance</option>
+                        <option value="Atelier Pratique Express">Atelier Pratique Intensif</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="contact-form-group">
+                    <label class="contact-form-label" for="contact-message">Votre message / Projet professionnel <span class="req">*</span></label>
+                    <textarea id="contact-message" class="contact-textarea" placeholder="Indiquez vos objectifs professionnels, vos disponibilités ou vos questions sur le déroulement..." required></textarea>
+                  </div>
+
+                  <div id="contact-form-alert" style="display:none;padding:12px 16px;border-radius:12px;margin-bottom:16px;font-size:0.9rem;font-weight:600;"></div>
+
+                  <button type="submit" id="contact-submit-btn" class="contact-btn-submit">
+                    <span>✉️ Envoyer ma demande</span>
+                  </button>
+
+                  <a id="contact-wa-direct-link" href="https://wa.me/21695466836?text=Bonjour%2C%20je%20souhaite%20des%20informations%20sur%20les%20formations%20de%20l'Académie." target="_blank" rel="noopener noreferrer" class="contact-btn-whatsapp-direct">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
+                    <span>💬 Discuter immédiatement sur WhatsApp (95 466 836)</span>
+                  </a>
+                </form>
+              </div>
+
+              <!-- Right: Info column -->
+              <div class="contact-info-col">
+                <!-- Location Box -->
+                <div class="contact-info-box">
+                  <div class="contact-info-icon-circle">📍</div>
+                  <div class="contact-info-content">
+                    <h4>Localisation Principale</h4>
+                    <div class="contact-info-main">Tunis Belvédère, Tunisie</div>
+                    <p>Siège de l'Académie & Cliniques d'application pratique. Cadre d'apprentissage moderne.</p>
+                  </div>
+                </div>
+
+                <!-- WhatsApp Box -->
+                <div class="contact-info-box">
+                  <div class="contact-info-icon-circle" style="background:rgba(37,211,102,0.12);border-color:rgba(37,211,102,0.3);color:#25D366;">💬</div>
+                  <div class="contact-info-content">
+                    <h4>WhatsApp Officiel Direct</h4>
+                    <div class="contact-info-main">
+                      <a href="https://wa.me/21695466836" target="_blank" rel="noopener">+216 95 466 836</a>
+                    </div>
+                    <p>Conseillère pédagogique disponible 7j/7 pour vos questions et inscriptions.</p>
+                  </div>
+                </div>
+
+                <!-- Phone Box -->
+                <div class="contact-info-box">
+                  <div class="contact-info-icon-circle">📞</div>
+                  <div class="contact-info-content">
+                    <h4>Numéro Principal</h4>
+                    <div class="contact-info-main">
+                      <a href="tel:+21695466836">+216 95 466 836</a>
+                    </div>
+                    <p>Standard ouvert du Lundi au Samedi de 09h00 à 18h00.</p>
+                  </div>
+                </div>
+
+                <!-- Email Box -->
+                <div class="contact-info-box">
+                  <div class="contact-info-icon-circle">✉️</div>
+                  <div class="contact-info-content">
+                    <h4>Email Admissions</h4>
+                    <div class="contact-info-main">
+                      <a href="mailto:contact@academie.tn">contact@academie.tn</a>
+                    </div>
+                    <p>Dossiers de candidature, informations générales et partenariats.</p>
+                  </div>
+                </div>
+
+                <!-- International Partners Card (France & Turquie) -->
+                <div class="contact-partner-box">
+                  <h4>Partenaires Internationaux</h4>
+                  <p>L'Académie collabore exclusivement avec des partenaires d'excellence en <strong>France & Turquie</strong> pour garantir des formations conformes aux exigences internationales.</p>
+                  <div class="contact-partner-flags">
+                    <span class="contact-flag-pill">🇫🇷 France</span>
+                    <span class="contact-flag-pill">🇹🇷 Turquie</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Features Strip -->
+            <div class="contact-features-strip">
+              <div class="contact-feat-card">
+                <div class="icon">🏆</div>
+                <h4>Certifications Reconnues</h4>
+                <p>Diplômes officiels et attestations valorisant votre profil d'experte.</p>
+              </div>
+              <div class="contact-feat-card">
+                <div class="icon">👥</div>
+                <h4>Pratique Clinique Réelle</h4>
+                <p>Entraînement encadré sur modèles en petits groupes de travail.</p>
+              </div>
+              <div class="contact-feat-card">
+                <div class="icon">⚡</div>
+                <h4>Réponse Immédiate</h4>
+                <p>Échangez directement avec une formatrice ou conseillère par WhatsApp.</p>
+              </div>
+              <div class="contact-feat-card">
+                <div class="icon">💼</div>
+                <h4>Accompagnement Métier</h4>
+                <p>Conseils pour rentabiliser vos prestations et équiper votre institut.</p>
+              </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="contact-faq-wrap">
+              <h3 class="contact-faq-title">Questions Fréquentes avant Inscription</h3>
+              <div class="contact-faq-grid">
+                <div class="contact-faq-item">
+                  <h5><span>✦</span> Où se déroulent les formations pratiques ?</h5>
+                  <p>Toutes nos sessions pratiques ont lieu dans nos locaux à <strong>Tunis Belvédère</strong>, équipés de technologies médico-esthétiques de pointe.</p>
+                </div>
+                <div class="contact-faq-item">
+                  <h5><span>✦</span> Comment réserver une place rapidement ?</h5>
+                  <p>Contactez-nous directement sur <strong>WhatsApp au +216 95 466 836</strong> pour choisir votre session et bloquer votre inscription.</p>
+                </div>
+                <div class="contact-faq-item">
+                  <h5><span>✦</span> Qui sont vos partenaires ?</h5>
+                  <p>Nos partenaires institutionnels et techniques sont situés en <strong>France & Turquie</strong>, garantissant les plus hauts standards de formation.</p>
+                </div>
+                <div class="contact-faq-item">
+                  <h5><span>✦</span> Les débutantes sont-elles acceptées ?</h5>
+                  <p>Oui, nous avons des parcours conçus pour acquérir les bases fondamentales avant d'aborder les technologies avancées en toute sécurité.</p>
+                </div>
+              </div>
+            </div>
+          `;
+
+          container.innerHTML = "";
+          container.appendChild(page);
+
+          // Handle form submit
+          const form = page.querySelector("#ecom-contact-form");
+          const alertBox = page.querySelector("#contact-form-alert");
+          const submitBtn = page.querySelector("#contact-submit-btn");
+
+          if (form) {
+            form.addEventListener("submit", async (e) => {
+              e.preventDefault();
+              const fullName = (page.querySelector("#contact-fullname")?.value || "").trim();
+              const phone = (page.querySelector("#contact-phone")?.value || "").trim();
+              const email = (page.querySelector("#contact-email")?.value || "").trim();
+              const training = page.querySelector("#contact-training")?.value || "";
+              const mode = page.querySelector("#contact-mode")?.value || "";
+              const message = (page.querySelector("#contact-message")?.value || "").trim();
+
+              if (!fullName || !phone || !email || !message) {
+                alertBox.style.display = "block";
+                alertBox.style.background = "#fef2f2";
+                alertBox.style.color = "#991b1b";
+                alertBox.style.border = "1px solid #fecaca";
+                alertBox.textContent = "Veuillez remplir tous les champs obligatoires.";
+                return;
+              }
+
+              submitBtn.disabled = true;
+              submitBtn.innerHTML = "<span>⏳ Envoi en cours...</span>";
+
+              try {
+                const res = await fetch("/api/public/contact", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    fullName,
+                    phone,
+                    email,
+                    subject: "Demande formation : " + training + " (" + mode + ")",
+                    message: message + "\n\n[Formation: " + training + " | Format: " + mode + "]"
+                  })
+                });
+
+                alertBox.style.display = "block";
+                alertBox.style.background = "#f0fdf4";
+                alertBox.style.color = "#166534";
+                alertBox.style.border = "1px solid #bbf7d0";
+                alertBox.innerHTML = "✓ Merci " + fullName + " ! Votre demande a été enregistrée avec succès. Notre équipe vous recontactera rapidement au <strong>" + phone + "</strong>.";
+                form.reset();
+              } catch (err) {
+                alertBox.style.display = "block";
+                alertBox.style.background = "#fef2f2";
+                alertBox.style.color = "#991b1b";
+                alertBox.style.border = "1px solid #fecaca";
+                alertBox.textContent = "Une erreur est survenue lors de l'envoi. Vous pouvez nous contacter directement sur WhatsApp au +216 95 466 836.";
+              } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = "<span>✉️ Envoyer ma demande</span>";
+              }
+            });
+          }
+
+          // Dynamic WhatsApp link update
+          const updateWaLink = () => {
+            const name = (page.querySelector("#contact-fullname")?.value || "").trim();
+            const training = page.querySelector("#contact-training")?.value || "";
+            const mode = page.querySelector("#contact-mode")?.value || "";
+            let text = "Bonjour, je souhaite des informations sur l'Académie.";
+            if (name || training) {
+              text = "Bonjour, je suis " + (name || "un candidat") + ", je souhaite des renseignements sur la formation " + training + " (" + mode + ").";
+            }
+            const waLink = page.querySelector("#contact-wa-direct-link");
+            if (waLink) {
+              waLink.href = "https://wa.me/21695466836?text=" + encodeURIComponent(text);
+            }
+          };
+
+          page.querySelectorAll("#contact-fullname, #contact-training, #contact-mode").forEach(input => {
+            input.addEventListener("input", updateWaLink);
+            input.addEventListener("change", updateWaLink);
+          });
+
+          return true;
+        };
+
+const enhanceFormationsPage = () => {
           if (!window.location.pathname.startsWith("/formations")) return;
           const grid = document.querySelector(".sm\\:grid-cols-2.xl\\:grid-cols-3, .sm\\:grid-cols-2.lg\\:grid-cols-3, div[class*='grid-cols']");
           if (!grid) return;
@@ -1711,7 +2037,7 @@
                     </div>
                   </div>
                   <div class="mt-5 pt-3 border-t border-[#f1e6d6]">
-                    <a href="https://wa.me/33663111415?text=${encodeURIComponent("Bonjour, je souhaite m'inscrire à la formation : " + f.title)}" target="_blank" rel="noopener noreferrer" class="btn-primary w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-full text-sm font-bold text-white bg-[#25D366] hover:bg-[#128C7E] transition shadow" style="text-decoration:none;">
+                    <a href="https://wa.me/21695466836?text=${encodeURIComponent("Bonjour, je souhaite m'inscrire à la formation : " + f.title)}" target="_blank" rel="noopener noreferrer" class="btn-primary w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-full text-sm font-bold text-white bg-[#25D366] hover:bg-[#128C7E] transition shadow" style="text-decoration:none;">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
                       <span>S'inscrire via WhatsApp</span>
                     </a>
@@ -1729,6 +2055,7 @@
           injectAboutNavLink();
           addAboutFooterLink();
           buildAboutPage();
+          buildContactPage();
           enhanceFormationsPage();
         };
 

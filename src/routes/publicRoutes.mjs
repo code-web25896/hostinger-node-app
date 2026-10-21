@@ -127,7 +127,11 @@ router.post("/contact", async (req, res) => {
       return res.status(400).json({ message: "Nom complet, email, telephone et message sont obligatoires." });
     }
 
-    await forwardContactMessage({ fullName, email, phone, subject, message });
+    try {
+      await forwardContactMessage({ fullName, email, phone, subject, message });
+    } catch (fwdError) {
+      console.warn("External contact API warning:", fwdError.message);
+    }
 
     const result = await insert(
       `INSERT INTO contact_requests (full_name, phone, email, subject, message, status)
@@ -136,7 +140,7 @@ router.post("/contact", async (req, res) => {
     );
     const [contact] = await query("SELECT * FROM contact_requests WHERE id = ?", [result.insertId]);
     res.status(201).json({
-      message: "Votre message a ete envoye.",
+      message: "Votre message a bien été envoyé. Notre équipe vous recontactera très rapidement.",
       contact: {
         _id: String(contact.id),
         fullName: contact.full_name,
