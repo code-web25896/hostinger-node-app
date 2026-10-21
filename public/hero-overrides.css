@@ -942,3 +942,181 @@ footer a:hover {
   font-weight: 600;
   color: #F7EAD0;
 }
+
+/* --------------------------------------------------------------------------
+   16. OPTIMISATION MOBILE AVANCÉE : LARGEUR 98% ET TAILLES CONTENUS COMPACTES
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+
+  /* Élargissement maximal du contenu pour éviter les marges vides latérales */
+  .mx-auto,
+  .max-w-7xl,
+  .max-w-6xl,
+  .max-w-5xl,
+  .max-w-4xl,
+  .max-w-3xl,
+  main,
+  main > div,
+  main section,
+  section,
+  .hero,
+  #formations-showcase-section {
+    width: 98% !important;
+    max-width: 98% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+
+  /* Section Hero compacte et proportionnée */
+  .hero {
+    min-height: auto !important;
+    padding: 16px 8px !important;
+    border-radius: 20px !important;
+  }
+
+  .hero-content {
+    padding: 14px 10px !important;
+    border-radius: 16px !important;
+  }
+
+  .hero h1 {
+    font-size: 1.75rem !important;
+    line-height: 1.15 !important;
+    margin-top: 6px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .hero .description,
+  .hero-content p.text-slate-900,
+  p {
+    font-size: 0.88rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .hero .subtitle,
+  .hero-content > p:first-child {
+    font-size: 0.65rem !important;
+    padding: 4px 10px !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* Cartes sous le Hero */
+  .hero [class*="sm:grid-cols-3"] {
+    gap: 8px !important;
+    margin-top: 14px !important;
+  }
+
+  .hero [class*="sm:grid-cols-3"] > div {
+    padding: 10px 8px !important;
+    border-radius: 14px !important;
+  }
+
+  /* Section Showcase Formations E-commerce Mobile */
+  #formations-showcase-section {
+    padding: 14px 6px !important;
+    border-radius: 20px !important;
+    margin-top: 20px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .section-title {
+    font-size: 1.65rem !important;
+    line-height: 1.15 !important;
+  }
+
+  .ecom-carousel-track {
+    gap: 12px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .ecom-card {
+    flex: 0 0 88vw !important;
+    border-radius: 20px !important;
+  }
+
+  .ecom-card-media {
+    height: 270px !important;
+  }
+
+  .ecom-card-body {
+    padding: 14px 12px !important;
+    gap: 10px !important;
+  }
+
+  .ecom-card-title {
+    font-size: 1.25rem !important;
+  }
+
+  .ecom-card-desc {
+    font-size: 0.82rem !important;
+  }
+
+  .ecom-btn-whatsapp {
+    padding: 11px 16px !important;
+    font-size: 13px !important;
+  }
+
+  /* Bandeau de réassurance Trust Bar Mobile */
+  #ecommerce-trust-bar {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin-top: 20px !important;
+    margin-bottom: 24px !important;
+  }
+
+  .trust-item {
+    padding: 12px 14px !important;
+    border-radius: 16px !important;
+  }
+
+  .trust-icon-box {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .trust-text h4 {
+    font-size: 13px !important;
+  }
+
+  .trust-text p {
+    font-size: 11px !important;
+  }
+
+  /* Header compact */
+  header .max-w-7xl {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   17. SUPPRESSION DU PAIEMENT EN LIGNE, DEVIS, REÇUS ET DEMANDES
+   -------------------------------------------------------------------------- */
+/* Masquer tout lien ou élément de menu "Demandes" */
+a[href*="/demandes"],
+a[href="/demandes"],
+nav a[href*="demande"],
+button[data-tab="demandes"] {
+  display: none !important;
+}
+
+/* Masquer les formulaires ou boutons de reçu de virement */
+[data-receipt-form],
+#receipt-upload-section,
+.receipt-dropzone,
+div:has(> input[type="file"][name="receipt"]) {
+  display: none !important;
+}
+
+/* Masquer les mentions de devis ou de reçus résiduelles */
+.country-verbose-badge,
+[data-country-badge] {
+  display: none !important;
+}
+

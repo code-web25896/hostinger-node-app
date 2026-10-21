@@ -61,6 +61,10 @@ app.use("/api/news", newsRoutes);
 app.use("/api/student", studentRoutes);
 app.use("/api/admin", adminRoutes);
 
+app.get("/demandes", (_req, res) => {
+  res.redirect(301, "/formations");
+});
+
 app.use(express.static(publicDir));
 app.get(/^\/(?!api|uploads).*/, (_req, res) => {
   res.sendFile(path.join(publicDir, "index.html"));

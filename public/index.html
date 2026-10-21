@@ -232,8 +232,7 @@
             { label: "Accueil", href: "/" },
             { label: "Formations", href: "/formations" },
             { label: "Actualites", href: "/actualites" },
-            { label: "Recherche", href: "/recherche" },
-            { label: "Demandes", href: "/demandes" }
+            { label: "Recherche", href: "/recherche" }
           ];
           const menuLinks = menuItems
             .map(
@@ -423,724 +422,110 @@
     </script>
     <script>
       (function () {
-        const BANK_INFO = {
-          name: "ACADEMIE INTERNATIONALE BEAUTE",
-          bank: "Attijari Bank",
-          rib: "04 012 08600 94325762 87",
-          iban: "TN59 0070 0800 3423 6271 7571",
-          bic: "BSTUTNTT"
-        };
+        // Redirection si l'utilisateur arrive sur /demandes
+        if (window.location.pathname === "/demandes") {
+          window.location.replace("/formations");
+        }
 
-        const STORAGE_KEYS = {
-          enrollment: "academy_last_enrollment",
-          enrollmentPayload: "academy_last_enrollment_payload",
-          demandes: "academy_last_demandes"
-        };
-
-        const readJson = (key) => {
-          try {
-            return JSON.parse(sessionStorage.getItem(key) || "null");
-          } catch (error) {
-            return null;
-          }
-        };
-
-        const writeJson = (key, value) => {
-          sessionStorage.setItem(key, JSON.stringify(value));
-        };
-
-        const getEnrollmentContext = () => {
-          const stored = readJson(STORAGE_KEYS.enrollment) || {};
-          const payload = readJson(STORAGE_KEYS.enrollmentPayload) || {};
-          return { ...payload, ...stored };
-        };
-
-        const findAmount = (root) => {
-          const texts = Array.from(root.querySelectorAll("*"))
-            .map((el) => el.textContent || "")
-            .filter(Boolean);
-          const match = texts
-            .map((t) => t.match(/\\b\\d[\\d\\s.]*\\s?(TND|DT|EUR)\\b/i))
-            .find((m) => m);
-          return match ? match[0].replace(/\\s+/g, " ").trim() : "";
-        };
-
-        const renderBox = (amount) => {
-          const amountLine = amount
-            ? `Montant a regler : <strong>${amount}</strong>`
-            : "Montant a regler : <strong>le prix de la formation selectionnee</strong>";
-
-          return `
-            <section class="mt-6 rounded-[26px] border border-[#ead9c0] bg-[linear-gradient(135deg,#fffdfa_0%,#f7ecde_55%,#fff9f4_100%)] p-5 shadow-[0_18px_50px_rgba(36,28,21,0.08)]">
-              <div class="flex items-center gap-3">
-                <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#fbf2e2] text-gold">EUR</span>
-                <div>
-                  <p class="text-xs font-bold uppercase tracking-[0.28em] text-gold">Paiement par virement</p>
-                  <h3 class="text-2xl font-semibold text-[#0a0f1a]">Reglez votre inscription apres confirmation</h3>
-                </div>
-              </div>
-              <p class="mt-3 text-sm text-slate-700">
-                ${amountLine}. Utilisez l'intitule et votre numero de telephone comme reference.
-              </p>
-              <div class="mt-4 grid gap-3 md:grid-cols-2">
-                <div class="rounded-[18px] bg-white/90 px-4 py-3 text-sm text-slate-700">
-                  <p class="font-semibold text-[#0a0f1a]">Beneficiaire</p>
-                  <p>${BANK_INFO.name}</p>
-                </div>
-                <div class="rounded-[18px] bg-white/90 px-4 py-3 text-sm text-slate-700">
-                  <p class="font-semibold text-[#0a0f1a]">Banque</p>
-                  <p>${BANK_INFO.bank}</p>
-                </div>
-                <div class="rounded-[18px] bg-white/90 px-4 py-3 text-sm text-slate-700">
-                  <p class="font-semibold text-[#0a0f1a]">RIB</p>
-                  <p>${BANK_INFO.rib}</p>
-                </div>
-                <div class="rounded-[18px] bg-white/90 px-4 py-3 text-sm text-slate-700">
-                  <p class="font-semibold text-[#0a0f1a]">IBAN / BIC</p>
-                  <p>${BANK_INFO.iban}</p>
-                  <p class="text-xs text-slate-500">BIC : ${BANK_INFO.bic}</p>
-                </div>
-              </div>
-              <p class="mt-3 text-xs text-slate-500">
-                Une fois le virement effectue, notre equipe valide votre inscription.
-              </p>
-            </section>
-          `;
-        };
-
-        const showPaymentModal = () => {
-          const existing = document.querySelector("#payment-modal");
-          if (existing) return true;
-
-          const amount = findAmount(document.body);
-          const amountLine = amount
-            ? `Montant a regler : <strong>${amount}</strong>`
-            : "Montant a regler : <strong>le prix de la formation selectionnee</strong>";
-
-          const modal = document.createElement("div");
-          modal.id = "payment-modal";
-          modal.style.position = "fixed";
-          modal.style.inset = "0";
-          modal.style.zIndex = "9999";
-          modal.innerHTML = `
-            <div id="payment-modal-backdrop" style="position:absolute;inset:0;background:rgba(10,14,24,0.45);backdrop-filter:blur(6px);"></div>
-            <div style="position:relative;display:flex;align-items:center;justify-content:center;height:100%;padding:16px;">
-              <div style="width:min(720px,95vw);border-radius:26px;background:linear-gradient(135deg,#eef8ef 0%,#f6fff6 60%,#ffffff 100%);border:1px solid #dfeee0;box-shadow:0 30px 80px rgba(10,14,24,0.25);padding:22px;">
-                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
-                  <div>
-                    <p style="font-size:11px;letter-spacing:0.28em;text-transform:uppercase;color:#b28a4d;font-weight:700;">Paiement apres inscription</p>
-                    <h3 style="margin-top:6px;font-size:22px;color:#0a0f1a;font-weight:700;">Instructions de paiement</h3>
-                    <p style="margin-top:6px;color:#4a5568;font-size:14px;">${amountLine}. Utilisez l'intitule et votre numero de telephone comme reference.</p>
-                  </div>
-                  <button id="payment-modal-close" style="height:40px;width:40px;border-radius:999px;border:1px solid #e6d6bf;background:white;color:#0a0f1a;font-weight:700;">✕</button>
-                </div>
-
-                <div style="margin-top:14px;display:grid;gap:10px;">
-                  <div style="border-radius:18px;border:1px solid #e9e0d2;background:#fffaf1;padding:12px;">
-                    <div style="font-weight:700;color:#0a0f1a;">Virement bancaire</div>
-                    <div style="margin-top:6px;font-size:13px;color:#1f2a44;">
-                      <div><strong>Beneficiaire :</strong> ${BANK_INFO.name}</div>
-                      <div><strong>Banque :</strong> ${BANK_INFO.bank}</div>
-                      <div><strong>RIB :</strong> ${BANK_INFO.rib}</div>
-                      <div><strong>IBAN :</strong> ${BANK_INFO.iban}</div>
-                      <div style="font-size:12px;color:#718096;">BIC/SWIFT : ${BANK_INFO.bic}</div>
-                    </div>
-                  </div>
-
-                  ${renderReceiptUploader(getEnrollmentContext())}
-                </div>
-              </div>
-            </div>
-          `;
-
-          document.body.appendChild(modal);
-          bindReceiptUpload(modal);
-          const close = () => modal.remove();
-          modal.querySelector("#payment-modal-close").addEventListener("click", close);
-          modal.querySelector("#payment-modal-backdrop").addEventListener("click", close);
-          return true;
-        };
-
-        const wrapFetchOnce = () => {
-          if (window.__academyFetchWrapped) return;
-          window.__academyFetchWrapped = true;
-          const originalFetch = window.fetch.bind(window);
-          window.fetch = async (input, init = {}) => {
-            const url = typeof input === "string" ? input : input.url || "";
-            const response = await originalFetch(input, init);
-            try {
-              if (url.includes("/api/public/enrollments/checkout")) {
-                let payload = null;
-                if (init.body && typeof init.body === "string") {
-                  try {
-                    payload = JSON.parse(init.body);
-                  } catch (error) {
-                    payload = null;
-                  }
-                }
-                if (payload?.email || payload?.phone) {
-                  writeJson(STORAGE_KEYS.enrollmentPayload, {
-                    email: payload.email?.trim(),
-                    phone: payload.phone?.trim(),
-                    trainingId: payload.trainingId || null,
-                    fullName: payload.fullName || ""
-                  });
-                }
-                const clone = response.clone();
-                const data = await clone.json();
-                if (data?.enrollmentId) {
-                  writeJson(STORAGE_KEYS.enrollment, {
-                    id: data.enrollmentId,
-                    paymentStatus: data.paymentStatus || "Recu manquant"
-                  });
-                }
-              }
-              if (url.includes("/api/public/enrollments/status")) {
-                const clone = response.clone();
-                const data = await clone.json();
-                if (Array.isArray(data)) {
-                  writeJson(STORAGE_KEYS.demandes, data);
-                }
-              }
-              if (url.includes("/api/admin/enrollments")) {
-                const clone = response.clone();
-                const data = await clone.json();
-                if (Array.isArray(data)) {
-                  window.__academyAdminEnrollments = data;
-                }
-              }
-            } catch (error) {
-              // ignore capture errors
-            }
-            return response;
-          };
-        };
-
-        const renderReceiptUploader = (context) => `
-          <div style="margin-top:14px;border-radius:18px;border:1px dashed #cfe4d2;background:#f5fff6;padding:14px;">
-            <div style="font-weight:700;color:#0a0f1a;">Recu de virement obligatoire</div>
-            <p style="margin-top:6px;font-size:13px;color:#4a5568;">
-              Televersez votre recu (image ou PDF). Sans recu, l'inscription reste en attente.
-            </p>
-            <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
-              <input id="receipt-file" type="file" accept="image/*,.pdf" style="flex:1 1 220px;border-radius:14px;border:1px solid #e2e8f0;background:white;padding:8px 10px;" />
-              <button id="receipt-upload" style="flex:0 0 auto;border-radius:999px;border:1px solid #c2d7c4;background:#0f7a3b;color:white;padding:10px 18px;font-weight:700;">Telecharger le recu</button>
-            </div>
-            <div id="receipt-status" style="margin-top:8px;font-size:12px;color:#1d6a34;"></div>
-          </div>
-        `;
-
-        const bindReceiptUpload = (root) => {
-          const fileInput = root.querySelector("#receipt-file");
-          const uploadBtn = root.querySelector("#receipt-upload");
-          const status = root.querySelector("#receipt-status");
-          if (!fileInput || !uploadBtn || !status) return;
-
-          const ctx = getEnrollmentContext();
-          if (ctx.paymentStatus === "Recu" || ctx.paymentStatus === "Paye") {
-            status.textContent = "Recu deja televerse. Merci.";
-            status.style.color = "#1d6a34";
-          }
-
-          uploadBtn.addEventListener("click", async () => {
-            if (!fileInput.files || !fileInput.files[0]) {
-              status.textContent = "Veuillez choisir un fichier.";
-              status.style.color = "#c53030";
-              return;
-            }
-
-            const ctx = getEnrollmentContext();
-            if (!ctx.email || !ctx.phone) {
-              status.textContent = "Veuillez indiquer email et telephone dans le formulaire d'inscription.";
-              status.style.color = "#c53030";
-              return;
-            }
-
-            const formData = new FormData();
-            formData.append("file", fileInput.files[0]);
-            formData.append("email", ctx.email);
-            formData.append("phone", ctx.phone);
-            if (ctx.trainingId) formData.append("trainingId", ctx.trainingId);
-
-            const endpoint = ctx.id ? `/api/public/enrollments/${ctx.id}/receipt` : "/api/public/enrollments/receipt";
-            status.textContent = "Envoi du recu en cours...";
-            status.style.color = "#1d6a34";
-
-            try {
-              const res = await fetch(endpoint, { method: "POST", body: formData });
-              if (!res.ok) {
-                const data = await res.json().catch(() => ({}));
-                throw new Error(data.message || "Impossible d'envoyer le recu.");
-              }
-              const data = await res.json();
-              if (data?.enrollment?.id) {
-                writeJson(STORAGE_KEYS.enrollment, {
-                  id: data.enrollment.id,
-                  paymentStatus: data.enrollment.paymentStatus
-                });
-              }
-              status.textContent = "Recu televerse. Notre equipe validera votre paiement.";
-              status.style.color = "#1d6a34";
-            } catch (error) {
-              status.textContent = error.message || "Erreur lors de l'envoi.";
-              status.style.color = "#c53030";
-            }
-          });
-        };
-
-        const injectDemandesUploader = () => {
-          if (window.location.pathname !== "/demandes") return false;
-          if (document.getElementById("demandes-receipt-uploader")) return true;
-
-          const container = document.querySelector("main") || document.querySelector("#root");
-          if (!container) return false;
-
-          const section = document.createElement("section");
-          section.id = "demandes-receipt-uploader";
-          section.className = "dashboard-card";
-          section.style.marginTop = "20px";
-          section.innerHTML = `
-            <div style="display:flex;flex-direction:column;gap:12px;">
-              <h3 style="font-size:20px;font-weight:700;color:#091632;">Ajouter votre recu de virement</h3>
-              <p style="font-size:14px;color:#4a5568;">Si vous avez quitte le formulaire, televersez votre recu ici. Sans recu, l'inscription reste en attente.</p>
-              <div style="display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
-                <input id="demandes-email" class="soft-input" placeholder="Email" />
-                <input id="demandes-phone" class="soft-input" placeholder="Telephone" />
-                <select id="demandes-training" class="soft-input">
-                  <option value="">Selectionnez la formation (optionnel)</option>
-                </select>
-              </div>
-              <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
-                <input id="demandes-file" type="file" accept="image/*,.pdf" class="soft-input" style="padding:10px 12px;" />
-                <button id="demandes-upload" class="btn-primary" type="button">Telecharger le recu</button>
-              </div>
-              <p id="demandes-status" style="font-size:12px;color:#1d6a34;"></p>
-            </div>
-          `;
-          container.appendChild(section);
-
-          const emailInput = section.querySelector("#demandes-email");
-          const phoneInput = section.querySelector("#demandes-phone");
-          const trainingSelect = section.querySelector("#demandes-training");
-          const fileInput = section.querySelector("#demandes-file");
-          const uploadBtn = section.querySelector("#demandes-upload");
-          const status = section.querySelector("#demandes-status");
-
-          const ctx = getEnrollmentContext();
-          if (ctx.email) emailInput.value = ctx.email;
-          if (ctx.phone) phoneInput.value = ctx.phone;
-
-          const demandes = readJson(STORAGE_KEYS.demandes);
-          if (Array.isArray(demandes)) {
-            demandes.forEach((item) => {
-              if (!item?.training?._id) return;
-              const option = document.createElement("option");
-              option.value = item.training._id;
-              option.textContent = `${item.training.title}`;
-              trainingSelect.appendChild(option);
-            });
-          }
-
-          uploadBtn.addEventListener("click", async () => {
-            if (!fileInput.files || !fileInput.files[0]) {
-              status.textContent = "Veuillez choisir un fichier.";
-              status.style.color = "#c53030";
-              return;
-            }
-            if (!emailInput.value.trim() || !phoneInput.value.trim()) {
-              status.textContent = "Email et telephone obligatoires.";
-              status.style.color = "#c53030";
-              return;
-            }
-
-            const formData = new FormData();
-            formData.append("file", fileInput.files[0]);
-            formData.append("email", emailInput.value.trim());
-            formData.append("phone", phoneInput.value.trim());
-            if (trainingSelect.value) formData.append("trainingId", trainingSelect.value);
-
-            status.textContent = "Envoi du recu en cours...";
-            status.style.color = "#1d6a34";
-            try {
-              const res = await fetch("/api/public/enrollments/receipt", { method: "POST", body: formData });
-              if (!res.ok) {
-                const data = await res.json().catch(() => ({}));
-                throw new Error(data.message || "Erreur lors de l'envoi.");
-              }
-              status.textContent = "Recu televerse. Notre equipe validera votre paiement.";
-              status.style.color = "#1d6a34";
-            } catch (error) {
-              status.textContent = error.message || "Erreur lors de l'envoi.";
-              status.style.color = "#c53030";
-            }
-          });
-
-          return true;
-        };
-
-        const getAdminEnrollments = async () => {
-          if (Array.isArray(window.__academyAdminEnrollments) && window.__academyAdminEnrollments.length > 0) {
-            return window.__academyAdminEnrollments;
-          }
-
-          const token = sessionStorage.getItem("token");
-          if (!token) return [];
-
-          try {
-            const res = await fetch("/api/admin/enrollments", {
-              headers: { Authorization: `Bearer ${token}` }
-            });
-            if (!res.ok) return [];
-            const data = await res.json();
-            if (Array.isArray(data)) {
-              window.__academyAdminEnrollments = data;
-              return data;
-            }
-          } catch (error) {
-            return [];
-          }
-
-          return [];
-        };
-
-        const decorateAdminPayments = async () => {
-          if (window.location.pathname !== "/admin") return false;
-          const enrollments = await getAdminEnrollments();
-          if (!Array.isArray(enrollments) || enrollments.length === 0) return false;
-
-          const cards = Array.from(document.querySelectorAll(".dashboard-card")).filter((card) =>
-            (card.textContent || "").includes("Reference paiement")
-          );
-          if (!cards.length) return false;
-
-          const cardsParent = cards[0].parentElement;
-          if (!cardsParent) return false;
-          let pendingGrid = cardsParent;
-          if (!pendingGrid.id) pendingGrid.id = "payments-pending-grid";
-
-          let acceptedSection = document.getElementById("payments-accepted");
-          if (!acceptedSection) {
-            const heading = document.createElement("h3");
-            heading.className = "mt-6 text-xl font-semibold text-[#091632] md:text-2xl";
-            heading.textContent = "Paiements en attente";
-            cardsParent.parentElement?.insertBefore(heading, cardsParent);
-
-            acceptedSection = document.createElement("div");
-            acceptedSection.id = "payments-accepted";
-            acceptedSection.className = "mt-10";
-            acceptedSection.innerHTML = `
-              <h3 class="text-xl font-semibold text-[#091632] md:text-2xl">Paiements acceptes</h3>
-              <div id="payments-accepted-grid" class="mt-4 grid gap-4 lg:grid-cols-2"></div>
-            `;
-            cardsParent.parentElement?.appendChild(acceptedSection);
-          }
-
-          const acceptedGrid = document.getElementById("payments-accepted-grid") || pendingGrid;
-
-          const normalizeText = (value) =>
-            (value || "")
-              .replace(/\s+/g, " ")
-              .trim()
-              .toLowerCase();
-
-          cards.forEach((card) => {
-            if (card.dataset.receiptDecorated) return;
-            const titleEl = card.querySelector("p.text-lg") || card.querySelector("p.font-semibold");
-            const trainingTitle = titleEl ? titleEl.textContent.trim() : "";
-            const normalizedCardText = normalizeText(card.textContent || "");
-            const enrollment =
-              enrollments.find((item) => {
-                const fullName = normalizeText(item.fullName);
-                const email = normalizeText(item.email);
-                const training = normalizeText(item.training?.title);
-                const titleMatches = trainingTitle
-                  ? normalizeText(trainingTitle) === training || normalizedCardText.includes(training)
-                  : normalizedCardText.includes(training);
-                const emailMatches = email && normalizedCardText.includes(email);
-                const nameMatches = fullName && normalizedCardText.includes(fullName);
-                return titleMatches && (emailMatches || nameMatches);
-              }) ||
-              enrollments.find((item) => {
-                const email = normalizeText(item.email);
-                const training = normalizeText(item.training?.title);
-                return !!email && !!training && normalizedCardText.includes(email) && normalizedCardText.includes(training);
-              }) ||
-              enrollments.find((item) => {
-                const email = normalizeText(item.email);
-                return !!email && normalizedCardText.includes(email);
-              });
-            if (!enrollment) return;
-
-            const receiptBox = document.createElement("div");
-            receiptBox.className = "mt-4 rounded-[18px] border border-[#e7dbc8] bg-[#fffaf1] px-4 py-3 text-sm text-slate-600";
-            if (enrollment.paymentReceiptUrl) {
-              receiptBox.innerHTML = `
-                <p class="font-semibold text-[#091632]">Recu de virement</p>
-                <a href="${enrollment.paymentReceiptUrl}" target="_blank" rel="noopener" class="mt-2 inline-flex items-center gap-2 text-gold font-semibold">Voir le recu</a>
-              `;
+        // Nettoyage et conversion 100% WhatsApp
+        const cleanAndConvertWhatsApp = () => {
+          // 1. Masquer les liens 'Demandes' partout (header, menu mobile, etc.)
+          document.querySelectorAll('a[href="/demandes"], a[href*="demandes"]').forEach((el) => {
+            const container = el.closest("div, li");
+            if (container && container.parentElement && container.parentElement.children.length > 2) {
+              container.style.display = "none";
             } else {
-              receiptBox.innerHTML = `
-                <p class="font-semibold text-[#091632]">Recu de virement</p>
-                <p>Recu non recu pour cette inscription.</p>
-              `;
-            }
-
-            const actions = document.createElement("div");
-            actions.className = "mt-4 flex flex-col gap-2 sm:flex-row";
-            actions.innerHTML = `
-              <button class="btn-secondary w-full sm:w-auto" type="button">Accepter paiement</button>
-              <button class="rounded-full border border-red-200 px-5 py-3 text-sm font-semibold text-red-600 w-full sm:w-auto" type="button">Refuser paiement</button>
-            `;
-
-            const [acceptBtn, refuseBtn] = actions.querySelectorAll("button");
-            if (!enrollment.paymentReceiptUrl) {
-              acceptBtn.textContent = "Recu manquant";
-              acceptBtn.disabled = true;
-            }
-
-            const originalVerifyBtn = Array.from(card.querySelectorAll("button")).find((button) =>
-              (button.textContent || "").trim().toLowerCase() === "verifier paiement"
-            );
-            const originalDeleteBtn = Array.from(card.querySelectorAll("button")).find((button) =>
-              (button.textContent || "").trim().toLowerCase() === "supprimer"
-            );
-
-            const refreshReceiptBox = (currentEnrollment) => {
-              if (currentEnrollment.paymentReceiptUrl) {
-                receiptBox.innerHTML = `
-                  <p class="font-semibold text-[#091632]">Recu de virement</p>
-                  <a href="${currentEnrollment.paymentReceiptUrl}" target="_blank" rel="noopener" class="mt-2 inline-flex items-center gap-2 text-gold font-semibold">Voir le recu</a>
-                `;
-                acceptBtn.textContent = "Accepter paiement";
-                acceptBtn.disabled = false;
-              } else {
-                receiptBox.innerHTML = `
-                  <p class="font-semibold text-[#091632]">Recu de virement</p>
-                  <p>Recu non recu pour cette inscription.</p>
-                `;
-                acceptBtn.textContent = "Recu manquant";
-                acceptBtn.disabled = true;
-              }
-            };
-
-            acceptBtn.addEventListener("click", async () => {
-              try {
-                const token = sessionStorage.getItem("token");
-                const res = await fetch(`/api/admin/enrollments/${enrollment.id}/accept`, {
-                  method: "POST",
-                  headers: token ? { Authorization: `Bearer ${token}` } : {}
-                });
-                if (!res.ok) throw new Error("Erreur validation paiement.");
-                const data = await res.json();
-                enrollment.paymentStatus = data.paymentStatus || "Paye";
-                enrollment.status = data.status || "Confirmee";
-                enrollment.studentUserId = data.studentUserId || data.student_user_id || enrollment.studentUserId;
-                const chips = card.querySelectorAll(".metric-chip");
-                if (chips[0]) chips[0].textContent = "Confirmee";
-                if (chips[1]) chips[1].textContent = "Paye";
-                const lines = card.querySelectorAll("p.text-slate-600");
-                lines.forEach((line) => {
-                  if ((line.textContent || "").includes("Compte eleve")) {
-                    line.textContent = `Compte eleve: Cree (#${data.studentUserId || data.student_user_id || ""})`;
-                  }
-                });
-                acceptBtn.textContent = "Paiement accepte";
-                acceptBtn.disabled = true;
-                refuseBtn.disabled = true;
-                if (originalVerifyBtn) {
-                  originalVerifyBtn.textContent = "Paiement verifie";
-                  originalVerifyBtn.disabled = true;
-                }
-                acceptedGrid.appendChild(card);
-              } catch (error) {
-                acceptBtn.textContent = "Erreur";
-              }
-            });
-            refuseBtn.addEventListener("click", async () => {
-              try {
-                const token = sessionStorage.getItem("token");
-                const res = await fetch(`/api/admin/enrollments/${enrollment.id}/reject`, {
-                  method: "POST",
-                  headers: token ? { Authorization: `Bearer ${token}` } : {}
-                });
-                if (!res.ok) throw new Error("Erreur refus paiement.");
-                const chips = card.querySelectorAll(".metric-chip");
-                if (chips[0]) chips[0].textContent = "Refusee";
-                if (chips[1]) chips[1].textContent = "Refuse";
-                refuseBtn.textContent = "Paiement refuse";
-                refuseBtn.disabled = true;
-                acceptBtn.disabled = true;
-                if (originalVerifyBtn) {
-                  originalVerifyBtn.disabled = true;
-                }
-              } catch (error) {
-                refuseBtn.textContent = "Erreur";
-              }
-            });
-
-            if (originalVerifyBtn && !originalVerifyBtn.dataset.receiptBound) {
-              originalVerifyBtn.dataset.receiptBound = "true";
-              originalVerifyBtn.addEventListener("click", async () => {
-                try {
-                  const token = sessionStorage.getItem("token");
-                  const res = await fetch(`/api/admin/enrollments/${enrollment.id}/verify-payment`, {
-                    headers: token ? { Authorization: `Bearer ${token}` } : {}
-                  });
-                  if (!res.ok) throw new Error("Verification impossible.");
-                  const fresh = await res.json();
-                  enrollment.paymentReceiptUrl = fresh.paymentReceiptUrl;
-                  enrollment.paymentReceiptName = fresh.paymentReceiptName;
-                  enrollment.paymentStatus = fresh.paymentStatus || enrollment.paymentStatus;
-                  enrollment.status = fresh.status || enrollment.status;
-                  refreshReceiptBox(enrollment);
-
-                  if (enrollment.paymentReceiptUrl) {
-                    originalVerifyBtn.textContent = "Verification ok";
-                    acceptBtn.click();
-                  } else {
-                    originalVerifyBtn.textContent = "Recu manquant";
-                  }
-                } catch (error) {
-                  originalVerifyBtn.textContent = "Erreur";
-                }
-              });
-            }
-
-            [originalVerifyBtn, originalDeleteBtn].forEach((button) => {
-              if (!button) return;
-              button.style.display = "none";
-              button.setAttribute("aria-hidden", "true");
-              button.disabled = true;
-            });
-
-            card.appendChild(receiptBox);
-            card.appendChild(actions);
-            card.dataset.receiptDecorated = "true";
-
-            const isAccepted = enrollment.paymentStatus === "Paye" || enrollment.status === "Confirmee";
-            if (isAccepted) {
-              acceptedGrid.appendChild(card);
-            } else {
-              pendingGrid.appendChild(card);
+              el.style.display = "none";
             }
           });
 
-          return true;
-        };
-
-        const styleDemandesStatus = () => {
-          if (window.location.pathname !== "/demandes") return false;
-          const cards = Array.from(document.querySelectorAll("section,article,div")).filter((el) =>
-            (el.textContent || "").includes("Paiement:")
-          );
-          if (!cards.length) return false;
-
-          const makePill = (label, variant) => {
-            const span = document.createElement("span");
-            span.textContent = label;
-            span.style.display = "inline-flex";
-            span.style.alignItems = "center";
-            span.style.gap = "6px";
-            span.style.padding = "6px 12px";
-            span.style.borderRadius = "999px";
-            span.style.fontSize = "12px";
-            span.style.fontWeight = "700";
-            span.style.letterSpacing = "0.04em";
-            span.style.border = "1px solid transparent";
-            if (variant === "confirmed") {
-              span.style.background = "linear-gradient(135deg,#e6f9f0 0%,#d1fae5 45%,#f0fdf4 100%)";
-              span.style.color = "#0f6b3a";
-              span.style.borderColor = "#b7f0d1";
-            } else if (variant === "paid") {
-              span.style.background = "linear-gradient(135deg,#eef2ff 0%,#e0e7ff 45%,#f5f3ff 100%)";
-              span.style.color = "#4338ca";
-              span.style.borderColor = "#c7d2fe";
-            } else if (variant === "receipt") {
-              span.style.background = "linear-gradient(135deg,#fff7ed 0%,#ffedd5 45%,#fef3c7 100%)";
-              span.style.color = "#9a3412";
-              span.style.borderColor = "#fed7aa";
-            } else if (variant === "pending") {
-              span.style.background = "linear-gradient(135deg,#fef9ef 0%,#fdf2d7 45%,#fff7ed 100%)";
-              span.style.color = "#a16207";
-              span.style.borderColor = "#fde68a";
-            } else {
-              span.style.background = "#f8fafc";
-              span.style.color = "#475569";
-              span.style.borderColor = "#e2e8f0";
-            }
-            return span;
-          };
-
-          cards.forEach((card) => {
-            if (card.dataset.statusStyled) return;
-            const lines = Array.from(card.querySelectorAll("p,span,div"));
-            lines.forEach((line) => {
-              const text = (line.textContent || "").trim();
-              if (text === "Confirmee") {
-                line.textContent = "";
-                line.appendChild(makePill("Confirmee", "confirmed"));
-              }
-              if (text === "En attente") {
-                line.textContent = "";
-                line.appendChild(makePill("En attente", "pending"));
-              }
-              if (text.startsWith("Paiement:")) {
-                const value = text.replace("Paiement:", "").trim();
-                line.textContent = "";
-                if (value.toLowerCase().includes("paye")) {
-                  line.appendChild(makePill("Paiement: Paye", "paid"));
-                } else if (value.toLowerCase().includes("recu")) {
-                  line.appendChild(makePill("Paiement: Recu", "receipt"));
-                } else {
-                  line.appendChild(makePill(`Paiement: ${value || "En attente"}`, "pending"));
-                }
-              }
-            });
-            card.dataset.statusStyled = "true";
-          });
-
-          return true;
-        };
-
-        const hookButtons = () => {
-          document.querySelectorAll("button").forEach((btn) => {
-            if (/s'inscrire/i.test(btn.textContent || "")) {
-              btn.addEventListener("click", () => {
-                setTimeout(insertAfterSuccess, 600);
-              });
+          // Masquer le bouton 'Demandes' dans la bottom navigation mobile
+          document.querySelectorAll('nav a, nav button').forEach((el) => {
+            const txt = (el.textContent || "").trim().toLowerCase();
+            if (txt === "demandes") {
+              el.style.display = "none";
             }
           });
-        };
 
-        const hookValidateButton = () => {
-          const buttons = Array.from(document.querySelectorAll("button"));
+          // 2. Effacer les bandeaux encombrants 'Pays d'inscription'
+          document.querySelectorAll("div, p, span").forEach((el) => {
+            const txt = (el.textContent || "").trim();
+            if (txt.includes("Pays d'inscription:") || txt.includes("Tarifs en EUR") || txt.includes("Tarifs en TND")) {
+              if (el.classList.contains("rounded-full") || el.classList.contains("inline-flex")) {
+                el.style.display = "none";
+              }
+            }
+          });
+
+          // 3. Remplacer les mentions de devis par inscription WhatsApp
+          document.querySelectorAll("p, span, div, li").forEach((el) => {
+            const txt = (el.textContent || "").trim();
+            if (txt.includes("Vous recevrez alors le devis")) {
+              el.textContent = "Nos formations sont réservables directement en ligne auprès de nos conseillères sur WhatsApp.";
+            }
+            if (txt.includes("Paiement par virement ou Visa")) {
+              el.textContent = "Inscription & réservation directe sur WhatsApp";
+            }
+          });
+
+          // 4. Transformer TOUS les boutons 'S'inscrire' en boutons WhatsApp directs
+          const buttons = Array.from(document.querySelectorAll("button, a.btn-secondary, a.btn-primary"));
           buttons.forEach((btn) => {
-            const label = (btn.textContent || "").toLowerCase();
-            if (!label.includes("valider l'inscription")) return;
-            if (btn.dataset.paymentModalBound) return;
-            btn.dataset.paymentModalBound = "true";
-            btn.addEventListener("click", () => {
-              setTimeout(() => {
-                showPaymentModal();
-              }, 700);
-            });
+            const label = (btn.textContent || "").trim().toLowerCase();
+            // Cibler les boutons d'inscription aux formations
+            if (label === "s'inscrire" || label.includes("s'inscrire") && !label.includes("whatsapp")) {
+              if (btn.dataset.waConverted === "true") return;
+
+              // Trouver le titre de la formation dans la carte parente
+              const card = btn.closest("article, .dashboard-card, div.rounded-\\[28px\\], div.rounded-\\[24px\\]");
+              let trainingTitle = "Formation Esthétique";
+              if (card) {
+                const titleEl = card.querySelector("h2, h3, h4, p.text-2xl, p.text-xl, p.font-semibold");
+                if (titleEl && titleEl.textContent) {
+                  trainingTitle = titleEl.textContent.trim();
+                }
+              }
+
+              const waUrl = "https://wa.me/33663111415?text=" + encodeURIComponent("Bonjour, je souhaite m'inscrire à la formation : " + trainingTitle);
+
+              // Rediriger au clic
+              btn.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                window.open(waUrl, "_blank", "noopener,noreferrer");
+              };
+
+              // Si c'est un lien <a>, modifier le href
+              if (btn.tagName === "A") {
+                btn.setAttribute("href", waUrl);
+                btn.setAttribute("target", "_blank");
+                btn.setAttribute("rel", "noopener noreferrer");
+              }
+
+              // Mettre à jour le texte du bouton avec style WhatsApp E-commerce
+              btn.innerHTML = `
+                <span style="display:inline-flex;align-items:center;gap:8px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/>
+                  </svg>
+                  <span>S'inscrire via WhatsApp</span>
+                </span>
+              `;
+              btn.dataset.waConverted = "true";
+            }
           });
+
+          // 5. Fermer tout modal résiduel d'inscription en ligne
+          const modalBackdrop = document.querySelector(".fixed.inset-0.z-\\[60\\]");
+          if (modalBackdrop) {
+            modalBackdrop.remove();
+          }
         };
 
-        const tryInsert = () => {
-          wrapFetchOnce();
-          hookButtons();
-          hookValidateButton();
-          injectDemandesUploader();
-          decorateAdminPayments();
-          styleDemandesStatus();
-        };
-
-        const observer = new MutationObserver(tryInsert);
+        const observer = new MutationObserver(cleanAndConvertWhatsApp);
         observer.observe(document.documentElement, { childList: true, subtree: true });
-        wrapFetchOnce();
-        window.addEventListener("load", tryInsert);
-        setInterval(tryInsert, 1200);
+        window.addEventListener("load", cleanAndConvertWhatsApp);
+        setInterval(cleanAndConvertWhatsApp, 500);
       })();
     </script>
       <script>
@@ -1663,11 +1048,11 @@
             </div>
             <div class="trust-item">
               <div class="trust-icon-box">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
               </div>
               <div class="trust-text">
-                <h4>Règlement Flexible</h4>
-                <p>Virement bancaire, Visa & facilités</p>
+                <h4>Réservation Rapide</h4>
+                <p>Conseil personnalisé & sans attente</p>
               </div>
             </div>
             <div class="trust-item">
