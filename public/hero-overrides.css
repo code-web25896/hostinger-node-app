@@ -2212,3 +2212,13 @@ article:has(.atelier-gallery):not(#ateliers-hero2 *),
     width: 100% !important;
   }
 }
+
+/* -- Sécurité affichage Header sur toutes les pages -------------------- */
+header, #root header {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 50 !important;
+}

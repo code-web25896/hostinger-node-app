@@ -17,9 +17,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261021-04"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261021-04">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20261021-04">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261021-05"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261021-05">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20261021-05">
   </head>
   <body>
     <div id="root"></div>
@@ -1291,19 +1291,35 @@
 
           if (document.getElementById("about-page-injected")) return true;
 
-          // Trouver ou créer le container a-propos-root
+          // Attendre que le header existe dans le DOM avant de monter la page
+          const header = document.querySelector("header");
+          if (!header) return false;
+          header.style.display = "";
+
+          // Trouver ou créer le container a-propos-root SANS JAMAIS toucher au header
           let container = document.getElementById("a-propos-root");
           if (!container) {
+            container = document.createElement("div");
+            container.id = "a-propos-root";
             const footer = document.querySelector("footer");
             if (footer && footer.parentNode) {
-              container = document.createElement("div");
-              container.id = "a-propos-root";
               footer.parentNode.insertBefore(container, footer);
-            } else {
-              container = document.querySelector("#root > div") || document.body;
+            } else if (header.parentNode) {
+              header.parentNode.insertBefore(container, header.nextSibling);
             }
           }
           if (!container) return false;
+
+          // Sécurité absolue : si container n'est pas strictement a-propos-root, cibler l'intérieur
+          if (container.id !== "a-propos-root") {
+            let child = container.querySelector("#a-propos-root");
+            if (!child) {
+              child = document.createElement("div");
+              child.id = "a-propos-root";
+              container.appendChild(child);
+            }
+            container = child;
+          }
 
           // Masquer les blocs de la home s'ils sont présents
           document.querySelectorAll("#ateliers-hero2, #nos-formations-ecom, #presentation-video").forEach(el => {
