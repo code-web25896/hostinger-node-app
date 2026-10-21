@@ -17,9 +17,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261021-01"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261021-01">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20261021-01">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261021-02"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261021-02">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20261021-02">
   </head>
   <body>
     <div id="root"></div>
@@ -227,93 +227,114 @@
         const buildFooterMenu = () => {
           const footer = document.querySelector("footer");
           if (!footer) return false;
-          if (footer.dataset.footerRebuilt === "true") return true;
-          const menuItems = [
-            { label: "Accueil", href: "/" },
-            { label: "Formations", href: "/formations" },
-            { label: "Actualites", href: "/actualites" },
-            { label: "Recherche", href: "/recherche" }
-          ];
-          const menuLinks = menuItems
-            .map(
-              (item) => `
-                <a href="${item.href}" style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;background:rgba(255,255,255,0.8);border:1px solid #eadfce;color:#475569;font-size:14px;font-weight:600;text-decoration:none;">
-                  <span style="display:flex;height:38px;width:38px;align-items:center;justify-content:center;border-radius:999px;background:#fbf2e2;color:#caa56a;flex-shrink:0;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="height:18px;width:18px;">
-                      <path d="M4 12h16"></path>
-                      <path d="M12 4v16"></path>
-                    </svg>
-                  </span>
-                  <span>${item.label}</span>
-                </a>
-              `
-            )
-            .join("");
+          if (footer.dataset.footerRebuilt === "v3") return true;
 
-          const footerInner = footer.querySelector(".mx-auto");
-          if (!footerInner) return false;
+          // Rebuild footer completely — Stripe-style minimal
+          footer.style.background = "#0F1730";
+          footer.style.borderTop = "none";
+          footer.style.marginTop = "0";
+          footer.style.padding = "0";
+          footer.style.backdropFilter = "none";
+          footer.style.borderRadius = "0";
+
+          const footerInner = footer.querySelector(".mx-auto") || footer;
 
           footerInner.innerHTML = `
-            <div>
-              <a href="/" style="display:inline-flex;align-items:center;gap:12px;text-decoration:none;">
-                <span style="overflow:hidden;border-radius:999px;border:1px solid #eadfce;background:rgba(255,255,255,0.85);box-shadow:0 4px 16px rgba(15,23,42,0.06);">
-                  <img src="/logo.jpeg" alt="Academie Internationale de Beaute" style="height:56px;width:56px;object-fit:cover;display:block;" />
-                </span>
-                <span style="min-width:0;">
-                  <span style="display:block;font-size:34px;line-height:1;color:#caa56a;font-weight:500;">L'Academie</span>
-                  <span style="display:block;font-size:10px;font-weight:600;letter-spacing:0.28em;text-transform:uppercase;color:#64748b;margin-top:6px;">Internationale de beaute</span>
-                </span>
-              </a>
-              <p style="margin-top:16px;max-width:340px;font-size:14px;line-height:1.9;color:#475569;">
-                Academie specialisee en esthetique avancee, soins capillaires, technologies de peau et parcours professionnels en France.
-              </p>
-            </div>
-            <div>
-              <h4 class="text-xl font-semibold text-espresso md:text-2xl">Contact</h4>
-              <div class="mt-4" style="display:grid;gap:14px;">
-                <div style="display:flex;align-items:center;gap:14px;border-radius:18px;background:rgba(255,255,255,0.86);padding:14px 16px;border:1px solid #eadfce;box-shadow:0 10px 24px rgba(15,23,48,0.05);">
-                  <span style="display:flex;height:42px;width:42px;align-items:center;justify-content:center;border-radius:999px;background:#fbf2e2;color:#caa56a;flex-shrink:0;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="height:20px;width:20px;">
-                      <path d="M12 21s-6-5.33-6-11a6 6 0 1 1 12 0c0 5.67-6 11-6 11Z"></path>
-                      <circle cx="12" cy="10" r="2.5"></circle>
-                    </svg>
-                  </span>
-                  <span style="font-size:14px;font-weight:600;color:#475569;">FRANCE - 75002 PARIS</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:14px;border-radius:18px;background:rgba(255,255,255,0.86);padding:14px 16px;border:1px solid #eadfce;box-shadow:0 10px 24px rgba(15,23,48,0.05);">
-                  <span style="display:flex;height:42px;width:42px;align-items:center;justify-content:center;border-radius:999px;background:#fbf2e2;color:#caa56a;flex-shrink:0;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="height:20px;width:20px;">
-                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07A19.5 19.5 0 0 1 5.15 12.8 19.86 19.86 0 0 1 2.08 4.09 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.63 2.61a2 2 0 0 1-.45 2.11L8 9.91a16 16 0 0 0 6.09 6.09l1.47-1.24a2 2 0 0 1 2.11-.45c.83.3 1.71.51 2.61.63A2 2 0 0 1 22 16.92Z"></path>
-                    </svg>
-                  </span>
-                  <a href="tel:+33663111415" style="font-size:14px;font-weight:600;color:#475569;text-decoration:none;">+33 6 63 11 14 15</a>
-                </div>
-                <div style="display:flex;align-items:center;gap:14px;border-radius:18px;background:rgba(255,255,255,0.86);padding:14px 16px;border:1px solid #eadfce;box-shadow:0 10px 24px rgba(15,23,48,0.05);">
-                  <span style="display:flex;height:42px;width:42px;align-items:center;justify-content:center;border-radius:999px;background:#fbf2e2;color:#caa56a;flex-shrink:0;">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="height:20px;width:20px;">
-                      <rect x="3" y="5" width="18" height="14" rx="3"></rect>
-                      <path d="m6 8 6 5 6-5"></path>
-                    </svg>
-                  </span>
-                  <a href="mailto:contact@academie.tn" style="font-size:14px;font-weight:600;color:#475569;text-decoration:none;">contact@academie.tn</a>
+            <!-- top row -->
+            <div style="max-width:1200px;margin:0 auto;padding:52px 24px 36px;display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;align-items:start;">
+
+              <!-- Brand col -->
+              <div>
+                <a href="/" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:18px;">
+                  <img src="/logo.jpeg" alt="Académie" style="height:44px;width:44px;border-radius:999px;object-fit:cover;border:2px solid rgba(197,160,89,0.4);">
+                  <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:1.25rem;font-weight:700;color:#F7EAD0;letter-spacing:-0.01em;">L'Académie</span>
+                </a>
+                <p style="font-size:13px;line-height:1.8;color:rgba(247,234,208,0.55);max-width:260px;">Formation esthétique certifiante d'excellence à Tunis Belvédère — en présentiel & en ligne.</p>
+                <div style="margin-top:20px;display:flex;gap:10px;">
+                  <a href="https://wa.me/33663111415" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;background:rgba(37,211,102,0.15);border:1px solid rgba(37,211,102,0.3);color:#25D366;text-decoration:none;transition:all 0.2s;" title="WhatsApp">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
+                  </a>
+                  <a href="tel:+33663111415" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;background:rgba(197,160,89,0.12);border:1px solid rgba(197,160,89,0.25);color:#C5A059;text-decoration:none;" title="Téléphone">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07A19.5 19.5 0 0 1 5.15 12.8 19.86 19.86 0 0 1 2.08 4.09 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.63 2.61a2 2 0 0 1-.45 2.11L8 9.91a16 16 0 0 0 6.09 6.09l1.47-1.24a2 2 0 0 1 2.11-.45c.83.3 1.71.51 2.61.63A2 2 0 0 1 22 16.92Z"/></svg>
+                  </a>
+                  <a href="mailto:contact@academie.tn" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:999px;background:rgba(197,160,89,0.12);border:1px solid rgba(197,160,89,0.25);color:#C5A059;text-decoration:none;" title="Email">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m6 8 6 5 6-5"/></svg>
+                  </a>
                 </div>
               </div>
-              <div class="ecom-payment-badges">
-                <span class="ecom-payment-pill">💳 Visa / CB</span>
-                <span class="ecom-payment-pill">💳 Mastercard</span>
-                <span class="ecom-payment-pill">🏦 Attijari Bank</span>
-                <span class="ecom-payment-pill">🔒 100% Sécurisé</span>
+
+              <!-- Nav col 1 -->
+              <div>
+                <p style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(247,234,208,0.35);margin-bottom:16px;">Navigation</p>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                  <a href="/" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12L12 4l9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>Accueil
+                  </a>
+                  <a href="/formations" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m2 8 10-5 10 5-10 5-10-5Z"/><path d="m6 10.5 6 3 6-3"/><path d="M6 14.5 12 18l6-3.5"/></svg>Formations
+                  </a>
+                  <a href="/actualites" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>Actualités
+                  </a>
+                  <a href="/a-propos" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.8-3.2 4.55-4.8 8-4.8s6.2 1.6 8 4.8"/></svg>À Propos
+                  </a>
+                  <a href="/recherche" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Recherche
+                  </a>
+                </div>
+              </div>
+
+              <!-- Contact col -->
+              <div>
+                <p style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(247,234,208,0.35);margin-bottom:16px;">Contact</p>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                  <a href="tel:+33663111415" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07A19.5 19.5 0 0 1 5.15 12.8 19.86 19.86 0 0 1 2.08 4.09 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.63 2.61a2 2 0 0 1-.45 2.11L8 9.91a16 16 0 0 0 6.09 6.09l1.47-1.24a2 2 0 0 1 2.11-.45c.83.3 1.71.51 2.61.63A2 2 0 0 1 22 16.92Z"/></svg>+33 6 63 11 14 15
+                  </a>
+                  <a href="mailto:contact@academie.tn" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m6 8 6 5 6-5"/></svg>contact@academie.tn
+                  </a>
+                  <span style="font-size:14px;color:rgba(247,234,208,0.65);display:flex;align-items:center;gap:8px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-6-5.33-6-11a6 6 0 1 1 12 0c0 5.67-6 11-6 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>France — 75002 Paris
+                  </span>
+                  <a href="https://wa.me/33663111415?text=Bonjour%2C%20je%20souhaite%20un%20renseignement." target="_blank" rel="noopener" style="margin-top:4px;display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);color:#25D366;font-size:13px;font-weight:700;text-decoration:none;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
+                    WhatsApp
+                  </a>
+                </div>
+              </div>
+
+              <!-- Formations col -->
+              <div>
+                <p style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(247,234,208,0.35);margin-bottom:16px;">Nos Spécialités</p>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                  ${["Épilation Laser","HIFU Lifting","Hyaluron Pen","Hydrafacial","Radiofréquence","Micropigmentation","Soins Capillaires"].map(f =>
+                    `<a href="/formations" style="font-size:14px;color:rgba(247,234,208,0.65);text-decoration:none;display:flex;align-items:center;gap:8px;" onmouseover="this.style.color='#C5A059'" onmouseout="this.style.color='rgba(247,234,208,0.65)'">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>${f}
+                    </a>`
+                  ).join("")}
+                </div>
               </div>
             </div>
-            <div>
-              <h4 class="text-xl font-semibold text-espresso md:text-2xl">Menu plateforme</h4>
-              <div class="mt-4" style="display:grid;gap:12px;">
-                ${menuLinks}
+
+            <!-- Divider -->
+            <div style="max-width:1200px;margin:0 auto;padding:0 24px;">
+              <div style="height:1px;background:rgba(197,160,89,0.12);"></div>
+            </div>
+
+            <!-- Bottom bar -->
+            <div style="max-width:1200px;margin:0 auto;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+              <p style="font-size:12px;color:rgba(247,234,208,0.3);margin:0;">© ${new Date().getFullYear()} Académie Internationale de Beauté. Tous droits réservés.</p>
+              <div style="display:flex;gap:16px;flex-wrap:wrap;">
+                ${["#microneedling","#esthetique","#hydrafacial","#laser","#tunis"].map(tag =>
+                  `<span style="font-size:11px;color:rgba(197,160,89,0.4);">${tag}</span>`
+                ).join("")}
               </div>
             </div>
           `;
 
-          footer.dataset.footerRebuilt = "true";
+          footer.dataset.footerRebuilt = "v3";
           return true;
         };
 
@@ -330,6 +351,7 @@
         window.addEventListener("load", tryBuildFooterMenu);
       })();
     </script>
+
     <script>
       (function () {
         const buildCard = (name, img, pdf, role, altImg) => `
@@ -530,56 +552,106 @@
     </script>
       <script>
         (function () {
-          const buildVideoSection = () => {
-            if (document.getElementById("presentation-video")) return false;
-            const headings = Array.from(document.querySelectorAll("h1,h2,h3,h4"));
-            const presentationHeading = headings.find((h) => {
-              const text = (h.textContent || "").trim().toLowerCase();
-              return text.includes("presentation") && text.includes("centre");
-            });
-            const ateliersHeading = headings.find((h) => {
-              const text = (h.textContent || "").trim().toLowerCase();
-              return text.includes("nos ateliers") || text === "ateliers";
-            });
+          /* ── HERO 2 : Nos Ateliers — Section animée premium ──────────── */
+          const buildAteliersHero = () => {
+            if (document.getElementById("ateliers-hero2")) return false;
 
-            const presentationSection = presentationHeading ? presentationHeading.closest("section") : null;
-            const ateliersSection = ateliersHeading ? ateliersHeading.closest("section") : null;
-            const anchorSection = ateliersSection || presentationSection;
-            if (!anchorSection) return false;
+            const ateliersSection = Array.from(document.querySelectorAll("section")).find((s) => {
+              const h = s.querySelector("h2");
+              return h && (h.textContent || "").trim().toLowerCase().includes("nos ateliers");
+            });
+            if (!ateliersSection) return false;
 
-            const wrapper = document.createElement("div");
-            wrapper.id = "presentation-video";
-            wrapper.style.marginTop = "18px";
-            wrapper.innerHTML = `
-              <div style="display:flex;justify-content:center;">
-                <div style="width:min(760px,100%);">
-                  <div style="border-radius:28px;overflow:hidden;border:1px solid #ead9c0;box-shadow:0 20px 50px rgba(15,23,42,0.12);background:#fff;">
-                    <video id="centre-video" muted autoplay loop playsinline controls style="width:100%;height:auto;display:block;background:#000;">
-                      <source src="/videositeorigine.mp4" type="video/mp4" />
-                      <source src="/videopres.mp4" type="video/mp4" />
-                    </video>
+            // Insert BEFORE the ateliers section
+            const hero2 = document.createElement("div");
+            hero2.id = "ateliers-hero2";
+
+            const ATELIER_IMGS = [
+              { src: "/atelier1.jpeg", label: "Soin Visage Expert" },
+              { src: "/atelier2.jpeg", label: "Techniques Laser" },
+              { src: "/atelier3.jpeg", label: "Hydrafacial Pro" },
+              { src: "/atelier4.jpeg", label: "Formation Pratique" }
+            ];
+
+            hero2.innerHTML = `
+              <div class="ateliers-hero2-wrap">
+                <!-- LEFT: Text & CTA -->
+                <div class="ateliers-hero2-content">
+                  <span class="ateliers-hero2-badge">NOS ATELIERS</span>
+                  <h2 class="ateliers-hero2-title">L'art de l'esthétique<br><em>en live</em></h2>
+                  <p class="ateliers-hero2-desc">Nos ateliers pratiques accueillent des petits groupes d'expertes pour maîtriser les dernières techniques certifiantes dans un environnement haut de gamme.</p>
+                  <div class="ateliers-hero2-features">
+                    <div class="ah2-feat"><span class="ah2-feat-icon">👥</span><div><strong>Petits Groupes</strong><span>Max 6 apprenantes par atelier</span></div></div>
+                    <div class="ah2-feat"><span class="ah2-feat-icon">🏆</span><div><strong>Instructrices Certifiées</strong><span>Formatrices internationales</span></div></div>
+                    <div class="ah2-feat"><span class="ah2-feat-icon">📜</span><div><strong>Certificat Remis</strong><span>Attestation officielle à chaque session</span></div></div>
                   </div>
-                  <p style="margin-top:10px;font-size:12px;color:#8a7f72;text-align:center;">Cliquez sur le haut-parleur pour activer le son si besoin.</p>
+                  <a href="https://wa.me/33663111415?text=Bonjour%2C%20je%20souhaite%20réserver%20une%20place%20en%20atelier." target="_blank" rel="noopener noreferrer" class="ateliers-hero2-cta">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
+                    <span>Réserver ma place</span>
+                  </a>
+                </div>
+
+                <!-- RIGHT: Animated gallery grid -->
+                <div class="ateliers-hero2-gallery">
+                  <div class="ah2-grid">
+                    ${ATELIER_IMGS.map((img, i) => `
+                      <div class="ah2-card ah2-card-${i + 1}">
+                        <img src="${img.src}" alt="${img.label}" loading="lazy" onerror="this.src='/logo.jpeg'">
+                        <div class="ah2-card-label">${img.label}</div>
+                      </div>
+                    `).join("")}
+                    <!-- Floating badge -->
+                    <div class="ah2-floating-badge">
+                      <div class="ah2-badge-icon">✨</div>
+                      <div>
+                        <div style="font-weight:800;font-size:0.85rem;color:#0F1730;">200+</div>
+                        <div style="font-size:0.7rem;color:#6B7280;">Diplômées</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Video section — Design téléphone portrait premium -->
+              <div class="ateliers-video-section" id="presentation-video">
+                <div class="ateliers-video-inner">
+                  <div class="ateliers-video-text">
+                    <span class="ateliers-hero2-badge">ACADÉMIE EN LIVE</span>
+                    <h3 class="ateliers-video-title">Plongez dans<br><em>notre univers</em></h3>
+                    <p style="color:#6B7280;font-size:0.95rem;line-height:1.7;margin:12px 0 0;">Découvrez l'ambiance de nos salles de formation et nos démonstrations en situation réelle.</p>
+                  </div>
+                  <div class="ateliers-phone-frame">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                      <video id="centre-video" muted autoplay loop playsinline controls style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;">
+                        <source src="/videositeorigine.mp4" type="video/mp4">
+                        <source src="/videopres.mp4" type="video/mp4">
+                      </video>
+                    </div>
+                    <div class="phone-home-bar"></div>
+                  </div>
                 </div>
               </div>
             `;
-            anchorSection.appendChild(wrapper);
+
+            ateliersSection.parentNode.insertBefore(hero2, ateliersSection);
             return true;
           };
 
-          const tryInsert = () => {
-            if (buildVideoSection()) {
+          const tryBuild = () => {
+            if (buildAteliersHero()) {
               observer.disconnect();
               clearInterval(timer);
             }
           };
 
-          const observer = new MutationObserver(tryInsert);
+          const observer = new MutationObserver(tryBuild);
           observer.observe(document.documentElement, { childList: true, subtree: true });
-          const timer = setInterval(tryInsert, 400);
-          window.addEventListener("load", tryInsert);
+          const timer = setInterval(tryBuild, 400);
+          window.addEventListener("load", tryBuild);
         })();
       </script>
+
       <script>
         (function () {
           const mapping = {
