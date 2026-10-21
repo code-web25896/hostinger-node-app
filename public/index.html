@@ -17,9 +17,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261021-03"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261021-03">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20261021-03">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261021-04"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261021-04">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20261021-04">
   </head>
   <body>
     <div id="root"></div>
@@ -1222,7 +1222,7 @@
             for (const badge of SECTION_BADGES) {
               if (txt === badge.toLowerCase()) {
                 const article = el.closest("article, section");
-                if (article) article.style.display = "none";
+                if (article && !article.closest("#about-page-injected")) article.style.display = "none";
               }
             }
           });
@@ -1230,11 +1230,11 @@
           // Masquer aussi les cartes des formatrices et galerie étudiants sur la home
           document.querySelectorAll("img[src*='formatrice']").forEach((img) => {
             const section = img.closest("section");
-            if (section) section.style.display = "none";
+            if (section && !section.closest("#about-page-injected")) section.style.display = "none";
           });
           document.querySelectorAll(".students-gallery, .students-card").forEach((el) => {
             const section = el.closest("section");
-            if (section) section.style.display = "none";
+            if (section && !section.closest("#about-page-injected")) section.style.display = "none";
           });
 
           // Masquer résidu Devise / bouton Connexion
@@ -1262,12 +1262,6 @@
           { label: "Soins de Cuir Chevelu", color: "#f0fdf4", text: "#14532d", icon: "🌸" }
         ];
 
-        const TESTIMONIALS = [
-          { name: "Amira S.", role: "Hydrafacial", text: "La formation est structurée, très classe et surtout directement applicable en institut.", avatar: "A" },
-          { name: "Lina M.", role: "Esthétique Avancée", text: "J'ai retrouvé une vraie exigence professionnelle et un suivi sérieux de la directrice.", avatar: "L" },
-          { name: "Yasmine B.", role: "Parcours Expert", text: "Le planning, les documents et le stage sont clairs. L'expérience élève est vraiment fluide.", avatar: "Y" }
-        ];
-
         const FORMATRICES = [
           { name: "Madame Gharbi", role: "Formatrice Internationale Esthétique", img: "/formatrice-gharbi.jpeg", cv: "/formatrice-gharbi.pdf" },
           { name: "Madame Oumayma", role: "Formatrice Experte Technologies & Soins", img: "/formatrice-oumayma.jpg", cv: "/cv-oumayma.pdf" }
@@ -1287,7 +1281,8 @@
         ];
 
         const buildAboutPage = () => {
-          const isAbout = window.location.pathname.replace(/\/$/, "") === "/a-propos";
+          const pathname = (window.location.pathname || "").replace(/\/$/, "");
+          const isAbout = pathname === "/a-propos";
           if (!isAbout) {
             const existing = document.getElementById("about-page-injected");
             if (existing) existing.remove();
@@ -1296,17 +1291,23 @@
 
           if (document.getElementById("about-page-injected")) return true;
 
-          // Cible prioritaire : le container natif créé par le router React, ou fallback #root
-          const container = document.getElementById("a-propos-root") ||
-                            document.querySelector("#root > div > div:nth-child(3)") ||
-                            document.querySelector("#root > div");
+          // Trouver ou créer le container a-propos-root
+          let container = document.getElementById("a-propos-root");
+          if (!container) {
+            const footer = document.querySelector("footer");
+            if (footer && footer.parentNode) {
+              container = document.createElement("div");
+              container.id = "a-propos-root";
+              footer.parentNode.insertBefore(container, footer);
+            } else {
+              container = document.querySelector("#root > div") || document.body;
+            }
+          }
           if (!container) return false;
 
-          // Masquer tout contenu home ou résiduel dans le conteneur principal
-          document.querySelectorAll("#root > div > div:not(header):not(footer):not(#a-propos-root)").forEach(el => {
-            if (el.id !== "about-page-injected" && !el.contains(container)) {
-              el.style.display = "none";
-            }
+          // Masquer les blocs de la home s'ils sont présents
+          document.querySelectorAll("#ateliers-hero2, #nos-formations-ecom, #presentation-video").forEach(el => {
+            el.style.display = "none";
           });
 
           const page = document.createElement("div");
