@@ -2845,3 +2845,142 @@ div[class*='grid'] article img {
   line-height: 1.55;
   margin: 0;
 }
+
+/* ==========================================================================
+   18. OPTIMISATION MENU BAS MOBILE & HEADER MOBILE
+   ========================================================================== */
+
+/* 1. Supprimer définitivement le bouton formulaire contact flottant */
+#floating-enrollment-button,
+button[aria-label*="formulaire d'inscription"],
+button[aria-label*="Aller au formulaire"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 2. Header Mobile : supprimer l'icône menu burger, laisser uniquement l'icône téléphone */
+@media (max-width: 1023px) {
+  header button[aria-label="Menu principal"],
+  header button[aria-label*="Menu principal"],
+  header button:has(svg path[d*="M4 7h16"]),
+  header div[class*="lg:hidden"] button[aria-label*="Menu"] {
+    display: none !important;
+  }
+
+  /* Style propre et élégant de l'icône téléphone dans le header mobile */
+  header button[aria-label*="telephone"],
+  header button[aria-label*="Contact telephone"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 999px !important;
+    background: #ffffff !important;
+    border: 1.5px solid rgba(197, 160, 89, 0.4) !important;
+    color: #9f7831 !important;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06) !important;
+  }
+
+  header button[aria-label*="telephone"] svg,
+  header button[aria-label*="Contact telephone"] svg {
+    width: 18px !important;
+    height: 18px !important;
+    color: #C5A059 !important;
+  }
+}
+
+/* 3. Bouton WhatsApp flottant positionné au-dessus du menu bas pour ne rien chevaucher */
+@media (max-width: 768px) {
+  #floating-whatsapp-btn {
+    bottom: 74px !important;
+    right: 14px !important;
+    padding: 8px 14px !important;
+    border-radius: 999px !important;
+    z-index: 9990 !important;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.35) !important;
+  }
+}
+
+/* 4. Amélioration Haute Gamme du Menu Bas (Bottom Navigation Bar) */
+@media (max-width: 768px) {
+  nav.fixed.bottom-0 {
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(28px) !important;
+    -webkit-backdrop-filter: blur(28px) !important;
+    border-top: 1px solid rgba(197, 160, 89, 0.3) !important;
+    box-shadow: 0 -8px 30px rgba(15, 23, 42, 0.08), 0 -1px 0 rgba(255, 255, 255, 0.95) inset !important;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)) 4px !important;
+    z-index: 9999 !important;
+  }
+
+  nav.fixed.bottom-0 > div {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 2px !important;
+    align-items: center !important;
+    max-width: 480px !important;
+    margin: 0 auto !important;
+  }
+
+  nav.fixed.bottom-0 a,
+  nav.fixed.bottom-0 button {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 5px 2px !important;
+    border-radius: 14px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
+    text-decoration: none !important;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  nav.fixed.bottom-0 a span.rounded-full,
+  nav.fixed.bottom-0 button span.rounded-full {
+    width: 34px !important;
+    height: 34px !important;
+    margin-bottom: 2px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.22s ease !important;
+    border-radius: 999px !important;
+  }
+
+  nav.fixed.bottom-0 a svg,
+  nav.fixed.bottom-0 button svg {
+    width: 17px !important;
+    height: 17px !important;
+  }
+
+  /* Style Élément Actif */
+  nav.fixed.bottom-0 a[class*="text-gold"],
+  nav.fixed.bottom-0 a[class*="text-[#8e6822]"],
+  nav.fixed.bottom-0 a[class*="bg-[rgba(197,160,89"] {
+    color: #8e6822 !important;
+    background: rgba(197, 160, 89, 0.12) !important;
+  }
+
+  nav.fixed.bottom-0 a[class*="text-gold"] span.rounded-full,
+  nav.fixed.bottom-0 a[class*="text-[#8e6822]"] span.rounded-full,
+  nav.fixed.bottom-0 a[class*="bg-[rgba(197,160,89"] span.rounded-full {
+    background: #C5A059 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(197, 160, 89, 0.4) !important;
+    transform: translateY(-1px) scale(1.04) !important;
+  }
+
+  /* Style Élément Inactif */
+  nav.fixed.bottom-0 a:not([class*="text-gold"]):not([class*="bg-[rgba(197,160,89"]):not([class*="text-[#8e6822]"]) {
+    color: #64748b !important;
+  }
+
+  nav.fixed.bottom-0 a:not([class*="text-gold"]):not([class*="bg-[rgba(197,160,89"]):not([class*="text-[#8e6822]"]) span.rounded-full {
+    background: #faf6f0 !important;
+    color: #64748b !important;
+  }
+}
