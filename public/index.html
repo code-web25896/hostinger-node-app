@@ -17,9 +17,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261026-01"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261026-01">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20261026-01">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261026-02"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261026-02">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20261026-02">
   </head>
   <body>
     <div id="root"></div>
@@ -1197,26 +1197,7 @@
           `).join("");
 
           heroSec.innerHTML = `
-            <!-- Header Text & CTAs -->
-            <div class="hero-anim-header">
-              <span class="hero-anim-badge">✦ IMMERSION & FORMATIONS CERTIFIANTES ✦</span>
-              <h1 class="hero-anim-title">L'Art de l'Esthétique <em>en Immersion Réelle</em></h1>
-              <p class="hero-anim-subtitle">
-                Ateliers pratiques sur modèles réels, cursus d'élite et certifications internationales reconnues. Rejoignez nos promotions diplômées à Tunis Belvédère.
-              </p>
-              <div class="hero-anim-actions">
-                <a href="/formations" class="hero-anim-btn-primary">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m2 8 10-5 10 5-10 5-10-5Z"/><path d="m6 10.5 6 3 6-3"/><path d="M6 14.5 12 18l6-3.5"/></svg>
-                  <span>Découvrir nos 10 Formations</span>
-                </a>
-                <a href="https://wa.me/21695466836?text=Bonjour%2C%20je%20souhaite%20m'inscrire%20à%20l'Académie." target="_blank" rel="noopener noreferrer" class="hero-anim-btn-wa">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.825z"/></svg>
-                  <span>WhatsApp : +216 95 466 836</span>
-                </a>
-              </div>
-            </div>
-
-            <!-- Grand Slider Central -->
+            <!-- Grand Slider Central Animé -->
             <div class="hero-slider-wrap" id="hero-main-slider">
               ${slidesHtml}
               <div class="hero-slider-dots">
@@ -1243,10 +1224,19 @@
             </div>
           `;
 
-          if (showcaseSection) {
-            showcaseSection.parentNode.insertBefore(heroSec, showcaseSection);
+          const oldHero = document.querySelector("section.hero, .hero");
+          const showcase = document.getElementById("formations-showcase-section");
+          const header = document.querySelector("header");
+
+          if (oldHero && oldHero.parentNode) {
+            oldHero.parentNode.insertBefore(heroSec, oldHero);
+            oldHero.remove();
+          } else if (showcase && showcase.parentNode) {
+            showcase.parentNode.insertBefore(heroSec, showcase);
+          } else if (header && header.parentNode) {
+            header.parentNode.insertBefore(heroSec, header.nextSibling);
           } else {
-            targetParent.prepend(heroSec);
+            targetParent.appendChild(heroSec);
           }
 
           // Slider Logic
