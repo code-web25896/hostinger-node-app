@@ -1,3 +1,13 @@
+
+/* MASQUER L'ANCIEN HERO ET SES CONTENUS (remplacé par la section animée) */
+section.hero, .hero, .hero-grid {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
 /* ==========================================================================
    ACADÃMIE INTERNATIONALE DE BEAUTÃ - STYLES PRESTIGE HAUTE DÃFINITION
    Harmonisation officielle avec la charte du logo (Bleu Nuit & Or Noble)
@@ -2982,5 +2992,363 @@ button[aria-label*="Aller au formulaire"] {
   nav.fixed.bottom-0 a:not([class*="text-gold"]):not([class*="bg-[rgba(197,160,89"]):not([class*="text-[#8e6822]"]) span.rounded-full {
     background: #faf6f0 !important;
     color: #64748b !important;
+  }
+}
+
+
+/* ==========================================================================
+   19. NOUVELLE SECTION HERO ANIMÉE AVEC IMAGES RÉELLES DE L'ACADÉMIE
+   ========================================================================== */
+
+#hero-animated-showcase {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto 30px auto;
+  padding: 18px 16px 24px 16px;
+  box-sizing: border-box;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+.hero-anim-header {
+  text-align: center;
+  max-width: 860px;
+  margin: 0 auto 28px auto;
+}
+
+.hero-anim-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  border-radius: 999px;
+  background: rgba(197, 160, 89, 0.12);
+  border: 1px solid rgba(197, 160, 89, 0.35);
+  color: #9f7831;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.hero-anim-title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.2rem, 4.8vw, 3.8rem);
+  font-weight: 700;
+  color: #0a1128;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  margin-bottom: 14px;
+}
+
+.hero-anim-title em {
+  font-style: italic;
+  color: #C5A059;
+}
+
+.hero-anim-subtitle {
+  font-size: clamp(0.95rem, 1.8vw, 1.12rem);
+  color: #55627a;
+  line-height: 1.6;
+  max-width: 680px;
+  margin: 0 auto 22px auto;
+}
+
+.hero-anim-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.hero-anim-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #101c3d 0%, #1a2f66 100%);
+  color: #ffffff !important;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none !important;
+  box-shadow: 0 10px 24px rgba(16, 28, 61, 0.22);
+  transition: all 0.25s ease;
+}
+
+.hero-anim-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(16, 28, 61, 0.32);
+}
+
+.hero-anim-btn-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 24px;
+  border-radius: 999px;
+  background: #25D366;
+  color: #ffffff !important;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none !important;
+  box-shadow: 0 10px 22px rgba(37, 211, 102, 0.28);
+  transition: all 0.25s ease;
+}
+
+.hero-anim-btn-wa:hover {
+  background: #1eb956;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(37, 211, 102, 0.38);
+}
+
+/* Featured Cinematic Slider */
+.hero-slider-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 1180px;
+  height: clamp(340px, 48vw, 540px);
+  margin: 0 auto 34px auto;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(10, 17, 40, 0.16), 0 0 0 1px rgba(197, 160, 89, 0.3);
+  background: #080d1e;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 6s ease-out;
+  transform: scale(1.05);
+}
+
+.hero-slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.hero-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+
+.hero-slide-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8,13,30,0.1) 0%, rgba(8,13,30,0.3) 50%, rgba(8,13,30,0.85) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(20px, 4vw, 40px);
+  color: #ffffff;
+}
+
+.hero-slide-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(197, 160, 89, 0.95);
+  color: #0b1226;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 999px;
+  width: fit-content;
+  margin-bottom: 10px;
+}
+
+.hero-slide-caption {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.4rem, 2.8vw, 2.3rem);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+}
+
+.hero-slide-sub {
+  font-size: clamp(0.85rem, 1.4vw, 1rem);
+  color: rgba(247, 234, 208, 0.9);
+  max-width: 600px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+}
+
+/* Slider Controls */
+.hero-slider-nav {
+  position: absolute;
+  bottom: 24px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+}
+
+.hero-slider-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hero-slider-btn:hover {
+  background: rgba(197, 160, 89, 0.9);
+  color: #0b1226;
+  transform: scale(1.08);
+}
+
+.hero-slider-dots {
+  position: absolute;
+  bottom: 28px;
+  left: clamp(20px, 4vw, 40px);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.hero-slider-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero-slider-dot.active {
+  width: 28px;
+  background: #C5A059;
+}
+
+/* Double Marquee Ribbon (Continuous Animated Flow) */
+.hero-marquee-section {
+  position: relative;
+  overflow: hidden;
+  padding: 12px 0;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.hero-marquee-track {
+  display: flex;
+  gap: 18px;
+  width: max-content;
+  will-change: transform;
+}
+
+.hero-marquee-left {
+  animation: heroMarqueeLeft 38s linear infinite;
+}
+
+.hero-marquee-right {
+  animation: heroMarqueeRight 42s linear infinite;
+  margin-top: 16px;
+}
+
+.hero-marquee-section:hover .hero-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes heroMarqueeLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes heroMarqueeRight {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.hero-marquee-card {
+  width: clamp(220px, 22vw, 290px);
+  height: clamp(160px, 16vw, 200px);
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(197, 160, 89, 0.28);
+  background: #0d162e;
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.hero-marquee-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 18px 36px rgba(15, 23, 42, 0.16);
+  border-color: #C5A059;
+}
+
+.hero-marquee-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.hero-marquee-card:hover img {
+  transform: scale(1.06);
+}
+
+.hero-card-tag {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  background: rgba(10, 17, 38, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(197, 160, 89, 0.4);
+  border-radius: 10px;
+  padding: 6px 10px;
+  color: #F7EAD0;
+  font-size: 0.74rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 768px) {
+  #hero-animated-showcase {
+    padding: 12px 10px 20px 10px;
+  }
+  .hero-slider-wrap {
+    height: 380px;
+    border-radius: 20px;
+  }
+  .hero-slider-nav {
+    bottom: 16px;
+    right: 16px;
+  }
+  .hero-slider-btn {
+    width: 38px;
+    height: 38px;
+  }
+  .hero-marquee-card {
+    width: 200px;
+    height: 150px;
+    border-radius: 16px;
   }
 }
