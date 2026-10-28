@@ -3391,3 +3391,233 @@ header, #root header {
 #hero-animated-showcase {
   margin-top: 20px !important;
 }
+
+
+/* ==========================================================================
+   21. PHRASE BRILLANTE ANIMÉE (MÉDECINS SPÉCIALISÉS) & MENU BAS MOBILE NEW TECH
+   ========================================================================== */
+
+/* ── 1. PHRASE BRILLANTE ANIMÉE HAUTE COUTURE ───────────────────────────── */
+.doctor-shine-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px auto;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.doctor-shine-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 14px 32px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(253, 248, 240, 0.95) 100%);
+  border: 1.5px solid rgba(197, 160, 89, 0.6);
+  box-shadow: 0 10px 32px rgba(197, 160, 89, 0.28), 0 0 24px rgba(255, 215, 0, 0.18) inset;
+  cursor: default;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: doctorBadgePulse 3.5s ease-in-out infinite alternate;
+}
+
+.doctor-shine-pill:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 14px 44px rgba(197, 160, 89, 0.42), 0 0 35px rgba(255, 215, 0, 0.3) inset;
+}
+
+@keyframes doctorBadgePulse {
+  0% {
+    box-shadow: 0 8px 26px rgba(197, 160, 89, 0.22), 0 0 0 1px rgba(197, 160, 89, 0.35);
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    box-shadow: 0 14px 44px rgba(197, 160, 89, 0.45), 0 0 28px rgba(255, 215, 0, 0.35);
+    transform: translateY(-2px) scale(1.015);
+  }
+}
+
+.doctor-shine-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(197, 160, 89, 0.18);
+  color: #C5A059;
+  flex-shrink: 0;
+  animation: doctorIconBeat 2.5s ease-in-out infinite;
+}
+
+@keyframes doctorIconBeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); filter: drop-shadow(0 0 6px #ffd700); }
+}
+
+.doctor-shine-text {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-size: clamp(0.98rem, 2.2vw, 1.35rem);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  background: linear-gradient(
+    110deg,
+    #7c561a 0%,
+    #b0883b 22%,
+    #ffffff 48%,
+    #ffd700 55%,
+    #caa56a 78%,
+    #7c561a 100%
+  );
+  background-size: 240% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: doctorTextShimmerSweep 2.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes doctorTextShimmerSweep {
+  0% { background-position: 240% 0; }
+  100% { background-position: -40% 0; }
+}
+
+.doctor-shine-star {
+  color: #caa56a;
+  font-size: 14px;
+  animation: doctorStarSpin 3.5s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes doctorStarSpin {
+  0%, 100% { transform: scale(0.9) rotate(0deg); opacity: 0.7; }
+  50% { transform: scale(1.3) rotate(90deg); opacity: 1; color: #ffd700; text-shadow: 0 0 8px #ffd700; }
+}
+
+/* ── 2. MENU BAS MOBILE FLOTTANT "NEW TECH & DESIGN PRO" (Style iOS / Revolut / Airbnb) ── */
+@media (max-width: 768px) {
+  nav.fixed.bottom-0 {
+    /* Floating Dock au-dessus du bord inférieur */
+    bottom: 10px !important;
+    left: 12px !important;
+    right: 12px !important;
+    border-radius: 28px !important;
+    background: rgba(255, 255, 255, 0.90) !important;
+    backdrop-filter: blur(32px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    outline: 1px solid rgba(197, 160, 89, 0.3) !important;
+    box-shadow: 0 16px 42px rgba(10, 18, 38, 0.14), 0 2px 8px rgba(197, 160, 89, 0.12) !important;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)) 4px !important;
+    z-index: 9999 !important;
+  }
+
+  nav.fixed.bottom-0 > div {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 3px !important;
+    align-items: center !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  nav.fixed.bottom-0 a,
+  nav.fixed.bottom-0 button {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 6px 2px 4px 2px !important;
+    border-radius: 18px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
+    text-decoration: none !important;
+    position: relative !important;
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease !important;
+  }
+
+  nav.fixed.bottom-0 a:active,
+  nav.fixed.bottom-0 button:active {
+    transform: scale(0.92) !important;
+  }
+
+  /* Cercle d'icône nouvelle génération */
+  nav.fixed.bottom-0 a span.rounded-full,
+  nav.fixed.bottom-0 button span.rounded-full {
+    width: 36px !important;
+    height: 36px !important;
+    margin-bottom: 2px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.24s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    border-radius: 999px !important;
+  }
+
+  nav.fixed.bottom-0 a svg,
+  nav.fixed.bottom-0 button svg {
+    width: 19px !important;
+    height: 19px !important;
+    transition: transform 0.2s ease !important;
+  }
+
+  /* État ACTIF : design Apple/Revolut avec reflet or & micro-point indicateur */
+  nav.fixed.bottom-0 a[class*="text-gold"],
+  nav.fixed.bottom-0 a[class*="text-[#8e6822]"],
+  nav.fixed.bottom-0 a[class*="bg-[rgba(197,160,89"] {
+    color: #7c561a !important;
+    background: linear-gradient(180deg, rgba(197, 160, 89, 0.16) 0%, rgba(197, 160, 89, 0.05) 100%) !important;
+  }
+
+  nav.fixed.bottom-0 a[class*="text-gold"] span.rounded-full,
+  nav.fixed.bottom-0 a[class*="text-[#8e6822]"] span.rounded-full,
+  nav.fixed.bottom-0 a[class*="bg-[rgba(197,160,89"] span.rounded-full {
+    background: linear-gradient(135deg, #d4b070 0%, #aa8037 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 16px rgba(197, 160, 89, 0.45) !important;
+    transform: translateY(-2px) scale(1.08) !important;
+  }
+
+  nav.fixed.bottom-0 a[class*="text-gold"] svg,
+  nav.fixed.bottom-0 a[class*="text-[#8e6822]"] svg,
+  nav.fixed.bottom-0 a[class*="bg-[rgba(197,160,89"] svg {
+    stroke-width: 2.3 !important;
+    color: #ffffff !important;
+  }
+
+  /* Micro indicateur point sous l'onglet actif */
+  nav.fixed.bottom-0 a[class*="text-gold"]::after,
+  nav.fixed.bottom-0 a[class*="text-[#8e6822]"]::after,
+  nav.fixed.bottom-0 a[class*="bg-[rgba(197,160,89"]::after {
+    content: "";
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 999px;
+    background: #C5A059;
+    box-shadow: 0 0 6px #ffd700;
+  }
+
+  /* État INACTIF : sobre, ultra-moderne */
+  nav.fixed.bottom-0 a:not([class*="text-gold"]):not([class*="bg-[rgba(197,160,89"]):not([class*="text-[#8e6822]"]) {
+    color: #64748b !important;
+  }
+
+  nav.fixed.bottom-0 a:not([class*="text-gold"]):not([class*="bg-[rgba(197,160,89"]):not([class*="text-[#8e6822]"]) span.rounded-full {
+    background: rgba(245, 241, 233, 0.8) !important;
+    color: #55627a !important;
+  }
+
+  /* Bouton WhatsApp toujours élégamment surélevé au-dessus du dock flottant */
+  #floating-whatsapp-btn {
+    bottom: 84px !important;
+    right: 14px !important;
+    border-radius: 999px !important;
+    box-shadow: 0 10px 28px rgba(37, 211, 102, 0.4) !important;
+  }
+}

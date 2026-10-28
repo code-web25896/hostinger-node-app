@@ -17,9 +17,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261026-02"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261026-02">
-    <link rel="stylesheet" href="/hero-overrides.css?v=20261026-02">
+    <script type="module" crossorigin src="/assets/index-B9G38RkP.js?v=20261028-01"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-qGXqTXna.css?v=20261028-01">
+    <link rel="stylesheet" href="/hero-overrides.css?v=20261028-01">
   </head>
   <body>
     <div id="root"></div>
@@ -1088,6 +1088,8 @@
               <div class="top-bar-track">
                 <span class="top-bar-item"><span class="badge-gold">SESSION 2026-2027</span> ✨ Inscriptions Ouvertes : Formations Certifiantes & Ateliers Cliniques Pratiques</span>
                 <span class="top-bar-separator">✦</span>
+                <span class="top-bar-item"><span class="badge-gold">EXCLUSIVITÉ</span> 🩺 Des formations animées par des médecins spécialisés</span>
+                <span class="top-bar-separator">✦</span>
                 <span class="top-bar-item">🏆 Certifications Agréées à l'International</span>
                 <span class="top-bar-separator">✦</span>
                 <span class="top-bar-item">💎 Places Limitées par Promotion</span>
@@ -1096,6 +1098,8 @@
                 <span class="top-bar-separator">✦</span>
                 <!-- Défilement continu infini -->
                 <span class="top-bar-item"><span class="badge-gold">SESSION 2026-2027</span> ✨ Inscriptions Ouvertes : Formations Certifiantes & Ateliers Cliniques Pratiques</span>
+                <span class="top-bar-separator">✦</span>
+                <span class="top-bar-item"><span class="badge-gold">EXCLUSIVITÉ</span> 🩺 Des formations animées par des médecins spécialisés</span>
                 <span class="top-bar-separator">✦</span>
                 <span class="top-bar-item">🏆 Certifications Agréées à l'International</span>
                 <span class="top-bar-separator">✦</span>
@@ -1197,6 +1201,20 @@
           `).join("");
 
           heroSec.innerHTML = `
+            <!-- Phrase Brillante Animée : Des formations animées par des médecins spécialisés -->
+            <div class="doctor-shine-container">
+              <div class="doctor-shine-pill">
+                <span class="doctor-shine-star">✦</span>
+                <span class="doctor-shine-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                  </svg>
+                </span>
+                <span class="doctor-shine-text">Des formations animées par des médecins spécialisés</span>
+                <span class="doctor-shine-star">✦</span>
+              </div>
+            </div>
+
             <!-- Grand Slider Central Animé -->
             <div class="hero-slider-wrap" id="hero-main-slider">
               ${slidesHtml}
@@ -2229,6 +2247,71 @@ const enhanceFormationsPage = () => {
           }
         };
 
+        // ── MENU BAS MOBILE NOUVELLE TECH & DESIGN PRO (Style World Class Apps) ──
+        const APP_NAV_ICONS = {
+          "/formations": `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>`,
+          "/actualites": `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
+              <path d="M18 14h-8"/>
+              <path d="M15 18h-5"/>
+              <path d="M10 6h8v4h-8V6Z"/>
+            </svg>`,
+          "/recherche": `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.3-4.3"/>
+            </svg>`,
+          "/contact": `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+              <circle cx="12" cy="12" r="1" fill="currentColor"/>
+              <circle cx="8" cy="12" r="1" fill="currentColor"/>
+              <circle cx="16" cy="12" r="1" fill="currentColor"/>
+            </svg>`,
+          "/a-propos": `
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>`
+        };
+
+        const enhanceMobileBottomNav = () => {
+          const nav = document.querySelector("nav.fixed.bottom-0");
+          if (!nav) return false;
+
+          const links = nav.querySelectorAll("a");
+          if (!links.length) return false;
+
+          const currentPath = (window.location.pathname || "").replace(/\/$/, "") || "/";
+
+          links.forEach(link => {
+            const href = (link.getAttribute("href") || "").replace(/\/$/, "");
+            const iconWrap = link.querySelector("span.rounded-full");
+            if (iconWrap && APP_NAV_ICONS[href]) {
+              if (iconWrap.dataset.customAppIcon !== href) {
+                iconWrap.innerHTML = APP_NAV_ICONS[href];
+                iconWrap.dataset.customAppIcon = href;
+              }
+            }
+
+            // Sync active state accurately
+            const isActive = href === currentPath || (href === "/formations" && currentPath === "/formations");
+            if (isActive) {
+              link.classList.add("text-gold");
+              iconWrap?.classList.add("shadow-md");
+            } else {
+              link.classList.remove("text-gold");
+              iconWrap?.classList.remove("shadow-md");
+            }
+          });
+
+          return true;
+        };
+
         const runAll = () => {
           homeCleanup();
           injectAboutNavLink();
@@ -2237,6 +2320,7 @@ const enhanceFormationsPage = () => {
           buildAboutPage();
           buildContactPage();
           enhanceFormationsPage();
+          enhanceMobileBottomNav();
         };
 
         // React router navigation — re-run on route change
