@@ -20,7 +20,10 @@ const defaults = {
     { title: "Master Pack Laser & Nouvelles Technologies 2026", category: "Technologies esthétiques", image: "/master-pack-laser.jpeg", description: "Le cursus ultime combinant Laser Diode, HIFU 7D, Radiofréquence fractionnée et Cryolipolyse. Devenez une référence technique incontournable.", duration: "5 jours", priceTND: 2200, priceEUR: 710, availability: ["Présentiel", "En ligne"] },
     { title: "Radiofréquence & Oxygénéo Révolution", category: "Technologies esthétiques", image: "/radio-frequence-oxygeneo.jpeg", description: "Soin 3-en-1 stimulant la production naturelle de collagène par oxygénation sous-cutanée, exfoliation douce et resserrement tissulaire radiofréquence.", duration: "2 jours", priceTND: 900, priceEUR: 290, availability: ["Présentiel", "En ligne"] }
   ],
-  news: [{ title: "Nouvelle session de printemps", content: "Les inscriptions sont ouvertes pour la nouvelle session de formation professionnelle a Tunis Belvedere.", type: "Annonce" }]
+  news: [
+    { title: "Nouvelle session de printemps", content: "Les inscriptions sont ouvertes pour la nouvelle session de formation professionnelle a Tunis Belvedere.", type: "Annonce" },
+    { title: "Accréditation Officielle : The British Board", content: "L'Académie Internationale de Beauté est désormais officiellement accréditée par The British Board (britishboard-official.com). Nos cursus et attestations bénéficient d'une reconnaissance internationale de premier plan.", type: "Accréditation" }
+  ]
 };
 
 const schemaStatements = [
@@ -264,6 +267,14 @@ export const connectDB = async () => {
   await query("UPDATE trainings SET image = '/formation-microneedling.jpeg' WHERE (title LIKE '%Microneedling%') AND (image LIKE '%unsplash%' OR image = '' OR image IS NULL)");
   await query("UPDATE trainings SET image = '/formation-soin-visage.jpeg' WHERE (title LIKE '%Hydrafacial%') AND (image LIKE '%unsplash%' OR image = '' OR image IS NULL)");
   await query("UPDATE trainings SET image = '/backgroundesthetique.jpeg' WHERE (title LIKE '%Esthetique%' OR title LIKE '%Esthétique%') AND (image LIKE '%unsplash%' OR image = '' OR image IS NULL)");
+  const [bbNews] = await query("SELECT id FROM news WHERE title LIKE '%British Board%' LIMIT 1");
+  if (!bbNews) {
+    await insert("INSERT INTO news (title, content, type) VALUES (?, ?, ?)", [
+      "Accréditation Officielle : The British Board",
+      "L'Académie Internationale de Beauté est désormais officiellement accréditée par The British Board (britishboard-official.com). Nos formations esthétiques certifiantes bénéficient d'une reconnaissance internationale de premier plan.",
+      "Accréditation"
+    ]);
+  }
   await ensureSeedData();
   console.log(`MySQL connecte: ${process.env.MYSQL_HOST}/${process.env.MYSQL_DATABASE}`);
 };
